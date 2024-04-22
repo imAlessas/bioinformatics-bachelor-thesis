@@ -1,2 +1,2 @@
-# bachelor-thesis
-Bachelor thesis about CWBI interniship
+# Bachelor thesis
+Bachelor thesis about CWBI internship

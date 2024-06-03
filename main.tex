@@ -1,0 +1,47 @@
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+
+% Load Thesis Class
+\documentclass{DEIThesis}
+
+\title{An interesting title for the thesis}
+
+\author{Luca Martinelli}
+\studentId{1518036}
+
+% Advisor
+\advisor{Prof. Tim Berners-Lee}
+
+% If you are co-advised
+\coadvisor{Dott. Robert Kahn}
+\coadvisorsUniversity{University of Princeton}
+
+\university{University of Padova}
+\mastername{Computer Engineering}
+\academicYear{2021/2022}
+
+\begin{filecontents*}[overwrite]{\jobname.xmpdata}
+    \Title{An interesting title for the thesis}
+    \Author{Luca Martinelli}
+    \Language{en-EN}
+    \Keywords{Computer Engineering\sep LaTeX}
+\end{filecontents*}
+
+% Document
+
+\begin{document}
+    % The front matter (Cover, ToC, Abstract, etc...)
+    \frontmatter
+
+    % The main content
+    \mainmatter
+    
+    \include{chapters/01_introduction}
+    \include{chapters/02_releated}
+    \include{chapters/03_background}
+    \include{chapters/04_analysis}
+    \include{chapters/99_conclusions}
+    
+    % Bibliography, appendix, acknowledges, etc...
+    \backmatter
+\end{document}

@@ -1,0 +1,30 @@
+%!TEX root = ../main.tex
+
+\chapter{Background}
+\label{chp:background}
+
+\begin{algorithm}[ht]
+    \caption{An algorithm with caption}\label{alg:two}
+    \begin{algorithmic}
+        \REQUIRE $n \geq 0$
+        \ENSURE $y = x^n$
+        
+        \STATE $y \gets 1$
+        \STATE $X \gets x$
+        \STATE $N \gets n$
+        
+        \WHILE{$N \neq 0$}
+            \IF{$N$ is even}
+              \STATE $X \gets X \times X$
+              \STATE $N \gets \frac{N}{2} $  \COMMENT{This is a comment}
+            \ELSIF{$N$ is odd}
+              \STATE $y \gets y \times X$
+              \STATE $N \gets N - 1$
+            \ENDIF
+        \ENDWHILE
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{equation}
+e^{j\pi} + 1 = 0
+\end{equation}

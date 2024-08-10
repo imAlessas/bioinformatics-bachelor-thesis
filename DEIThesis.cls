@@ -35,7 +35,7 @@
 % language, font and encodings
 \RequirePackage{newpxtext,newpxmath}
 \RequirePackage[T1]{fontenc}
-\RequirePackage[english]{babel}
+\RequirePackage[italian]{babel}
 
 
 
@@ -230,19 +230,19 @@
   \setlength{\headwidth}{\textwidth}
 
   % custom titles
-  \renewcommand{\listfigurename}{List of Figures}
-  \renewcommand{\listtablename}{List of Tables}
-  \renewcommand{\listalgorithmname}{List of Algorithms}
-  \renewcommand{\lstlistingname}{Code} % Caption name of code snippets
-  \renewcommand{\lstlistlistingname}{List of Code Snippets}
-  \def\listacronymname{List of Acronyms}
+  \renewcommand{\listfigurename}{Indice delle Figure}
+  \renewcommand{\listtablename}{Indice delle Tabelle}
+  \renewcommand{\listalgorithmname}{Indice degli Algoritmi}
+  \renewcommand{\lstlistingname}{Codice} % Caption name of code snippets
+  \renewcommand{\lstlistlistingname}{Indice dei Frammenti di Codice}
+  \def\listacronymname{Lista degli Acronimi}
 
   \def\abstractname{Abstract}
   \def\abstractnameit{Sommario}
 
-  \renewcommand{\bibname}{References}
+  \renewcommand{\bibname}{Riferimenti}
 
-  \def\acknowledgmentsname{Acknowledgments}
+  \def\acknowledgmentsname{Ringraziamenti}
 
   % insert dedication page
   \dedicationpage
@@ -317,7 +317,7 @@
   }
 
   % set academic year in footer
-  \cfoot{\normalsize\textsc{Academic Year \\ \@academicYear}}
+  \cfoot{\normalsize\textsc{Anno Accademico \\ \@academicYear}}
 
   % set brands in header
   \lhead{
@@ -333,7 +333,7 @@
     % master name
     \null \vspace{\stretch{2}}
     \normalsize\textsc{
-      Master Thesis in \@mastername
+      Laurea Triennale in \@mastername
     } \\
 
     % title
@@ -346,10 +346,10 @@
 
     \begin{flushleft}
       \small
-      \textsc{Master Candidate} \hfill \textsc{Supervisor} \\
+      \textsc{Laureando} \hfill \textsc{Relatore} \\
       \large{\textbf{\@author}} \hfill \large{\textbf{\@advisor}} \\
       \small
-      \textbf{Student ID \@studentId} \hfill \textbf{\@university} \\
+      \textbf{Matricola \@studentId} \hfill \textbf{\@university} \\
       % insert co-advisor if not empty
       \ifx\@coadvisor\empty \else
         \hfill \\

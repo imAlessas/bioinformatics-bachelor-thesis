@@ -19,8 +19,10 @@
 % page geometry
 \RequirePackage[
   headheight=2cm,
-  top=3.5cm,
-  bottom=3.5cm,
+  top=2cm,
+  bottom=2cm,
+  inner=3cm,
+  outer=2cm,
   footskip=1.5cm,
   footnotesep=1cm,
   twoside,
@@ -33,7 +35,7 @@
 \RequirePackage[a-2b,mathxmp]{pdfx}[\today]
 
 % language, font and encodings
-\RequirePackage{newpxtext,newpxmath}
+\RequirePackage{mathptmx}
 \RequirePackage[T1]{fontenc}
 \RequirePackage[italian]{babel}
 
@@ -67,6 +69,9 @@
 
 % graphics
 \RequirePackage{graphicx}
+
+% todo
+\RequirePackage{todonotes}
 
 % algoritms
 \RequirePackage{algorithm}
@@ -240,12 +245,12 @@
   \def\abstractname{Abstract}
   \def\abstractnameit{Sommario}
 
-  \renewcommand{\bibname}{Riferimenti}
+  \renewcommand{\bibname}{Bibliografia}
 
   \def\acknowledgmentsname{Ringraziamenti}
 
   % insert dedication page
-  \dedicationpage
+  % \dedicationpage
 
   % insert abstract
   \abstractpage
@@ -435,12 +440,12 @@
   \thispagestyle{empty}
 
   % english version
-  \input{frontmatter/abstract}
+  \input{frontmatter/sommario}
   
   % italian version
   \cleardoublepage
   \thispagestyle{empty}
-  \input{frontmatter/sommario}
+  \input{frontmatter/abstract}
 }
 
 
@@ -472,12 +477,12 @@
   \addcontentsline{toc}{chapter}{\bibname}
   \printbibliography
   
-  \cleardoublepage
-  \phantomsection
+  % \cleardoublepage
+  % \phantomsection
 
   % add acknowledgments
-  \addcontentsline{toc}{chapter}{\acknowledgmentsname}
-  \acknowledgments
+  % \addcontentsline{toc}{chapter}{\acknowledgmentsname}
+  % \acknowledgments
 }
 
 

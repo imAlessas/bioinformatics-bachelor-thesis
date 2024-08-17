@@ -67,6 +67,9 @@
 % colors
 \RequirePackage{color}
 
+% random text
+\RequirePackage{blindtext}
+
 % graphics
 \RequirePackage{graphicx}
 

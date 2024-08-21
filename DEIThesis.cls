@@ -277,20 +277,20 @@
   \cleardoublepage
 
   % insert list of algorithms
-  \phantomsection
-  \setcounter{page}{15}
+  % \phantomsection
+  % \setcounter{page}{15}
   % \addcontentsline{toc}{chapter}{\listalgorithmname}
-  \listofalgorithms
+  % \listofalgorithms
 
   % insert list of code snippets
-  \phantomsection
-  \setcounter{page}{17}
+  % \phantomsection
+  % \setcounter{page}{17}
   % \addcontentsline{toc}{chapter}{\lstlistlistingname}
-  \lstlistoflistings
-  \cleardoublepage
+  % \lstlistoflistings
+  % \cleardoublepage
 
   % insert list of abbreviations/acronyms
-  \setcounter{page}{19}
+  \setcounter{page}{15}
   \acronyms
 }
 

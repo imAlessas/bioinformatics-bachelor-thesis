@@ -234,7 +234,7 @@
   % reset fancy headers
   \setfancyhf
 
-  % set head witdth
+  % set head width
   \setlength{\headwidth}{\textwidth}
 
   % custom titles
@@ -254,52 +254,43 @@
 
   % insert dedication page
   \dedicationpage
-  % \setcounter{page}{3}
+  % \refstepcounter{page}
   
   % insert quote page
-  \quotepage
-  % \setcounter{page}{5}
+  % \quotepage
+  % \refstepcounter{page}
   
   % insert abstract
   \abstractpage
-  % \setcounter{page}{9}
+  % \refstepcounter{page}
   
   % insert table of contents
   \tableofcontents
   \cleardoublepage
-  % \setcounter{page}{11}
-
+  
   % insert list of figures
   \phantomsection
-  \setcounter{page}{12}
-  % \addcontentsline{toc}{chapter}{\listfigurename}
   \listoffigures
   \cleardoublepage
 
   % insert list of tables
   \phantomsection
-  \setcounter{page}{15}
-  % \addcontentsline{toc}{chapter}{\listtablename}
   \listoftables
   \cleardoublepage
 
-  % insert list of algorithms
+  % insert list of algorithms (uncomment if needed)
   % \phantomsection
-  % \setcounter{page}{17}
-  % \addcontentsline{toc}{chapter}{\listalgorithmname}
-  % \listofalgorithms
+  % \cleardoublepage
 
-  % insert list of code snippets
+  % insert list of code snippets (uncomment if needed)
   % \phantomsection
-  % \setcounter{page}{19}
-  % \addcontentsline{toc}{chapter}{\lstlistlistingname}
   % \lstlistoflistings
   % \cleardoublepage
 
   % insert list of abbreviations/acronyms
-  \setcounter{page}{17}
   \acronyms
 }
+
 
 
 

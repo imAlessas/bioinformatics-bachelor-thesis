@@ -253,44 +253,51 @@
   \def\acknowledgmentsname{Ringraziamenti}
 
   % insert dedication page
-  % \dedicationpage
-
+  \dedicationpage
+  % \setcounter{page}{3}
+  
+  % insert quote page
+  \quotepage
+  % \setcounter{page}{5}
+  
   % insert abstract
   \abstractpage
-
+  % \setcounter{page}{9}
+  
   % insert table of contents
   \tableofcontents
   \cleardoublepage
+  % \setcounter{page}{11}
 
   % insert list of figures
   \phantomsection
-  \setcounter{page}{11}
+  \setcounter{page}{12}
   % \addcontentsline{toc}{chapter}{\listfigurename}
   \listoffigures
   \cleardoublepage
 
   % insert list of tables
   \phantomsection
-  \setcounter{page}{13}
+  \setcounter{page}{15}
   % \addcontentsline{toc}{chapter}{\listtablename}
   \listoftables
   \cleardoublepage
 
   % insert list of algorithms
   % \phantomsection
-  % \setcounter{page}{15}
+  % \setcounter{page}{17}
   % \addcontentsline{toc}{chapter}{\listalgorithmname}
   % \listofalgorithms
 
   % insert list of code snippets
   % \phantomsection
-  % \setcounter{page}{17}
+  % \setcounter{page}{19}
   % \addcontentsline{toc}{chapter}{\lstlistlistingname}
   % \lstlistoflistings
   % \cleardoublepage
 
   % insert list of abbreviations/acronyms
-  \setcounter{page}{15}
+  \setcounter{page}{17}
   \acronyms
 }
 
@@ -401,16 +408,21 @@
 
 
 
-% -- ACRONYMS/ABBREVIATIONS --
+% -- QUOTE --
 
-\RequirePackage{acronym}
+\newcommand{\quotepage} {
+  % set empty style for this page (no headers and footers)
+  \thispagestyle{empty}
 
-% custom style for acronyms
-\newcommand{\acronyms}{
   \phantomsection
-  % \addcontentsline{toc}{chapter}{\listacronymname}
-  \chapter*{\listacronymname}
-  \input{frontmatter/glossary}
+  
+  \null \vspace*{\fill}
+
+  \input{frontmatter/quote}
+
+  \vspace*{\fill} \null
+  
+  % insert pages for alignment
   \cleardoublepage
 }
 
@@ -449,6 +461,21 @@
   \cleardoublepage
   \thispagestyle{empty}
   \input{frontmatter/abstract}
+}
+
+
+
+% -- ACRONYMS/ABBREVIATIONS --
+
+\RequirePackage{acronym}
+
+% custom style for acronyms
+\newcommand{\acronyms}{
+  \phantomsection
+  % \addcontentsline{toc}{chapter}{\listacronymname}
+  \chapter*{\listacronymname}
+  \input{frontmatter/glossary}
+  \cleardoublepage
 }
 
 

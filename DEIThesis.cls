@@ -253,7 +253,7 @@
   \def\acknowledgmentsname{Ringraziamenti}
 
   % insert dedication page
-  \dedicationpage
+  % \dedicationpage
   % \refstepcounter{page}
   
   % insert quote page

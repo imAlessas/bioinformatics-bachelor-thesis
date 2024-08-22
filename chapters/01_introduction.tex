@@ -1,4 +1,5 @@
 %!TEX root = ../main.tex
+
 \chapter{Introduzione}\label{chp:introduction}
 
 Ad oggi l'avanzamento della genomica — branca della biologia molecolare che si occupa di studiare il genoma degli esseri viventi — si è rivelato notevolmente significativo al fine di approfondire e comprendere malattie legate alle mutazioni del genoma degli individui. Si stima che solamente una percentuale tra l'1\% e il 2\% del DNA contiene i \textsl{geni}, ovvero particolari regioni che contengono tutte le informazioni necessarie per la sintesi degli aminoacidi che poi comporranno le proteine\,\cite{sahu2011identification, pollard2022cell}. Ciò nonostante, la quasi totalità dei disturbi genomici è dovuta alle mutazioni nelle regioni non codificanti\,\cite{zhang2015non} — dette \textsl{varianti non codificianti}. Le mutazioni in queste zone del genoma, che apparentemente svolgono funzioni marginali, sono responsabili dello sviluppo di disturbi importanti, come le \textsl{malattie mendeliane}\footnote{Le malattie mendeliane, causate dalla mutazione di un singolo gene, includono la fibrosi cistica e il morbo di Huntington.}\,\cite{french2020role, chial2008mendelian}, l'epilessia\,\cite{pagni2022non}, malattie cardiovascolari\,\cite{kapoor2014enhancer, zhang2015non} e soprattuto tumori — tra cui il cancro del colon-retto e tumore al seno\,\cite{khurana2016role, tian2019systematic, bojesen2013multiple, michailidou2017association}.
@@ -39,7 +40,7 @@ Attraverso una serie di ripiegamenti, una molecola di DNA lunga circa due metri 
 
 La rilevanza del DNA è data delle informazioni essenziali che questa molecola contiene. Tali informazioni risiedono nei geni, che sono delle sequenze genomiche che codificano uno o più prodotti biologici operativi\,\cite{gerstein2007gene}. L'\textsl{espressione genica} è il processo che permette di utilizzare i dati contenuti nel gene per la creazione di macromolecole, come le proteine. Per esempio, le cellule della pelle a contatto con luce solare intensa possono esprimere geni che regolano la pigmentazione della pelle\,\cite{white2009gene}. L'espressione genica è divisa in due fasi principali: la \textsl{trascrizione} — che si occupa di produrre delle molecole di RNA che rispecchino il gene da esprimere — e la \textsl{traduzione} — la quale traduce le informazioni dell'RNA sintetizzando la proteina.
 
-Nella prima fase dell'espressione genica, è necessario trascrivere il DNA in una molecola molto simile ovvero l'RNA — chiamato anche acido ribonucleico. Questa molecola differisce dall'acido desossiribonucleico per una base azotata — anzichè la Timina è presente l'Uracile (U) — e per lo zucchero — da desossiribosio a ribosio\,\cite{alberts2002dna}. La trascrizione del DNA in RNA inizia quando delle proteine, chiamate \textsl{fattori di trascrizione}, riconoscono la regione che delimita l'inizione della molecola del gene da esprimere, detta \textsl{zona promotrice}. Dopo aver riconosciuto l'inizio della sequenza, queste proteine permettono ad un enzima chiamata \textsl{RNA polimerasi} di attaccarsi ed aprire la doppia elica del DNA\,\cite{cramer2019organization}. Una volta aperta la doppia elica, inizia la vera e propria trascrizione in RNA:\@ il filamento del DNA viene preso come modello per la creazione dell'RNA;\@ in particolare il nucleotide dell'RNA sarà il complementare rispetto a quello del DNA (di conseguenza $A\to U$, $C\to G$, $G\to C$ e $T\to A$). Così facendo l'acido ribonucleico viene creato un nucleotide alla volta, analizzando quello del DNA\,\cite{alberts2002dna}. La trascrizione termina nel momento in cui gli enzimi e le proteine incontrano la regione terminatrice del gene che determina la separazione dal filamento e la terminazione dell'RNA \textsl{messaggero} (\textsl{mRNA}) che contiene le informazioni presenti nel gene da esprimere. L'intero processo di trascrizione è illustrato nella figura\,\ref{fig:dna-transcription}.
+Nella prima fase dell'espressione genica, è necessario trascrivere il DNA in una molecola molto simile ovvero l'RNA — chiamato anche acido ribonucleico. Questa molecola differisce dall'acido desossiribonucleico per una base azotata — anzichè la Timina è presente l'Uracile (U) — e per lo zucchero — da desossiribosio a ribosio\,\cite{alberts2002dna}. La trascrizione del DNA in RNA inizia quando delle proteine, chiamate \textsl{fattori di trascrizione}, attratte dalle \textsl{zone intensificatrici} del DNA, riconoscono la regione che delimita l'inizione della molecola del gene da esprimere, detta \textsl{zona promotrice}. Dopo aver riconosciuto l'inizio della sequenza, queste proteine permettono ad un enzima chiamata \textsl{RNA polimerasi} di attaccarsi ed aprire la doppia elica del DNA\,\cite{cramer2019organization}. Una volta aperta la doppia elica, inizia la vera e propria trascrizione in RNA:\@ il filamento del DNA viene preso come modello per la creazione dell'RNA;\@ in particolare il nucleotide dell'RNA sarà il complementare rispetto a quello del DNA (di conseguenza $A\rightarrow U$, $C\rightarrow G$, $G\rightarrow C$ e $T\rightarrow A$). Così facendo l'acido ribonucleico viene creato un nucleotide alla volta, analizzando quello del DNA\,\cite{alberts2002dna}. La trascrizione termina nel momento in cui gli enzimi e le proteine incontrano la regione terminatrice del gene che determina la separazione dal filamento e la terminazione dell'RNA \textsl{messaggero} (\textsl{mRNA}) che contiene le informazioni presenti nel gene da esprimere. L'intero processo di trascrizione è illustrato nella figura\,\ref{fig:dna-transcription}.
 
 \begin{figure}[b!]
     \centering
@@ -59,16 +60,33 @@ Dopo essere uscito dal nucleo attraverso i \textsl{pori}, l'RNA messaggero raggi
 
 Una volta creata la sequenza polipeptidica, inizia il processo di ripiegamento della proteina. In maniera molto simile a quanto visto per l'impacchettamento del DNA nel cromosoma, la sequenza di polipeptidi inizialmente si arrotola creando delle bobine che sono comunemente chiamate $\alpha$\textit{-helix}. Queste ultime poi si ripiegano nuovamente arrivando alla struttura terziaria della proteina, ovvero la proteina tridimensionale effettiva\,\cite{schulz2013principles}. Una volta creata la proteina il gene è stato espresso definitivamente. Questo passaggio di informazioni dal DNA alla creazione della proteina è gergo definito come il \textsl{dogma della biologia molecolare}.
 
+Come accennato all'inizio del capitolo, la cellula possiede la notevole capacità di replicarsi. In genere una cellula si duplica durante la crescita e lo sviluppo dell'organismo, quando deve essere rimpiazzata o rigenerata oppure nella riporduzione asessuata di alcuni micro organismi\,\cite{bavle2014mitosis}. Il processo replicazione cellulare, chiamato \textsl{mitosi}, è preceduto dall'\textsl{interfase}, processo fondamentale in cui la cellula cresce di dimensioni e il DNA nei cromosomi si duplica, favorendo la replicazione cellulare. La mitosi può essere suddivisa in quattro fasi principali\,\cite{walczak2010mechanisms, bavle2014mitosis, li2020theoretical, sullivan2007finishing} le quali sono riassunte anche nell'illustrazione\,\ref{fig:mitosis}:
+\begin{enumerate}
+    \item Nella \textsl{profase} i cromosomi duplicati si condensano nel nucleo ed iniziano ad avvicinarsi dei microtuboli al nucleo, chiamati \textsl{centrosomi}; allo stesso tempo la mebrana nucleare inizia a svanire;
+    \item Dopo che i microtuboli si sono attaccati ai cromosomi (fase intermedia detta \textsl{prometafase}) si giunge alla \textsl{metafase}, situazione in cui tutti i cromosomi sono allineati lungo la linea equatoriale della cellula;
+    \item Durante l'\textsl{anafase}, ciascuna coppia di cromosomi si divide e raggiunge i poli della cellula;
+    \item La fase finale della mitosi è la \textsl{telofase} nella quale le due cellule si dividono; le membrane nucleari delle due cellule si riformano attorno ai cromosomi divisi.
+\end{enumerate}
+
+\begin{figure}[b!]
+    \centering
+    \includegraphics[width=\textwidth]{assets/mitosis.jpg}
+    \caption[La mitosi cellulare.]{Rappresentazione delle quattro fasi che comprendono la mitosi cellulare\,\cite{nhgri_mitosis_image}.}\label{fig:mitosis}
+\end{figure}
+
+Affinchè la mitosi abbia successo, è prima necessario duplicare il DNA all'interno della cellula. Il processo di replicazione di DNA che precede la mitosi è anche definito come \textsl{fase di sintesi} — \textit{S-phase}. La duplicazione del DNA inizia con l'identificazione dell'\textsl{origine della replicazione}, ovvero una sequenza del DNA che specifica da quale punto della sequenza il DNA deve essere replicato (ci sono più di cento mila siti che segnalano un punto di orine nel DNA di una cellula). Una \textsl{proteina iniziatrice} è legata al punto di origine promovendo l'attaccamento al DNA del \textsl{replisoma} che è composto da un enziama chiamato \textsl{elicasi} che si occupa di dividere i due filamenti di DNA procedendo nella direzione $5^\prime \to 3^\prime$.\@ A questo punto il \textsl{RNA prime} inizia la sintesi del DNA favorendo l'attaccamento della \textsl{DNA polimerasi} entrambi i filamenti per duplicare il DNA.\@ Essendo che il genoma è complementare, un filamento avrà un verso $5^\prime \to 3^\prime$ (\textit{leading strand}) mentre l'altro filamento avrà verso opposto, $3^\prime \to 5^\prime$ (\textit{lagging strand}). Di conseguenza, nel filamento concorde al replisoma, la polimerasi non incontrearà problemi nella duplicazione, invece nel filamento $3^\prime \to 5^\prime$ il DNA dovrà essere duplicato a segmenti, detti \textsl{frammenti di Okazaki} che verranno collegati tramite la \textsl{DNA ligasi}\,\cite{laskey1989s, bell2002dna, dutta1997initiation, pollard2022cell}. La figura\,\ref{fig:dna-replication} racchiude quanto descritto sulla fase di sintesi.
+
+\begin{figure}[b!]
+    \centering
+    \includegraphics[width=\textwidth]{assets/dna-replication.jpg}
+    \caption[Il processo di replicazione del DNA.]{Il processo di replicazione del DNA durante la fase di sintesi\,\cite{nhgri_dna_replication_image}.}\label{fig:dna-replication}
+\end{figure}
+
+Alle regioni del DNA che prendono parte al processo di espressione genica, si contrappongono le regioni che non vengono codificate, come le zone intensificatrici e promotrici del DNA e gli introni dei geni. Anche se queste sequenze non vengono effettivamente espresse, ricoprono un ruolo fondamentale nell'espressione genica (figure\,\ref{fig:dna-transcription} e\,\ref{fig:mrna-translation}) e durante la mitosi (illustrazione\,\ref{fig:mitosis} e\,\ref{fig:dna-replication}). Proprio per questo motivo le mutazioni in queste zone possono indurre a disturbi genetici critici. 
+
+\todo{finisci introduzione alle varianti non codificanti}
 
 
-
-
-
-
-\todo{geni, parti del gene in modo da spiegare bene le varianti non codificanti}
-
-\todo{Come accennato all'inizio del capitolo, la cellula possiede la notevole capacità di replicarsi; il processo replicazione cellulare è detto \textsl{mitosi}.}
-\todo{DNA replication\,\cite{bell2002dna} durante il ciclo della mitosi (non descriverla tutta) \,\cite{mcintosh2012biophysics}}
 
 \section{Cenni storici}
 \todo{
@@ -88,8 +106,6 @@ Una volta creata la sequenza polipeptidica, inizia il processo di ripiegamento d
 % https://books.google.it/books?hl=it&lr=&id=mXiiEAAAQBAJ&oi=fnd&pg=PP1&dq=cellular+biology&ots=8O1TrOZBXp&sig=fqZhVnT0H-I3qEu1iPk4v2nvZi8&redir_esc=y#v=onepage&q=cellular%20biology&f=false
 
 % https://books.google.it/books?hl=it&lr=&id=z4BDRcLrekMC&oi=fnd&pg=PR19&dq=cell+nucleus+organization&ots=wiXN8JbVpC&sig=oviVqMKJqsvcYwe4X37tQM28P3Y&redir_esc=y#v=onepage&q=cell%20nucleus%20organization&f=false
-
-% https://sci-hub.ru/https://www.annualreviews.org/content/journals/10.1146/annurev.genet.34.1.77
 
 % Images:
 % https://www.genome.gov/genetics-glossary

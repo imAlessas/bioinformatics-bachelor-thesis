@@ -1,16 +1,6 @@
 %!TEX root = ../main.tex
 
-\chapter{Introduzione}\label{chp:introduction}
-
-Ad oggi l'avanzamento della genomica — branca della biologia molecolare che si occupa di studiare il genoma degli esseri viventi — si è rivelato notevolmente significativo al fine di approfondire e comprendere malattie legate alle mutazioni del genoma degli individui. Si stima che solamente una percentuale tra l'1\% e il 2\% del DNA contiene i \textsl{geni}, ovvero particolari regioni che contengono tutte le informazioni necessarie per la sintesi degli aminoacidi che poi comporranno le proteine\,\cite{sahu2011identification, pollard2022cell}. Ciò nonostante, la quasi totalità dei disturbi genomici è dovuta alle mutazioni nelle regioni non codificanti\,\cite{zhang2015non} — dette \textsl{varianti non codificanti}. Le mutazioni in queste zone del genoma, che apparentemente svolgono funzioni marginali, sono responsabili dello sviluppo di disturbi importanti, come le \textsl{malattie mendeliane}\footnote{Le malattie mendeliane, causate dalla mutazione di un singolo gene, includono la fibrosi cistica e il morbo di Huntington.}\,\cite{french2020role, chial2008mendelian}, l'epilessia\,\cite{pagni2022non}, malattie cardiovascolari\,\cite{kapoor2014enhancer, zhang2015non} e soprattutto tumori — tra cui il cancro del colon-retto e tumore al seno\,\cite{khurana2016role, tian2019systematic, bojesen2013multiple, michailidou2017association}.
-
-Risulta quindi vitale continuare a studiare gli effetti che le varianti non codificanti in sequenze genomiche hanno sugli individui. Proprio a questo proposito, con l'avvento dell'intelligenza artificiale, in particolare del \textsl{deep learning}, si continuano a trovare e perfezionare soluzioni che permettano di delineare sempre con più precisione il ruolo che hanno le mutazioni nelle regioni non codificanti del DNA.\@ Grazie a queste nuove tecnologie, la \textsl{genomica funzionale} — area della genomica che si interessa a descrivere le relazioni che ci sono tra i componenti di un sistema biologico, come geni e proteine\,\cite{caudai2021ai} — ha avuto un forte impulso nell'approfondire le varianti non codificanti ma rimangono ancora significative lacune nella comprensione riguardante la relazione tra mutazioni genetiche ed espressione genica. L'utilizzo di tecniche di deep learning quindi cruciale per continuare la ricerca; a questo proposito, nel presente elaborato accademico verranno descritti e paragonati tre \textsl{tool} che utilizzano le \textsl{reti neurali convoluzionali} per predire l'effetto delle varianti non codificanti su sequenze genomiche: DeepSEA\,\cite{zhou2015predicting}, Basset\,\cite{kelley2016basset} e DeepSATA\,\cite{ma2023deepsata}.
-
-Più precisamente, nel capitolo\,\ref{chp:CNN} su discuterà la storia dell'intelligenza artificiale e saranno esplorati i concetti che si trovano alla base delle reti neurali e di come le reti neurali convoluzionali possono essere utilizzate come ottimo strumento per predire l'effetto di sequenze genomiche. Il capitolo\ref{chp:implementation-details} invece discuterà i dettagli implementativi di ciascuno dei tre tool, indagando principalmente negli aspetti legati alla codifica delle sequenze, alla struttura della rete e al \textsl{dataset} utilizzato per allenare il modello.
-
-
-
-\section{Background}
+\chapter{Background biologico}\label{chp:biological-background}
 
 La cellula è l'unità fondamentale della vita. La cellula è una piccola miscela acquosa con componenti chimici, racchiusi in una membrana, e possiede l'eccezionale capacità di replicarsi. Il primo elemento che permette di distinguere le cellule è la presenza di un nucleo. Vengono definite \textsl{procarioti} le cellule senza nucleo — che sono le più diffuse e compongono organismi unicellulari come i batteri e gli archei — mentre sono chiamate \textsl{eucarioti} le cellule che contengono un nucleo — le quali sono in genere più grandi e più complesse e costituiscono forme di vita multicellulari come animali piante e funghi\,\cite{alberts2015essential}.
 
@@ -43,6 +33,8 @@ Attraverso una serie di ripiegamenti, una molecola di DNA lunga circa due metri 
     \includegraphics[width=\textwidth]{assets/dna-packaging.jpg}
     \caption[Il processo di impacchettamento del DNA.]{Il processo di impacchettamento del DNA che permette di compattare la struttura a doppia eilca nel cromosoma\,\cite{nhgri_chromosome_image}.}\label{fig:dna-packaging}
 \end{figure}
+
+\section{Dogma centrale}
 
 La rilevanza del DNA è data delle informazioni essenziali che questa molecola contiene. Tali informazioni risiedono nei geni, che sono delle sequenze genomiche che codificano uno o più prodotti biologici operativi\,\cite{gerstein2007gene}. L'\textsl{espressione genica} è il processo che permette di utilizzare i dati contenuti nel gene per la creazione di macromolecole, come le proteine. Per esempio, le cellule della pelle a contatto con luce solare intensa possono esprimere geni che regolano la pigmentazione della pelle\,\cite{white2009gene}. L'espressione genica è divisa in due fasi principali: la \textsl{trascrizione} — che si occupa di produrre delle molecole di RNA che rispecchino il gene da esprimere — e la \textsl{traduzione} — la quale traduce le informazioni dell'RNA sintetizzando la proteina.
 
@@ -88,6 +80,8 @@ Affinché la mitosi abbia successo, è prima necessario duplicare il DNA all'int
     \caption[Il processo di replicazione del DNA.]{Il processo di replicazione del DNA durante la fase di sintesi\,\cite{nhgri_dna_replication_image}.}\label{fig:dna-replication}
 \end{figure}
 
+\section{Varianti non codificanti}
+
 Come descritto fino ad ora, il ruolo del DNA è fondamentale in quanto trasmesso da cellula a cellula durante la replicazione per poi essere utilizzato nell'espressione genica creando le proteine. Alle regioni del DNA che prendono parte al processo di espressione di un gene, si contrappongono le regioni che non vengono codificate, come le zone intensificatrici e promotrici del DNA e gli introni dei geni. Anche se queste sequenze non vengono effettivamente espresse, ricoprono un ruolo fondamentale nell'espressione genica (Figura\,\ref{fig:dna-transcription} e Figura\,\ref{fig:mrna-translation}) e durante la duplicazione del DNA (Figura\,\ref{fig:dna-replication}). Proprio per questo motivo le mutazioni in queste zone possono indurre a disturbi genetici critici. Ciò nonostante non si è ancora in grado di comprendere a fondo gli effetti che queste particolari mutazioni hanno. Risulta quindi importante continuare a studiare le varianti non codificanti e gli effetti collaterali genetici che provocano.
 
 
@@ -97,19 +91,3 @@ Come descritto fino ad ora, il ruolo del DNA è fondamentale in quanto trasmesso
 % \section{Cenni storici}
 % \todo{ Questi articoli che raccontano bene la storia \cite{crick1954complementary, watson1953molecular, li2021cell}. Si può citare anche la question del junk DNA. }
 % \todo{ Questo libro parla della scoperta delle cellule \cite{alberts2015essential}}
-
-
-\section{Stato dell'arte}
-
-Il continuo avanzamento di strumenti informatici e computazionali ha nettamente agevolato la comprensione di numerosi aspetti legati alla biologia favorendo la nascita di una branca che unisce informatica e biologia, la bioinformatica. Inoltre, con l'emergere dell'intelligenza artificiale, svariati strumenti bioinformatici sono stati creati come AlphaFold, ROSETTA3, Bioconductor, Clustale  DeepVirFInder\,\cite{jumper2021highly, leaver2011rosetta3, gentleman2004bioconductor, larkin2007clustal, ren2020identifying}. Oltre a questi rimangono molto diffusi anche strumenti che non hanno basi di deep learning ma sfruttano solo la potenza di calcolo delle macchine moderne, come BLAST\,\cite{altschul1990basic}. La potenza e l'accuratezza di questi nuovi strumenti basati sull'AI è stata favorita anche dall'immensità di dati biologici che sono stati raccolti nell'ultimo ventennio e mantenuti in enormi basi di dati come l'\textit{NCBI database} e il PDB\,\cite{sherry2001dbsnp, burley2017protein}
-
-In particolare, per quanto riguarda le varianti non codificanti, lo stato dell'arte è rappresentato da DeepSEA, Basset e DeepSATA\,\cite{zhou2015predicting, kelley2016basset, ma2023deepsata}. Questi tre tool si occupano di fornire una predizione accurata sugli effetti delle varianti non codificanti attraverso le reti neurali convoluzionali.
-
-% https://books.google.it/books?hl=it&lr=&id=Cg4WAgAAQBAJ&oi=fnd&pg=PP1&dq=Introduction+to+cell+biology&ots=yg4LdM46O3&sig=FkW8Ei_rOFccb96Sw3A28QsHuFo&redir_esc=y#v=onepage&q=Introduction%20to%20cell%20biology&f=false
-
-% https://books.google.it/books?hl=it&lr=&id=mXiiEAAAQBAJ&oi=fnd&pg=PP1&dq=cellular+biology&ots=8O1TrOZBXp&sig=fqZhVnT0H-I3qEu1iPk4v2nvZi8&redir_esc=y#v=onepage&q=cellular%20biology&f=false
-
-% https://books.google.it/books?hl=it&lr=&id=z4BDRcLrekMC&oi=fnd&pg=PR19&dq=cell+nucleus+organization&ots=wiXN8JbVpC&sig=oviVqMKJqsvcYwe4X37tQM28P3Y&redir_esc=y#v=onepage&q=cell%20nucleus%20organization&f=false
-
-% Images:
-% https://www.genome.gov/genetics-glossary

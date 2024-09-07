@@ -89,7 +89,7 @@
 
 % references
 \RequirePackage[autostyle]{csquotes}
-\RequirePackage[backend=biber, style=numeric-comp, sorting=none]{biblatex}
+\RequirePackage[backend=biber, style=ieee, sorting=none]{biblatex}
 \addbibresource{references.bib}
 
 

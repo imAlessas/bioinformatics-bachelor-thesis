@@ -76,6 +76,9 @@
 % todo
 \RequirePackage{todonotes}
 
+% comment
+\RequirePackage{comment}
+
 % algoritms
 \RequirePackage{algorithm}
 \RequirePackage{algorithmic}

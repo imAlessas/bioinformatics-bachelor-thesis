@@ -1,6 +1,11 @@
 name: Update README with abstract.tex content
 
 on:
+  workflow_run:
+    workflows: ["Build thesis.pdf"]  # Triggers after the "Extract Abstract" workflow finishes
+    types:
+      - completed
+      
   push:
     paths:
       - "frontmatter/abstract.tex" # Trigger only when abstract.tex is modified

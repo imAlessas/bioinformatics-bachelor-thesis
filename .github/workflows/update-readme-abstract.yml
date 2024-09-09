@@ -2,7 +2,7 @@ name: Update README abstract
 
 on:
   workflow_run:
-    workflows: ["Build thesis.pdf"]  # Triggers after the "Extract Abstract" workflow finishes
+    workflows: ["Update README sommario"]  # Triggers after the "Update README sommario" workflow finishes
     types:
       - completed
 
@@ -21,7 +21,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Extract abstract from abstract.tex and update README.md
+    - name: Extract abstract and update README.md
       run: |
         # Extract content between \begin{abstract} and \end{abstract}
         abstract_content=$(sed -n '/\\begin{abstract}/, /\\end{abstract}/p' frontmatter/abstract.tex | sed '1d;$d')

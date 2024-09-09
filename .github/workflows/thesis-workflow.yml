@@ -1,0 +1,112 @@
+name: Thesis Workflow
+
+on:
+  push:
+    paths:
+      - '**/*.tex'  # Trigger when any .tex file is modified
+
+permissions:
+  contents: write
+
+jobs:
+  # Job 1: Build thesis.pdf
+  build-thesis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v3
+
+      - name: Check if main.pdf exists
+        id: check_pdf
+        run: |
+          if [ -f main.pdf ]; then
+            echo "::set-output name=pdf_exists::true"
+          else
+            echo "::set-output name=pdf_exists::false"
+          fi
+
+      - name: Compile main.tex
+        if: steps.check_pdf.outputs.pdf_exists == 'false'
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+
+      - name: Push main.pdf
+        if: steps.check_pdf.outputs.pdf_exists == 'false'
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git add main.pdf
+          git add main.xmpdata
+          git commit -m "Create main.pdf"
+          git push https://${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
+
+      - name: Update thesis.pdf
+        run: |
+          if [ -f main.pdf ]; then
+            mv main.pdf thesis.pdf
+          fi
+
+      - name: Push thesis.pdf
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "GitHub Actions"
+          git add .
+          git commit -m "Update thesis.pdf"
+          git push
+
+  # Job 2: Update README sommario
+  update-sommario:
+    runs-on: ubuntu-latest
+    needs: build-thesis  # Only run after the build-thesis job is complete
+    if: github.event.commits.*.modified contains 'frontmatter/sommario.tex'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Extract sommario and update README.md
+        run: |
+          # Extract content between \begin{abstract}[it] and \end{abstract}
+          sommario_content=$(sed -n '/\\begin{abstract}\[it\]/, /\\end{abstract}/p' frontmatter/sommario.tex | sed '1d;$d')
+
+          # Escape special characters for safe use in sed
+          sommario_content=$(printf '%s\n' "$sommario_content" | sed 's/[&/\]/\\&/g')
+
+          # Replace content in README.md between the markers <!-- BEGIN SOMMARIO --> and <!-- END SOMMARIO -->
+          sed -i '/<!-- BEGIN SOMMARIO -->/,/<!-- END SOMMARIO -->/c\<!-- BEGIN SOMMARIO -->\n'"$sommario_content"'\n<!-- END SOMMARIO -->' README.md
+
+      - name: Commit changes
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "GitHub Actions"
+          git add README.md
+          git commit -m "Update README - sommario"
+          git push
+
+  # Job 3: Update README abstract
+  update-abstract:
+    runs-on: ubuntu-latest
+    needs: update-sommario  # Only run after the update-sommario job is complete
+    if: github.event.commits.*.modified contains 'frontmatter/abstract.tex'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Extract abstract and update README.md
+        run: |
+          # Extract content between \begin{abstract} and \end{abstract}
+          abstract_content=$(sed -n '/\\begin{abstract}/, /\\end{abstract}/p' frontmatter/abstract.tex | sed '1d;$d')
+
+          # Escape special characters for safe use in sed
+          abstract_content=$(printf '%s\n' "$abstract_content" | sed 's/[&/\]/\\&/g')
+
+          # Replace content in README.md between the markers <!-- BEGIN ABSTRACT --> and <!-- END ABSTRACT -->
+          sed -i '/<!-- BEGIN ABSTRACT -->/,/<!-- END ABSTRACT -->/c\<!-- BEGIN ABSTRACT -->\n'"$abstract_content"'\n<!-- END ABSTRACT -->' README.md
+
+      - name: Commit changes
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "GitHub Actions"
+          git add README.md
+          git commit -m "Update README - abstract"
+          git push

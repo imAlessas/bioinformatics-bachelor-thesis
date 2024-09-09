@@ -8,7 +8,7 @@ on:
 
   push:
     paths:
-      - "frontmatter/sommario.tex"  # Trigger only when sommario.tex is modified
+      - "nevertrigger.file"  # Trigger only when sommario.tex is modified
 
 permissions:
   contents: write

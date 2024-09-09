@@ -8,7 +8,7 @@ on:
 
   push:
     paths:
-      - "frontmatter/abstract.tex" # Trigger only when abstract.tex is modified
+      - "nevertrigger.file" # Trigger only when abstract.tex is modified
 
 permissions:
   contents: write

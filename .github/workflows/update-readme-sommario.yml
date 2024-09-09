@@ -8,7 +8,7 @@ on:
 
   push:
     paths:
-      - "frontmatter/sommario.tex" # Trigger only when sommario.tex is modified
+      - "frontmatter/sommario.tex"  # Trigger only when sommario.tex is modified
 
 permissions:
   contents: write
@@ -24,7 +24,7 @@ jobs:
     - name: Extract sommario and update README.md
       run: |
         # Extract content between \begin{abstract}[it] and \end{abstract}
-        sommario_content=$(sed -n '/\\begin{abstract}[it]/, /\\end{abstract}/p' frontmatter/sommario.tex | sed '1d;$d')
+        sommario_content=$(sed -n '/\\begin{abstract}\[it\]/, /\\end{abstract}/p' frontmatter/sommario.tex | sed '1d;$d')
 
         # Escape special characters for safe use in sed
         sommario_content=$(printf '%s\n' "$sommario_content" | sed 's/[&/\]/\\&/g')
@@ -34,7 +34,7 @@ jobs:
 
     - name: Commit changes
       run: |
-        git config user.email "actions@github.com"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
         git config user.name "GitHub Actions"
         git add README.md
         git commit -m "Update README - sommario"

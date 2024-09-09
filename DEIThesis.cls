@@ -461,7 +461,7 @@
 
 % -- ACRONYMS/ABBREVIATIONS --
 
-\RequirePackage{acronym}
+\RequirePackage[printonlyused, withpage]{acronym}
 
 % custom style for acronyms
 \newcommand{\acronyms}{

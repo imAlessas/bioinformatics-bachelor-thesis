@@ -1,0 +1,41 @@
+name: Update README sommario
+
+on:
+  workflow_run:
+    workflows: ["Build thesis.pdf"]  # Triggers after the "Build thesis.pdf" workflow finishes
+    types:
+      - completed
+
+  push:
+    paths:
+      - "frontmatter/sommario.tex" # Trigger only when sommario.tex is modified
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme-sommario:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Extract sommario and update README.md
+      run: |
+        # Extract content between \begin{sommario} and \end{sommario}
+        sommario_content=$(sed -n '/\\begin{sommario}/, /\\end{sommario}/p' frontmatter/sommario.tex | sed '1d;$d')
+
+        # Escape special characters for safe use in sed
+        sommario_content=$(printf '%s\n' "$sommario_content" | sed 's/[&/\]/\\&/g')
+
+        # Replace content in README.md between the markers <!-- BEGIN SOMMARIO --> and <!-- END SOMMARIO -->
+        sed -i '/<!-- BEGIN SOMMARIO -->/,/<!-- END SOMMARIO -->/c\<!-- BEGIN SOMMARIO -->\n'"$sommario_content"'\n<!-- END SOMMARIO -->' README.md
+
+    - name: Commit changes
+      run: |
+        git config user.email "actions@github.com"
+        git config user.name "GitHub Actions"
+        git add README.md
+        git commit -m "Update README - sommario"
+        git push

@@ -6,10 +6,6 @@ on:
     types:
       - completed
 
-  push:
-    paths:
-      - "nevertrigger.file" # Trigger only when abstract.tex is modified
-
 permissions:
   contents: write
 

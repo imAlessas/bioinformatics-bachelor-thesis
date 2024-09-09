@@ -1,0 +1,37 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        axis lines = middle,
+        xlabel = $v$,
+        ylabel = {\textbf{sign}$(v)$},
+        ymin=-1.2, ymax=1.2, % control the vertical limits
+        xmin=-3, xmax=3,     % control the horizontal limits
+        xtick={-2,-1,0,1,2}, % x-axis ticks
+        ytick={-1,0,1},      % y-axis ticks
+        domain=-3:3,
+        samples=100,
+        width=10cm,
+        height=6cm,
+        enlargelimits,
+        yticklabel style={yshift=-1ex, xshift=0.75ex} % Adjust vertical position of y-tick labels
+    ]
+        % Plot the step function
+        \addplot[
+            red,
+            thick,
+            domain=-3:0,
+        ] {-1}; % Plot f(x) = -1 for x < 0
+
+        \addplot[
+            red,
+            thick,
+            domain=0:3,
+        ] {1}; % Plot f(x) = 1 for x >= 0
+
+        % Add a filled circle for the closed part of the step at x = 0, y = 1
+        \addplot[only marks, mark=*, black] coordinates {(0, 1)};
+        
+        % Add an open circle for the open part of the step at x = 0, y = 0
+        \addplot[only marks, mark=o, black] coordinates {(0, -1)};
+        
+    \end{axis}
+\end{tikzpicture}

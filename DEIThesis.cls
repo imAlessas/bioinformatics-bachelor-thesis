@@ -60,6 +60,9 @@
 % mathematics
 \RequirePackage{amsmath}
 
+% plots
+\RequirePackage{pgfplots}
+
 % links
 \RequirePackage{hyperref}
 \RequirePackage{url}

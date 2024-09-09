@@ -1,11 +1,11 @@
-name: Update README with abstract.tex content
+name: Update README abstract
 
 on:
   workflow_run:
     workflows: ["Build thesis.pdf"]  # Triggers after the "Extract Abstract" workflow finishes
     types:
       - completed
-      
+
   push:
     paths:
       - "frontmatter/abstract.tex" # Trigger only when abstract.tex is modified
@@ -24,7 +24,7 @@ jobs:
     - name: Extract abstract from abstract.tex and update README.md
       run: |
         # Extract content between \begin{abstract} and \end{abstract}
-        abstract_content=$(sed -n '/\\begin{abstract}/, /\\end{abstract}/p' abstract.tex | sed '1d;$d')
+        abstract_content=$(sed -n '/\\begin{abstract}/, /\\end{abstract}/p' frontmatter/abstract.tex | sed '1d;$d')
 
         # Escape special characters for safe use in sed
         abstract_content=$(printf '%s\n' "$abstract_content" | sed 's/[&/\]/\\&/g')
@@ -34,8 +34,8 @@ jobs:
 
     - name: Commit changes
       run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git config user.email "actions@github.com"
+        git config user.name "GitHub Actions"
         git add README.md
-        git commit -m "Update README.md with content from abstract.tex"
+        git commit -m "Update README - abstract"
         git push

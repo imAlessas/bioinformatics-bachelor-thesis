@@ -2,12 +2,13 @@
 
     % inputs
     \node[draw, rectangle] (X0) {$X_0$};
-    \node[draw, rectangle, below of=X0] (X1) {$X_1$};
-    \node[below of=X1] (dots) {$\vdots$};
-    \node[draw, rectangle, below of=dots] (Xn) {$X_n$};
+    \node[below of=X0] (dots1) {$\vdots$};
+    \node[draw, rectangle, below of=dots1] (Xi) {$X_i$};
+    \node[below of=Xi] (dots2) {$\vdots$};
+    \node[draw, rectangle, below of=dots2] (Xn) {$X_n$};
     
     % perceptron summation
-    \node [draw, circle, right=2.5cm of X1] (perceptron) {$\sum$};
+    \node [draw, circle, right=2.5cm of Xi, minimum size=1.5cm] (perceptron) {\large $\displaystyle \sum$};
 
     % signal output v
     \node [right=0.5cm of perceptron] (output) {};
@@ -19,8 +20,8 @@
     \node [right=1cm of activation] (final_output) {};
 
     % input arrows with weights
-    \draw [->] (X0) -- node[midway, above] {} node[midway,above] {$W_0$} (perceptron);
-    \draw [->] (X1) -- node[midway, above] {} node[midway,below] {$W_1$} (perceptron);
+    \draw [->] (X0) -- node[midway, above] {} node[midway,below] {$W_0$} (perceptron);
+    \draw [->] (Xi) -- node[midway, above] {} node[midway,below] {$W_i$} (perceptron);
     \draw [->] (Xn) -- node[midway, above] {} node[midway,below] {$W_n$} (perceptron);
 
     \draw [->] (perceptron) -- node[above] {$v$} (activation);

@@ -9,7 +9,9 @@ Dopo due anni, nel 1958, lo psicologo F. Resenblatt introdusse il \textsl{percet
 Nonostante il grande sviluppo nella parte algoritmistica, l'hardware non era computazionalmente prestante da supportare le richieste di calcolo delle reti neurali artificiali. Questa carenza nella potenza di calcolo portò al \textsl{Secondo Inverno dell'Intelligenza Artificiale}, periodo in cui l'interesse scientifico si spostò su modelli che richiedevano meno potenza di calcolo, come le \textit{Support Vector Machines} introdotte nel 1963. Il Secondo Inverno della \ac{AI} terminò a metà degli anni Novanta quando il progresso dell'hardware riuscì a soddisfare i requisiti computazionali dei modelli basati su reti neurali. Il costante sviluppo culminò nell'ultimo ventennio quando venne introdotta la GPU, che, insieme all'aumento dei dati disponibili, accelerò notevolmente i progressi nel campo dell'\ac{AI}\,\cite{flasinski2016introduction, muthukrishnan2020brief}.
 
 \section{Principi di base ed evoluzione}
-% 
+%
+
+
 
 
 
@@ -19,10 +21,169 @@ Nonostante il grande sviluppo nella parte algoritmistica, l'hardware non era com
 % 
 
 
+\section*{Capitolo 11 — Introduction to Artificial Intelligence}
+% file:///C:/Users/Home/Desktop/Books/Introduction%20to%20Artificial%20Intelligence.pdf
+
+Le reti neurali artificiali — comunemente note come reti neurali — mirano a rappresentare un modello semplificato del cervello, trattato come una struttura composta da neuroni. Risulta quindi necessario comprendere il funzionamento del singolo neurone artificiale per passare alla comprensione della rete neurale, come collegamento tra neuroni.
+
+Come un neurone biologico, il neurone artificiale riceve un numero indefinito $n$ di segnali in input, che possono essere riassunti nella notazione $X_0, X_1, \dots, X_n$. Tali valori possono essere raggruppato nel vettore di input $\mathbf{X} = \left[X_0, X_1, \dots, X_n\right]$ (\textit{input vector}). Essendo che il primo termine $X_0$ è il \textit{bias}, ha un valore scelto da noi; si sceglie $X_0 = 1$. Al fine di comprendere il risultato di tutti i segnali in ingresso del neurone, si introduce una funzione $g$, che si suppone essere una semplice somma algebrica dei segnali di input $X_i\,,i\in[0,\,n]$. Ogni segnale di input, prima di essere sommato viene moltiplicato per il rispettivo peso $W_i\,,i\in[0,\,n]$, che appartiene al vettore dei pesi $\mathbf{W} = \left[W_0, W_1, \dots, W_n \right]$ (\textit{weight vector}). Ne consegue che il segnale in uscita, che viene chiamato $v$, comprenderà la somma del prodotto del segnale \textit{i}-esimo ($X_i$) con il rispettivo peso \textit{i}-esimo ($W_i$):
+
+\begin{gather*}
+    v = g\left(\mathbf{W}, \mathbf{X}\right) = \sum_{i = 0}^n W_i\,X_i = \mathbf{W}\cdot\mathbf{X}
+\end{gather*}
+
+\noindent Per attivare un neurone, è necessario che il segnale prodotto in output sia superiore ad una soglia prescelta. Il criterio secondo il quale un neuorne viene attivato o meno si riassume nella \textsl{funzione di attivazione}, chiamata $y = f(v)$. La funzione più semplice è la funzione \textsl{gradino} che viene riassunta come segue:
+
+\begin{gather*}
+    y(v) = \text{\textbf{1}}(v) =
+    \begin{cases}
+        1 \hspace{10px} \text{se } v\geq0\\
+        0 \hspace{10px} \text{se } v<0
+    \end{cases}
+\end{gather*}
+
+\begin{figure}[!b]
+    \centering
+    \input{assets/TikZ/perceptron.tex}
+    \caption[Rappresentazione schematica del funzionamento di un percettrone.]{Rappresentazione schematica del funzionamento di un percettrone. I segnali in input $X_i$ vengono moltiplicati con i rispettivi pesi $W_i$ e sommati tra loro; il risultato $v$ viene processato dalla funzione di $f(v)$ che restituisce l'output $y$.}\label{fig:perceptron}
+\end{figure}
+
+\noindent Come nel caso di un cervello umano, anche la rete neurale deve essere in grado di impararare. In particolare un neurone deve essere in grado di reagire in un determinato modo quando in input riceve determinati \textsl{pattern}. Affinchè il neurone sia in grado di comporatarsi correttamente di fronte a dei pattern, è necessario allenarlo, che si traduce nel creare un algoritmo tale per cui i pesi del neurone siano modificati in maniera consona. Tale algoritmo, prende dal 
+
+\begin{algorithm}[ht]
+    \caption{Algoritmo di allenamento del neurone}\label{alg:PLA}
+    \begin{algorithmic}
+        \STATE$\mathbf{W}$ inizializzato con numeri casuali
+        \STATE$i \gets 1$
+        
+        \WHILE{\text{neurone non si comporta in modo desiderato}}
+            \STATE$v = a$
+        \ENDWHILE\,
+    \end{algorithmic}
+\end{algorithm}
+
+\todo{Capisci come scrivere l'algoritmo, devi introdurre prima il dataset }
+
+\begin{figure}[!b]
+    \centering
+    \input{assets/TikZ/step-function.tex}
+    \caption[Grafico della funzione gradino \textbf{1}$(v)$.]{Grafico della funzione gradino \textbf{1}$(v)$. Si osserva che vale zero per valori strettamente minori di zero e uno per valori maggiori o ugali a zero.}\label{fig:step-function}
+\end{figure}
 
 
-\todo{quando fai CNN dici che ML fa cagare per questi}
-\todo{Deep learning:      https://www.nature.com/articles/nature14539}
+Ci sono due macro categorie di apprendimento: il \textsl{supervised learning} e l'\textsl{unsupervised learning}. Nel primo caso, per ciascun elemento del dataset (per ciascun vettore composto da $d$ features) è presente una risposta certa, ed è quindi possibile paragonare il risultato predetto dal modello con un risultto conosciuto. Nell'altro caso, si conoscono solo i dati in input, non conoscendo quindi le risposte reali (come nel caso del clustering). Verrà discusso solo il caso del supervised learning, dove il dataset iniziale sarà composto nella maniera seguente:
+
+\begin{gather*}
+    \mathcal{D} = \left\{ \left\{ X_1,\, y_1 \right\},\,\left\{ X_2,\, y_2 \right\},\,\dots\,\left\{ X_j,\, y_j \right\},\,\dots\,\left\{ X_M,\, y_M \right\} \right\}  
+\end{gather*}
+
+\noindent La coppia $\left\{ X_j,\, y_j \right\}$ è composta dal vettore di input $X_j$, che è il vettore che contiene esattamente $n$ componenti, ciascuna delle quali indica il segnale da mandare al neurone. In altre parole $X_j$ è un vettore di $N$ componenti: la componente $i$-esima del vettore $X_j$ viene indicata con $X_j^i$. D'altro canto, $y_i$ è il valore che il neurone dovrebbe resituire dato in input il vettore $X_j$. Possiamo quindi riassumere il dataset $\mathcal{D}$ come:
+
+\begin{gather*}
+    \mathcal{D} = \left\{ \mathbf{X},\, \mathbf{y} \right\}  
+\end{gather*}
+
+\noindent Dove $\mathbf{X}$ è una matrice ed $\mathbf{y}$ è un vettore composti come segue:
+
+\begin{gather*}
+    \begin{aligned}
+        \mathbf{X} &= 
+            \begin{bmatrix}
+            X_1^0       & X_1^1         & \cdots     & X_1^i         & \cdots     & X_1^n     \\
+            X_2^0       & X_2^1         & \cdots     & X_2^i         & \cdots     & X_2^n     \\
+            \vdots      & \vdots        & \ddots     & \vdots        & \ddots     & \vdots    \\
+            X_j^0       & X_j^1         & \cdots     & X_j^i         & \cdots     & X_j^n     \\
+            \vdots      & \vdots        & \ddots     & \vdots        & \ddots     & \vdots    \\
+            X_{M-1}^0   & X_{M-1}^1     & \cdots     & X_{M-1}^i     & \cdots     & X_{M-1}^n \\
+            X_M^0       & X_M^1         & \cdots     & X_M^i         & \cdots     & X_M^n     \\
+            \end{bmatrix}
+        %
+        \hspace{60px}
+        %
+        \mathbf{y} = 
+            \begin{bmatrix}
+            y_1 \\ y_2 \\ \vdots \\ y_j \\ \vdots \\ y_{M-1} \\ y_M
+            \end{bmatrix}
+    \end{aligned}
+\end{gather*}
+
+\noindent Di conseguenza otteniamo che il componente $j$-esimo del dataset
+
+\begin{gather*}
+    X_j = \left\{ X_j^0,\, X_j^1,\,\dots,\, X_j^n \right\}
+\end{gather*}
+
+\noindent È compatibile con il vettore di pesi $\mathbf{w}$ definitio inizialmente:
+
+\begin{gather*}
+    \mathbf{w} = \left\{w_0,\, w_1,\, \dots,\, w_n \right\}
+\end{gather*}
+
+\todo{sistema tutte ste notazioni perchè è una merda vera. IDEA:\, metti sopra all'inizio la x piccola e in seguito osservi che Xj = x. In questo modo rendi tutto piu fico. INVARIANTE:\, maiuscole = matrice, minuscole = vettore}
+
+
+Il modello di neurone artificiale che viene tuttora utilizzato è il percettrone. In questo caso si utilizza la funzione $g$ di somma algebrica per calcolare la risultatnte di tutti i segnali del vettore $X_j$ nel neurone:
+
+\begin{gather*}
+    v = g\left(\mathbf{w}, X_j\right) = \sum_{i = 0}^n w_i\,X_j^i
+\end{gather*}
+
+La funzione di attivazione del percettrone è la funzione gradino \textsl{bipolare} — \textit{bipolar step function} — che è anche la funzione \textsl{``segno''}:
+
+\begin{gather*}
+    y(v) = \text{\textbf{sign}}(v) =
+    \begin{cases}
+        1 \hspace{15px} \text{se } v\geq0\\
+        -1 \hspace{10px} \text{se } v<0
+    \end{cases}
+\end{gather*}
+
+La cosa più importante però è la \textsl{learning rule}, ovvero la regola secondo la quale il vettore di pesi sia aggiornato a seconda del risultato del vettore $X_j$:
+
+\begin{gather*}
+    w_i = w_i + y_j\,X_j^i
+\end{gather*}
+
+La $i$-esima componente del vettore di pesi è data dalla stessa componente sommata al prodotto tra il valore $y_j$ e la componente $i$-esima del vettore di input $j$-esimo ($X_j^i$).
+
+\todo{Spiega come il vettore venga o meno aggiornato a seconda del valore di $X_j^i$}
+
+
+\begin{figure}[!b]
+    \centering
+    \input{assets/TikZ/sign-function.tex}
+    \caption[Grafico della funzione segno \textbf{sign}$(v)$.]{Grafico della funzione segno \textbf{sign}$(v)$. Si osserva che vale -1 per valori strettamente minori di zero e 1 per valori maggiori o ugali a zero.}\label{fig:sign-function}
+\end{figure}
+
+
+\todo{Introduzion adaline e sigmoide che perfroza sono le più importanti}
+\todo{Inserisci il disegnone di una rete neurale bella pimpante}
+
+\begin{comment}
+Per non diventare matti la notazione è l'opposta di quella sul file di Machine Learnign.
+- ci sono esattamente N feature in un vettore di input, di conseguenza il vettore di pesi è di lunghezza N
+- ci sono esattamente M vettori di input nel dataset, di conseguenza la lunghezza della label è M
+- Il dataset D è composta da j colonne ed i righe
+- Ciascuna riga j rappresenta un elemento del dataset
+- Ciascuna colonna i rappresente un feature del dataset
+
+Di conseguneza D_j indica il vettore j-esimo composto esattamente da N componenti. La label y_j indica il vero valore dell'input processato
+\end{comment}
+
+
+
+
+
+\,\cite{flasinski2016introduction}
+
+\todo{riscrivi meglio il bias}
+\todo{se modifichi la notazione dei pesi devi anche sistemare il disegno /assets/TikZ/perceptron.tex}
+\todo{vedi se inserire la rappresentazione del percettrone e la step function}
+\todo{parla anche delle metodologie di evaluation}
+\todo{Vedi se nelle Reti Neurali vale la pena discutere la somiglianza con la \textsl{pattern recognition} (penso di no TBH)}
+% Il modello di reti neurali può essere trattat come uni dei tre approcci di Pattern Recognition
+
+\todo{convolution: filters osno di fatto dei profile sulle sequenze}
 
 \begin{comment}
 Il primo modello di intelligenza artificiale tento di creare il funzionamento di un neurone (ce la foto se vuoi metterla). I primi modelli piu semplici furono delle semplicit input-output function. IN seguito le funzioni divennero piu complicate, piu livelli furono aggiunti e feedback bidiriezionale fino ad arrivare ai modelli odierni di DL.
@@ -51,3 +212,5 @@ Nel 1950 Alan turing pubbliuca ``Computing machinery and intewlligence'' dove vi
 
 Dagli anni 80, viene inventata la backpropagation dove le reti neurali diventano efficaci. Qui nascono anche i sistemi esperti, che sono dei sistemi che, per esempio, si basano su delle regole logiche: qualcosa dis uper dettagliato ed un esperto inietta dentro la sua conoscienza. Nel 1996/1997 Gary kasparov sfidas DeepBLUE, progettato da IBM.\@ La prima sfida, Kasparov vince il mach overall ma perde due partite. Nella seconda edizione del 97, deepBLUE vince tutto. Per la prima volta, un esperto viene sconmfitto da una macchina. Negli anni 2000 arriva il machine learning: apprendimento automatico. Una macchina che apprende dai dati.  Reti neurali sono un sottoinsieme del ML, il deep learning sono un sottinsieme di rete neruale (LLM sono un soittinseeme di deep NN). 
 \end{comment}
+
+

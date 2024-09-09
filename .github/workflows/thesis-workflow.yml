@@ -3,7 +3,7 @@ name: Thesis Workflow
 on:
   push:
     paths:
-      - '**/*.tex'  # Trigger when any .tex file is modified
+      - 'nevertrigger.file'  # Trigger when any .tex file is modified
 
 permissions:
   contents: write

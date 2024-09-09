@@ -3,7 +3,7 @@ name: Build thesis.pdf
 on:
   push:
     paths:
-      - 'nevertrigger.file'
+      - '**/*.tex'
 
 permissions:
   contents: write

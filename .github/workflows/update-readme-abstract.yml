@@ -3,7 +3,7 @@ name: Update README with abstract.tex content
 on:
   push:
     paths:
-      - "abstract.tex" # Trigger only when abstract.tex is modified
+      - "frontmatter/abstract.tex" # Trigger only when abstract.tex is modified
 
 permissions:
   contents: write

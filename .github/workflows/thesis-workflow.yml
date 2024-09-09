@@ -3,7 +3,7 @@ name: Thesis Workflow
 on:
   push:
     paths:
-      - 'nevertrigger.file'  # Trigger when any .tex file is modified
+      - '**/*.tex'  # Trigger when any .tex file is modified
 
 permissions:
   contents: write
@@ -18,26 +18,20 @@ jobs:
 
       - name: Check if main.pdf exists
         id: check_pdf
-        run: |
-          if [ -f main.pdf ]; then
-            echo "::set-output name=pdf_exists::true"
-          else
-            echo "::set-output name=pdf_exists::false"
-          fi
+        run: echo "pdf_exists=$(test -f main.pdf && echo true || echo false)" >> $GITHUB_ENV
 
       - name: Compile main.tex
-        if: steps.check_pdf.outputs.pdf_exists == 'false'
+        if: env.pdf_exists == 'false'
         uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
 
       - name: Push main.pdf
-        if: steps.check_pdf.outputs.pdf_exists == 'false'
+        if: env.pdf_exists == 'false'
         run: |
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
-          git add main.pdf
-          git add main.xmpdata
+          git add main.pdf main.xmpdata
           git commit -m "Create main.pdf"
           git push https://${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
 
@@ -51,7 +45,7 @@ jobs:
         run: |
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "GitHub Actions"
-          git add .
+          git add thesis.pdf
           git commit -m "Update thesis.pdf"
           git push
 
@@ -67,14 +61,10 @@ jobs:
       - name: Check if sommario.tex was modified
         id: check_sommario
         run: |
-          if git diff --name-only HEAD~1 | grep -q 'frontmatter/sommario.tex'; then
-            echo "::set-output name=run_sommario::true"
-          else
-            echo "::set-output name=run_sommario::false"
-          fi
+          git diff --name-only HEAD^ HEAD | grep -q 'frontmatter/sommario.tex' && echo "run_sommario=true" >> $GITHUB_ENV || echo "run_sommario=false" >> $GITHUB_ENV
 
       - name: Extract sommario and update README.md
-        if: steps.check_sommario.outputs.run_sommario == 'true'
+        if: env.run_sommario == 'true'
         run: |
           # Extract content between \begin{abstract}[it] and \end{abstract}
           sommario_content=$(sed -n '/\\begin{abstract}\[it\]/, /\\end{abstract}/p' frontmatter/sommario.tex | sed '1d;$d')
@@ -86,7 +76,7 @@ jobs:
           sed -i '/<!-- BEGIN SOMMARIO -->/,/<!-- END SOMMARIO -->/c\<!-- BEGIN SOMMARIO -->\n'"$sommario_content"'\n<!-- END SOMMARIO -->' README.md
 
       - name: Commit changes
-        if: steps.check_sommario.outputs.run_sommario == 'true'
+        if: env.run_sommario == 'true'
         run: |
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "GitHub Actions"
@@ -106,14 +96,10 @@ jobs:
       - name: Check if abstract.tex was modified
         id: check_abstract
         run: |
-          if git diff --name-only HEAD~1 | grep -q 'frontmatter/abstract.tex'; then
-            echo "::set-output name=run_abstract::true"
-          else
-            echo "::set-output name=run_abstract::false"
-          fi
+          git diff --name-only HEAD^ HEAD | grep -q 'frontmatter/abstract.tex' && echo "run_abstract=true" >> $GITHUB_ENV || echo "run_abstract=false" >> $GITHUB_ENV
 
       - name: Extract abstract and update README.md
-        if: steps.check_abstract.outputs.run_abstract == 'true'
+        if: env.run_abstract == 'true'
         run: |
           # Extract content between \begin{abstract} and \end{abstract}
           abstract_content=$(sed -n '/\\begin{abstract}/, /\\end{abstract}/p' frontmatter/abstract.tex | sed '1d;$d')
@@ -125,7 +111,7 @@ jobs:
           sed -i '/<!-- BEGIN ABSTRACT -->/,/<!-- END ABSTRACT -->/c\<!-- BEGIN ABSTRACT -->\n'"$abstract_content"'\n<!-- END ABSTRACT -->' README.md
 
       - name: Commit changes
-        if: steps.check_abstract.outputs.run_abstract == 'true'
+        if: env.run_abstract == 'true'
         run: |
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "GitHub Actions"

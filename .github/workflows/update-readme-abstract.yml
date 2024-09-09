@@ -1,0 +1,36 @@
+name: Update README with abstract.tex content
+
+on:
+  push:
+    paths:
+      - "abstract.tex" # Trigger only when abstract.tex is modified
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme-abstract:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Extract abstract from abstract.tex and update README.md
+      run: |
+        # Extract content between \begin{abstract} and \end{abstract}
+        abstract_content=$(sed -n '/\\begin{abstract}/, /\\end{abstract}/p' abstract.tex | sed '1d;$d')
+
+        # Escape special characters for safe use in sed
+        abstract_content=$(printf '%s\n' "$abstract_content" | sed 's/[&/\]/\\&/g')
+
+        # Replace content in README.md between the markers <!-- BEGIN ABSTRACT --> and <!-- END ABSTRACT -->
+        sed -i '/<!-- BEGIN ABSTRACT -->/,/<!-- END ABSTRACT -->/c\<!-- BEGIN ABSTRACT -->\n'"$abstract_content"'\n<!-- END ABSTRACT -->' README.md
+
+    - name: Commit changes
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add README.md
+        git commit -m "Update README.md with content from abstract.tex"
+        git push

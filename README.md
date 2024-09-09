@@ -1,6 +1,6 @@
 # Reti neurali convoluzionali per lo studio di varianti non codificanti in sequenze genomiche
 
-## Sommario
+### Sommario
 
 <div style="text-align: justify; text-justify: inter-word;">
 <!-- BEGIN SOMMARIO -->
@@ -10,7 +10,7 @@
 
 ___
 
-## Abstract
+### Abstract
 
 <div style="text-align: justify; text-justify: inter-word;">
 <!-- BEGIN ABSTRACT -->

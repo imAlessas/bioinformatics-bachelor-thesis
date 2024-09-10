@@ -14,14 +14,15 @@ Le reti neurali artificiali (\acs{ANN}) — comunemente note come reti neurali (
 
 Come un neurone biologico, il neurone artificiale (Figura\,\ref{fig:artificial-neuron}) riceve un numero indefinito $n$ di segnali in \textsl{input}, che possono essere rappresentati con la notazione $x_0, x_1, \dots, x_n$. Tali valori possono essere raggruppato nel vettore di input $\mathbf{x} = \left[x_0, x_1, \dots, x_n\right]$. Per descrivere il risultato di tutti i segnali in ingresso del neurone, si introduce una funzione $g$, che si suppone essere una semplice somma algebrica dei segnali di input $x_i$, con $i\in[0,\,n]$. Ogni segnale di input, prima di essere sommato viene moltiplicato per il rispettivo peso (\textit{weight}) $w_i$, con $i\in[0,\,n]$, che appartiene al vettore dei pesi $\mathbf{w} = \left[w_0, w_1, \dots, w_n \right]$. Ne consegue che il segnale in uscita, indicato con $v$, comprenderà la somma del prodotto del segnale \textit{i}-esimo ($x_i$) con il rispettivo peso \textit{i}-esimo ($w_i$):
 % 
-\begin{gather*}
+\begin{gather}
     v = g\left(\mathbf{w}, \mathbf{x}\right) = \sum_{i = 0}^n w_i\,x_i
-\end{gather*}
+    \label{eq:algebric-sum}
+\end{gather}
 % 
 \begin{figure}[!b]
     \centering
     \input{assets/TikZ/artificial-neuron.tex}
-    \caption[Rappresentazione schematica del funzionamento di un percettrone.]{Rappresentazione schematica del funzionamento di un percettrone. I segnali in input $X_i$ vengono moltiplicati con i rispettivi pesi $W_i$ e sommati tra loro; il risultato $v$ viene processato dalla funzione di $f(v)$ che restituisce l'output $z$.}\label{fig:artificial-neuron}
+    \caption[Rappresentazione schematica del funzionamento di un neurone artificiale.]{Rappresentazione schematica del funzionamento di un neurone artificiale. I segnali in input $X_i$ vengono moltiplicati con i rispettivi pesi $W_i$ e sommati tra loro; il risultato $v$ viene processato dalla funzione di $f(v)$ che restituisce l'output $z$.}\label{fig:artificial-neuron}
 \end{figure}
 % 
 \noindent Per attivare un neurone, è necessario che il segnale $v$ prodotto in \textsl{output} sia superiore ad una soglia prescelta, solitamente rappresenta dalla prima componente del vettore di input ($x_0$). Questo valore, noto come \textit{bias}, è scelto arbitrariamente ma spesso viene impostato ad 1. Il criterio che descrive l'attivazione del neurone artificiale è riassunto nella \textsl{funzione di attivazione}, chiamata $z = f(v)$. La funzione di attivazione più semplice che descrive tale criterio la funzione \textsl{gradino} \textbf{1}$(v)$, descritta graficamente nella Figura\,\ref{fig:step-function}:
@@ -76,7 +77,7 @@ Come un neurone biologico, il neurone artificiale (Figura\,\ref{fig:artificial-n
     \begin{aligned}
         X_j = \left[ X_j^0,\, X_j^1,\,\dots,\, X_j^n \right]
         %
-        \hspace{60px}
+        \hspace{50px}
         %
         \mathbf{w} = \left[w_0,\, w_1,\, \dots,\, w_n \right]
     \end{aligned}
@@ -117,7 +118,7 @@ Il modello di neurone artificiale che viene tuttora utilizzato nelle reti neural
 % 
 \noindent La funzione di attivazione $f(v)$ è la funzione \textsl{``segno''}\,(Figura\,\ref{fig:sign-function}), chiamata anche \textsl{gradino bipolare} e definita come segue. 
 % 
-\begin{figure}[!b]
+\begin{figure}[!t]
     \centering
     \input{assets/TikZ/sign-function.tex}
     \caption[Grafico della funzione segno \textsl{sign}$(v)$.]{Grafico della funzione segno \textbf{sign}$(v)$. Si osserva che vale -1 per valori strettamente minori di zero e 1 per valori maggiori o ugali a zero.}\label{fig:sign-function}
@@ -137,41 +138,105 @@ Il modello di neurone artificiale che viene tuttora utilizzato nelle reti neural
     w_i \, = \, w_i \, + \, y_j\,X_j^i
 \end{gather*}
 
-\noindent
+Al modello di neurone artificiale del percettrone si aggiunge anche l'\textit{Adaline} (\textit{Adaptive Linear Neuron}) la cui learning rule 
+% 
+\begin{gather*}
+    w_i \, = \, w_i \, + \, \eta\,\left( y_j - v_j \right)\, X_j^i
+\end{gather*}
+
+Oltre a differire per la learning rule, alcuni modelli differiscono per l'activation function. Oltre alla funzione ``segno'' anche la funzione \textsl{sigmoide} (Figura\,\ref{fig:sigmoid-function}) è largamente utilizzata.
+% 
+\begin{gather*}
+    \sigma(v) \, = \, \frac{1}{1 + e^{-v}}
+\end{gather*}
+% 
+\begin{figure}[!t]
+    \centering
+    \input{assets/TikZ/sigmoid-function.tex}
+    \caption[Grafico della funzione sigmoide $\sigma(v)$.]{Grafico della funzione gradino $\sigma(v)$.}\label{fig:sigmoid-function}
+\end{figure}
+% 
+
+Una rete neurale non è altro che una struttura composta da neuroni artificiali i quali sono organizzati in livelli (\textit{layers}). In una rete neurale multilivello, è sempre presente un input layer e un output layer. I livelli che si trovano tra questi sono detti livelli nascosti — \textit{hidden} layers. Va osservato che i neuroni dello stesso livello non sono mai collegati ma sono collegati con quelli del livello precedente e del livello successivo.
+% 
+\begin{figure}[!b]
+    \centering
+    \input{assets/TikZ/neural-network.tex}
+    \caption[Rappresentazione di una rete neurale multilivello.]{Rappresentazione di una rete neurale multilivello.}\label{fig:neural-network}
+\end{figure}
+% 
+In particolare, data una rete neurale, i neuroni del livello $r$ ricevono il segnale dai neuroni del livello $r-1$ e, dopo aver elaborato le informazioni, inviano il segnale processato i neuroni del livello $r+1$. Osservando la Figura\,\ref{fig:neural-network} si introduce una nuova notazione per le reti neurali: si definisce con $N^{(r)(k)}$ il neurone $k$-esimo che si trova nel livello $r$; di conseguenza il suo output è identificato dalla notazione $y^{(r)(k)}$ e il suo input è $X^{(r)(k)}_i$, con $i\,\in\,\left[1,\,n\right]$, associato al peso $w^{(r)(k)}_i$. Si osserva che $n$ è il numero di input del neurone, e di conseguenza è il numero di neuroni presenti nel livello precedente; particolarmente l'input $i$-esimo di un neurone generico $k$ in un livello $r$ è uguale all'output del neurone $k$ al livello $r-1$:
+% 
+\begin{gather*}
+    y^{(r-1)(i)} = X^{(r)(k)}_i
+\end{gather*}
+% 
+\noindent Utilizzando la somma algebrica, illustrata nell'equazione\,\ref{eq:algebric-sum}, l'output di un neurone $k$, in un livello $r$ è dato da:
+% 
+\begin{gather*}
+    y^{(r)(k)} = f \left( \sum_i\,w_i^{(r)(k)}\, X_i^{(r)(k)}\right) = f \left( \sum_i\,w_i^{(r)(k)}\, y^{(r-1)(i)}\right)
+\end{gather*}
+% 
+\noindent Tale risultato può essere osservato graficamente nella Figura.
+
+\cite{flasinski2016introduction}
+
+Come nel caso di un singolo neurone artificiale, anche una rete neurale deve essere allenata. Per allenare una \acs{NN} i pesi della rete devono essere impostati in modo tale da \textsl{minimizzare} l'errore dato un determinato dataset di partenza. I pesi vengono man mano rifiniti durante la fase di allenamento attraverso la derivata parziale della funzione ``errore'' calcolate sui pesi. Questo approccio è del tutto analogo all'approccio del \textit{Gradient Descent} (\acs{GD})
 
 
+
+si utilizza l'algoritmo della \textit{backpropagation}, introdotto per la prima volta nel 1986. L'idea alla base di questo algoritmo è quella di minimizzare una funzione di errore attraverso l'approccio del \textit{Gradient Descent} (\acs{GD}). Essendo che questo approccio richiede il calcolo del gradiente, è necessario che la funzione di attivazione sia continua e differenziabile: a questo proposito si utilizza la funzione sigmoide (Figura\,\ref{fig:sigmoid-function}) anziché la funzione ``segno'' adottata nel percettrone.
+
+\begin{gather*}
+    s(x) = \sigma(x) \, = \, \frac{1}{1 + e^{-x}}
+    % 
+    \hspace{50px}
+    % 
+    \frac{d}{dx}s(x) = \frac{e^{-x}}{{\left( 1 + e^{-x} \right)}^2} = s(x)\left(1 - s(x)\right)
+\end{gather*}
+% 
+\noindent Per una rete compota da percettroni, la funzione ``segno'' può essere approssimata dalla \textsl{sigmoide simmetrica}, che non è altro che la tangente iperbolica di $\frac{x}{2}$:
+% 
+\begin{gather*}
+    S(x) = 2s(x) - 1 = \tanh\left( \frac{x}{2} \right)
+\end{gather*}
+
+
+
+\cite{sathyanarayana2014gentle}
+
+% https://www.researchgate.net/profile/Shashi-Sathyanarayana/publication/266396438_A_Gentle_Introduction_to_Backpropagation/links/577d124808aeaa6988aba0bc/A-Gentle-Introduction-to-Backpropagation.pdf
+
+% https://d1wqtxts1xzle7.cloudfront.net/51924347/NeuralNetworks-libre.pdf?1487958246=&response-content-disposition=inline%3B+filename%3DBack_Propagation_Algorithm.pdf&Expires=1725992239&Signature=J-LZ7rIZD5T6Nb9jar55PvgTCF3pDd0H8dGNJVU3ijf1bFEoiAX2yF9fkroyCTvPGm0oAhX8SUhRLSZ26bEVOC08ZV9wUPb8HekE0~cj836hKUsc60DVhhXQ3TjlPE91VTwe0kMkDuimtxQuf8LVgJhSF5zc~sAFzSOmHwPfbiqBTxNoSFRY8xkMRRNoTMWS1GZmoOr83rB3VkzKA6QncuQ85ogs4IHeInFT2nnqBNUbvUGOEyhDUbECy39bE57G1CkhMRIXiT-CZLPJxY1gu2dYjr7~gerF49Lay6w1yNJ5kdgqrMpy5TI8suaIwC0NQZ1obOrERVpDKrJ3Y~Lrhg__&Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA
 
 \section{Reti neurali convoluzionali}
 % 
+\todo{parla anche delle metodologie di evaluation}
+\todo{convolution: filters sono di fatto dei profile sulle sequenze}
 
-\section*{Capitolo 11 — Introduction to Artificial Intelligence}
+
+
+
+
+
+
+
+
+\,\cite{flasinski2016introduction, rojas1996backpropagation}
+
 % file:///C:/Users/Home/Desktop/Books/Introduction%20to%20Artificial%20Intelligence.pdf
 
-\todo{vedi se inserire Adaline e Sigmoide}
-\todo{Inserisci il disegnone di una rete neurale bella pimpante}
 
 \begin{comment}
-Per non diventare matti la notazione è l'opposta di quella sul file di Machine Learnign.
-- ci sono esattamente N feature in un vettore di input, di conseguenza il vettore di pesi è di lunghezza N
-- ci sono esattamente M vettori di input nel dataset, di conseguenza la lunghezza della label è M
-- Il dataset D è composta da j colonne ed i righe
-- Ciascuna riga j rappresenta un elemento del dataset
-- Ciascuna colonna i rappresente un feature del dataset
-
-Di conseguneza D_j indica il vettore j-esimo composto esattamente da N componenti. La label y_j indica il vero valore dell'input processato
+    Per non diventare matti la notazione è l'opposta di quella sul file di Machine Learnign.
+    - ci sono esattamente N feature in un vettore di input, di conseguenza il vettore di pesi è di lunghezza N
+    - ci sono esattamente M vettori di input nel dataset, di conseguenza la lunghezza della label è M
+    - Il dataset D è composta da j colonne ed i righe
+    - Ciascuna riga j rappresenta un elemento del dataset
+    - Ciascuna colonna i rappresente un feature del dataset
+    
+    Di conseguneza D_j indica il vettore j-esimo composto esattamente da N componenti. La label y_j indica il vero valore dell'input processato
 \end{comment}
-
-
-
-
-
-\,\cite{flasinski2016introduction}
-
-\todo{parla anche delle metodologie di evaluation}
-\todo{Vedi se nelle Reti Neurali vale la pena discutere la somiglianza con la \textsl{pattern recognition} (penso di no TBH)}
-% Il modello di reti neurali può essere trattat come uni dei tre approcci di Pattern Recognition
-
-\todo{convolution: filters sono di fatto dei profile sulle sequenze}
 
 \begin{comment}
 Il primo modello di intelligenza artificiale tento di creare il funzionamento di un neurone (ce la foto se vuoi metterla). I primi modelli piu semplici furono delle semplicit input-output function. IN seguito le funzioni divennero piu complicate, piu livelli furono aggiunti e feedback bidiriezionale fino ad arrivare ai modelli odierni di DL.

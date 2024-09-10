@@ -1,0 +1,26 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        axis lines = middle,
+        xlabel = $v$,
+        ylabel = {$\sigma(v)$},
+        ymin=-0.1, ymax=1.1, % control the vertical limits
+        xmin=-5, xmax=5,     % control the horizontal limits
+        xtick={-4,-2,0,2,4}, % x-axis ticks
+        ytick={0,0.5,1},     % y-axis ticks
+        domain=-5:5,
+        samples=100,
+        width=10cm,
+        height=6cm,
+        enlargelimits,
+        yticklabel style={yshift=-1ex, xshift=0.75ex} % Adjust vertical position of y-tick labels
+    ]
+        % Plot the sigmoid function
+        \addplot[
+            red,
+            thick
+        ] {1 / (1 + exp(-x))};
+        
+        % Add horizontal lines at y = 1 for reference
+        \addplot[dashed] coordinates {(-5,1) (5,1)} node[right] {};
+    \end{axis}
+\end{tikzpicture}

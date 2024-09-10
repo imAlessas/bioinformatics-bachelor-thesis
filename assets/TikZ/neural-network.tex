@@ -1,2 +1,79 @@
-% see this link
-% https://tikz.net/neural_networks/
+\colorlet{myred}{red!80!black}
+\colorlet{myblue}{blue!80!black}
+\colorlet{mydarkred}{red!30!black}
+\colorlet{mydarkblue}{blue!40!black}
+\colorlet{mylightgray}{gray!30!white}
+
+% STYLES
+\tikzset{
+  >=latex, % for default LaTeX arrow head
+  node/.style={thick,circle,draw=myblue,minimum size=22,inner sep=0.5,outer sep=0.6},
+  node in/.style={node,black!90,draw=myblue!30!black,fill=myblue!20},
+  node hidden/.style={node,black!90,draw=black!70,fill=mylightgray!20},
+%   node convol/.style={node,orange!20!black,draw=myorange!30!black,fill=myorange!20},
+  node out/.style={node,black!90,draw=myred!30!black,fill=myred!20},
+  connect/.style={thick,mylightgray}, %,line cap=round
+  node 1/.style={node in}, % node styles, numbered for easy mapping with \nstyle
+  node 2/.style={node hidden},
+  node 3/.style={node out}
+}
+\def\nstyle{int(\lay<\Nnodlen?min(2,\lay):3)} % map layer number onto 1, 2, or 3
+
+
+\begin{tikzpicture}[x=3.0cm,y=1.4cm]
+    \message{^^JNeural network, shifted}
+    \readlist\Nnod{4,5,5,5,3} % array of number of nodes per layer
+    \readlist\Nstr{l,m,m,m,p} % array of string number of nodes per layer
+    \readlist\Cstr{\strut N^{(\prev)},N^{(\prev)},N^{(\prev)},N^{(\prev)},N^{(\prev)}} % array of coefficient symbol per layer
+    \def\yshift{0.8} % shift last node for dots
+    
+    \message{^^J  Layer}
+    \foreachitem \N \in \Nnod{ % loop over layers
+      \def\lay{\Ncnt} % alias of index of current layer
+      \pgfmathsetmacro\prev{int(\Ncnt-1)} % number of previous layer
+      \message{\lay,}
+      \foreach \i [evaluate={\c=int(\i==\N); \y=\N/2-\i-\c*\yshift;
+                   \index=(\i<\N?int(\i):"\Nstr[\lay]");
+                   \x=\lay; \n=\nstyle;}] in {1,...,\N}{ % loop over nodes
+        % NODES
+        \node[node \n] (N\lay-\i) at (\x,\y) {$\Cstr[\lay]$\phantom{}$^{(\index)}$};
+        
+        % CONNECTIONS
+        \ifnum\lay>1 % connect to previous layer
+          \foreach \j in {1,...,\Nnod[\prev]}{ % loop over nodes in previous layer
+            \draw[connect,white,line width=1.2] (N\prev-\j) -- (N\lay-\i);
+            \draw[connect] (N\prev-\j) -- (N\lay-\i);
+          }
+        \fi % else: nothing to connect first layer
+        
+      }
+      \path (N\lay-\N) --++ (0,1+\yshift) node[midway,scale=1.5] {$\vdots$};
+    }
+
+    % LABELS
+    \node[above=0.75,align=center,myblue!60!black] at (N1-1.90) {input\\[-0.2em]layer};
+    \node[above=0.3,align=center,mylightgray!60!black] at (N3-1.90) {hidden layers};
+    \node[above=1.2,align=center,myred!60!black] at (N\Nnodlen-1.90) {output\\[-0.2em]layer};
+
+    % Input arrows
+    \draw[->,myblue!60!black] (0.3,0.5) -- ++(N1-1) node[pos=-0.2]{$X_1$};
+    \draw[->,myblue!60!black] (0.3,0.5) -- ++(N1-2);
+    \draw[->,myblue!60!black] (0.3,0.5) -- ++(N1-3);
+    \draw[->,myblue!60!black] (0.3,0.5) -- ++(N1-4);
+    
+    \draw[->,myblue!60!black] (0.3,-0.5) -- ++(N1-1)node[pos=-0.2, above]{$X_2$};
+    \draw[->,myblue!60!black] (0.3,-0.5) -- ++(N1-2);
+    \draw[->,myblue!60!black] (0.3,-0.5) -- ++(N1-3);
+    \draw[->,myblue!60!black] (0.3,-0.5) -- ++(N1-4);   
+    
+    \draw[->,myblue!60!black] (0.3,-1.5) -- ++(N1-1)node[pos=-0.2, above]{$X_n$};
+    \draw[->,myblue!60!black] (0.3,-1.5) -- ++(N1-2);
+    \draw[->,myblue!60!black] (0.3,-1.5) -- ++(N1-3);
+    \draw[->,myblue!60!black] (0.3,-1.5) -- ++(N1-4);
+        
+    % Output arrows
+    \draw[->,myred!60!black] (N\Nnodlen-1.0) -- ++(0.5,0) node[midway,above] {$y^{(5)(1)}$};
+    \draw[->,myred!60!black] (N\Nnodlen-2.0) -- ++(0.5,0) node[midway,above] {$y^{(5)(2)}$};
+    \draw[->,myred!60!black] (N\Nnodlen-3.0) -- ++(0.5,0) node[midway,above] {$y^{(5)(k)}$};
+    
+\end{tikzpicture}

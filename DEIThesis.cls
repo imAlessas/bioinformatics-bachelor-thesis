@@ -69,6 +69,7 @@
 
 % colors
 \RequirePackage{color}
+\RequirePackage{xcolor}
 
 % random text
 \RequirePackage{blindtext}
@@ -88,6 +89,9 @@
 
 % code snippets
 \RequirePackage{listings}
+
+% arrays
+\RequirePackage{listofitems}
 
 % plots, drawings etc...
 \RequirePackage{tikz}

@@ -83,7 +83,7 @@
 \RequirePackage{comment}
 
 % algoritms
-\RequirePackage{algorithm}
+\RequirePackage[Algoritmo]{algorithm}
 \RequirePackage{algorithmic}
 
 % code snippets
@@ -464,7 +464,7 @@
 
 % -- ACRONYMS/ABBREVIATIONS --
 
-\RequirePackage[printonlyused, withpage]{acronym}
+\RequirePackage[printonlyused]{acronym}
 
 % custom style for acronyms
 \newcommand{\acronyms}{

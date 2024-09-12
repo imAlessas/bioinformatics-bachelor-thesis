@@ -2,7 +2,7 @@
 
 \chapter{Reti neurali}\label{chp:neural-networks}
 % 
-Il primo modello di intelligenza artificiale (\acs{AI}) risale al 1943, dove E. McCulloch e W. Pitts cercarono di modellare un neurone come una semplice funzione predefinita. Nel modello, il neurone, generava un valore in output nel caso in cui le variabili booleane di input, una volta elaborate, superavano una soglia prestabilita\,\cite[``A logical calculus of the ideas immanent in nervous activity'']{mcculloch1943logical}. Poco dopo, nel 1950, Alan Turing, pubblicò un articolo che definiva una metodologia per testare l'intelligenza di un modello\,\cite[``Computing machinery and intelligence'']{turing2009computing}. Questo test — noto anche come \textsl{The imitation game} — consisteva nel valutare se una macchina potesse imitare l'intelligenza umana tabilendo così un obiettivo per il campo dell'intelligenza artificiale, termine che venne conianto per la prima volta nella conferenza di Dartmouth nel 1956.
+Il primo modello di intelligenza artificiale (\acs{AI}) risale al 1943, dove E. McCulloch e W. Pitts cercarono di modellare un neurone come una semplice funzione predefinita. Nel modello, il neurone, generava un valore in output nel caso in cui le variabili booleane di input, una volta elaborate, superavano una soglia prestabilita\,\cite[``A logical calculus of the ideas immanent in nervous activity'']{mcculloch1943logical}. Poco dopo, nel 1950, Alan Turing, pubblicò un articolo che definiva una metodologia per testare l'intelligenza di un modello\,\cite[``Computing machinery and intelligence'']{turing2009computing}. Questo test — noto anche come \textit{imitation game} — consisteva nel valutare se una macchina potesse imitare l'intelligenza umana tabilendo così un obiettivo per il campo dell'intelligenza artificiale, termine che venne conianto per la prima volta nella conferenza di Dartmouth nel 1956.
 
 Dopo due anni, nel 1958, lo psicologo F. Resenblatt introdusse il \textsl{percettrone} che, a differenza del modello del '43, processava input non booleani e disponeva di pesi per bilanciare l'output\,\cite[``The perceptron: a probabilistic model for information storage and organization in the brain.'']{rosenblatt1958perceptron}. Anche se il percettrone sarà alla base delle reti neurali artificiali moderne, nei dieci anni successivi alla pubblicazione dell'articolo, le aspettative iniziali non vennero soddisfatte. Nel 1968 venne pubblicato un libro il quale analizzava le prestazioni del percettrone e constatava le forti limitazioni del modello, come l'impossibilità di risolvere problemi non linearmente separabili\,\cite[``Perceptrons'']{minsky2017perceptrons}. In seguito ad un secondo articolo del 1973, dove si evidenziavano gli scarsi risultati ottenuti in paragone con le grandi aspettative, iniziò il \textsl{Primo Inverno dell'Intelligenza Artificiale} dove fino alla metà degli anni Ottanta molte organizzazioni governative smisero di finanziare la ricerca sull'Intelligenza Artificiale (\acs{AI}). L'Inverno della \acs{AI} terminò nel 1985 con l'introduzione del \textit{Gradient Descent Optimization}, algoritmo che permetteva di aggiornare i pesi in modo tale da minimizzare l'errore in una rete. Un anno dopo venne introdotto l'algoritmo della \textit{back-propagation}, fondamentale per lo sviluppo di reti neurali, costituite da più livelli di neuroni, ciascuno dei quali è collegato al livello successivo\,\cite[``Learning representations by back-propagating errors'']{rumelhart1986learning}.
 
@@ -116,7 +116,7 @@ Il modello di neurone artificiale che viene tuttora utilizzato nelle reti neural
     v = g\left(\mathbf{w}, X_j\right) = \sum_{i = 0}^n w_i\,X_j^i
 \end{gather*}
 % 
-\noindent La funzione di attivazione $f(v)$ è la funzione \textsl{``segno''}\,(Figura\,\ref{fig:sign-function}), chiamata anche \textsl{gradino bipolare} e definita come segue. 
+\noindent La funzione di attivazione $f(v)$ del percettrone è la funzione \textsl{``segno''}\,(Figura\,\ref{fig:sign-function}), chiamata anche \textsl{gradino bipolare} e definita come segue\,\cite{flasinski2016introduction}. 
 % 
 \begin{figure}[!t]
     \centering
@@ -132,17 +132,42 @@ Il modello di neurone artificiale che viene tuttora utilizzato nelle reti neural
     \end{cases}
 \end{gather*}
 % 
-\noindent Il particolare più importante però è la \textit{learning rule}, ovvero il criterio secondo il quel il vettore di pesi è aggiornato a seconda della predizione del percettrone. Se la predizione $z_j$ rispetto al vettore $X_j$ è diversa dalla risposta attesa $y_j$, allora il vettore di pesi è modificato come segue.
+\noindent Il particolare più importante del percettrone però è la \textit{learning rule}, ovvero il criterio secondo il quel il vettore di pesi è aggiornato a seconda della predizione del modello. Se la predizione $z_j$ rispetto al vettore $X_j$ è diversa dalla risposta attesa $y_j$, allora il vettore di pesi è modificato come segue.
 % 
 \begin{gather*}
     w_i \, = \, w_i \, + \, y_j\,X_j^i
 \end{gather*}
 
-Al modello di neurone artificiale del percettrone si aggiunge anche l'\textit{Adaline} (\textit{Adaptive Linear Neuron}) la cui learning rule 
+La learning rule introdotta nel percettrone, per quanto semplice, spesso viene sostituita dalla learning rule derivante dal \textit{Gradient Descent} (\acs{GD}), un approccio che mira a trovare il minimo di una funzione differenziabile, spesso chiamata funzione ``costo''. Fornito il vettore di pesi $\mathbf{w} = \left[w_0, w_1, \dots, w_n \right]$, durante l'allenamento del neurone, l'algoritmo cerca di modificare tale vettore cercando di minimizzare sempre di più l'errore tra il valore predetto dal modello e il risultato atteso. Più precisamente, data una funzione di costo $L(w)$ — detta anche \textit{loss function} — la learning rule del \acs{GD} vale:
 % 
 \begin{gather*}
-    w_i \, = \, w_i \, + \, \eta\,\left( y_j - v_j \right)\, X_j^i
+    \mathbf{w} = \mathbf{w} - \eta\,\nabla L\left(\mathbf{w}\right)
 \end{gather*}
+% 
+\begin{figure}[!b]
+    \centering
+    \input{assets/TikZ/gradient-descent.tex}
+    \caption[Funzionamento del gradient descent in una funzione bidimensionale.]{Funzionamento del gradient descent in una funzione bidimensionale. Si osserva che l'algoritmo, attraverso il gradiente della funzione, riesce a spostarsi verso il minimo (locale o assoluto) della funzione, come una biglia di vetro.}\label{fig:gradient-descent}
+\end{figure}
+% 
+\noindent Dove $\eta$ è un parametro positivo, chiamato \textit{learning rate} e serve per bilanciare la rapidità con cui il vettore dei pesi sia aggiornato durante l'esecuzione dell'algoritmo. La Figura\,\ref{fig:gradient-descent} mostra graficamente come l'approccio \acs{GD} cerchi di raggiungere il minimo della funzione costo ad ogni iterazione. Si osserva che in questo caso la funzione costo è rappresentata in due dimensioni ma in genera questa è una funzione $n$-dimensionale. Questa funzione può essere una qualsiasi funzione errore: una tra le più comuni è la funzione che somma il quadrato degli errori (in gergo chiamata \acs{SSE}, \textit{Sum of Squared Errors}). Per fare un esempio pratico, avendo il vettore di pesi $\mathbf{w}$, un dataset $\mathcal{D}$ — definito come in precedenza — ed una funzione di attivazione $z$, la \acs{SSE} è definita come:
+% 
+\begin{gather*}
+    L(\mathbf{w}) = \sum_{j = 1}^M\,{\left[ y_j - z(\mathbf{w}, X_j) \right]}^2
+\end{gather*}
+% 
+\noindent L'approccio adottato da questo algoritmo, per quanto efficacie non è completamente efficiente. La complessità computazionale richiesta è notevole: ad ogni iterazione dell'allentamento del neurone, è necessario travare il valore della derivata della loss function, che si traduce nel computare la predizione di tutti i vettori di input $X_j$ del dataset $\mathcal{D}$ e compararli con la risposta attesa $y_j$. Questo approccio, per dataset di dimensioni medio-grandi è molto poco efficiente, per quanto preciso. Inoltre è possibile che la discesa del gradiente conduca l'aggiornamento del vettore di pesi in un minimo locale della funzione errore, giungendo quindi ad una soluzione sub-ottima. Questi probliemi possono entrambi essere gestiti da una variante di questo algoritmo, chiamata \textit{Stochastic Gradient Descent} (\acs{SGD}). Per ogni iterazione dell'algoritmo di allenamento, vengono presi un numero $m < M$ di vettori di input con le rispettive risposte attese e aggiornato il vettore $\mathbf{w}$ in base a questo sotto insieme del dataset, chiamato anche $mini-batch$. In questo modo la complessità computazionale viene drasticamente diminuita in quanto calcolare la derivata della loss function per una frazione ridatta del dataset richiede meno risorse. In aggiunta la casualità della scelta del mini-batch può evitare la convergenza in un minimo locale poichè rende la discesa lungo la funzione di errore leggermente più imprevedibile, diminuendo la possibilità di risultati sub-ottimi\,\cite{lu2022gradient, andrychowicz2016learning}.
+
+
+
+
+
+
+
+
+
+
+
 
 Oltre a differire per la learning rule, alcuni modelli differiscono per l'activation function. Oltre alla funzione ``segno'' anche la funzione \textsl{sigmoide} (Figura\,\ref{fig:sigmoid-function}) è largamente utilizzata.
 % 
@@ -153,9 +178,20 @@ Oltre a differire per la learning rule, alcuni modelli differiscono per l'activa
 \begin{figure}[!t]
     \centering
     \input{assets/TikZ/sigmoid-function.tex}
-    \caption[Grafico della funzione sigmoide $\sigma(v)$.]{Grafico della funzione gradino $\sigma(v)$.}\label{fig:sigmoid-function}
+    \caption[Grafico della funzione sigmoide $\sigma(v)$.]{Grafico della funzione sigmoide $\sigma(v)$.}\label{fig:sigmoid-function}
 \end{figure}
 % 
+
+
+
+
+
+
+
+
+
+
+
 
 Una rete neurale non è altro che una struttura composta da neuroni artificiali i quali sono organizzati in livelli (\textit{layers}). In una rete neurale multilivello, è sempre presente un input layer e un output layer. I livelli che si trovano tra questi sono detti livelli nascosti — \textit{hidden} layers. Va osservato che i neuroni dello stesso livello non sono mai collegati ma sono collegati con quelli del livello precedente e del livello successivo.
 % 
@@ -181,6 +217,7 @@ In particolare, data una rete neurale, i neuroni del livello $r$ ricevono il seg
 
 \cite{flasinski2016introduction}
 
+
 Come nel caso di un singolo neurone artificiale, anche una rete neurale deve essere allenata. Per allenare una \acs{NN} i pesi della rete devono essere impostati in modo tale da \textsl{minimizzare} l'errore dato un determinato dataset di partenza. I pesi vengono man mano rifiniti durante la fase di allenamento attraverso la derivata parziale della funzione ``errore'' calcolate sui pesi. Questo approccio è del tutto analogo all'approccio del \textit{Gradient Descent} (\acs{GD})
 
 
@@ -200,6 +237,25 @@ si utilizza l'algoritmo della \textit{backpropagation}, introdotto per la prima 
 \begin{gather*}
     S(x) = 2s(x) - 1 = \tanh\left( \frac{x}{2} \right)
 \end{gather*}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

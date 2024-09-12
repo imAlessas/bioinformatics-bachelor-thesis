@@ -12,10 +12,10 @@ Nonostante il grande sviluppo nella parte algoritmistica, l'hardware non era com
 %
 Le reti neurali artificiali (\acs{ANN}) — comunemente note come reti neurali (\acs{NN}) — mirano a rappresentare un modello semplificato del cervello, trattato come una struttura composta da neuroni. Risulta quindi essenziale comprendere il funzionamento del singolo \textsl{neurone artificiale} per poi esplorare la struttura di una rete neurale, che è un collegamento tra più neuroni artificiali.
 
-Come un neurone biologico, il neurone artificiale (Figura\,\ref{fig:artificial-neuron}) riceve un numero indefinito $n$ di segnali in \textsl{input}, che possono essere rappresentati con la notazione $x_0, x_1, \dots, x_n$. Tali valori possono essere raggruppato nel vettore di input $\mathbf{x} = \left[x_0, x_1, \dots, x_n\right]$. Per descrivere il risultato di tutti i segnali in ingresso del neurone, si introduce una funzione $g$, che si suppone essere una semplice somma algebrica dei segnali di input $x_i$, con $i\in[0,\,n]$. Ogni segnale di input, prima di essere sommato viene moltiplicato per il rispettivo peso (\textit{weight}) $w_i$, con $i\in[0,\,n]$, che appartiene al vettore dei pesi $\mathbf{w} = \left[w_0, w_1, \dots, w_n \right]$. Ne consegue che il segnale in uscita, indicato con $v$, comprenderà la somma del prodotto del segnale \textit{i}-esimo ($x_i$) con il rispettivo peso \textit{i}-esimo ($w_i$):
+Come un neurone biologico, il neurone artificiale (Figura\,\ref{fig:artificial-neuron}) riceve un numero indefinito $n$ di segnali in \textsl{input}, che possono essere rappresentati con la notazione $x_0, x_1, \dots, x_n$. Tali valori possono essere raggruppato nel vettore di input $\mathbf{x} = \left[x_0, x_1, \dots, x_n\right]$. Per descrivere il risultato di tutti i segnali in ingresso del neurone, si introduce una funzione $g$, che generalmente è una semplice somma algebrica dei segnali di input $x_i$, con $i\in[0,\,n]$. Ogni segnale di input, prima di essere sommato viene moltiplicato per il rispettivo peso (\textit{weight}) $w_i$, con $i\in[0,\,n]$, che appartiene al vettore dei pesi $\mathbf{w} = \left[w_0, w_1, \dots, w_n \right]$. Ne consegue che il segnale in uscita, indicato con $v$, comprenderà la somma del prodotto del segnale \textit{i}-esimo ($x_i$) con il rispettivo peso \textit{i}-esimo ($w_i$):
 % 
 \begin{gather}
-    v = g\left(\mathbf{w}, \mathbf{x}\right) = \sum_{i = 0}^n w_i\,x_i
+    v = g\left(\mathbf{w}, \mathbf{x}\right) = \sum_{i = 0}^n w_i\,x_i = \mathbf{w}\,\cdot\,\mathbf{x}
     \label{eq:algebric-sum}
 \end{gather}
 % 
@@ -89,12 +89,13 @@ Come un neurone biologico, il neurone artificiale (Figura\,\ref{fig:artificial-n
     \mathcal{D} = \left\{ \mathbf{X},\, \mathbf{y} \right\}  
 \end{gather*}
 % 
-Con un dataset di partenza si può definire un algoritmo generico che sia in grado di descrivere il processo di apprendimento di neurone artificiale. Come descritto nell'Algoritmo\,\ref{alg:PLA}, dopo aver inizializzato il vettore di pesi $\mathbf{w}$, per ogni vettore $X_j$ del dataset $\mathcal{D}$ vengono calcolati il segnale $v$ e il valore della funzione di attivazione $z = f(v)$. L'idea alla base dell'algoritmo è quella di modificare il vettore di pesi $\mathbf{w}$ in funzione del risultato della funzione di attivazione rispetto al segnale processato.
+Con un dataset di partenza si può definire un algoritmo generico che sia in grado di descrivere il processo di apprendimento di neurone artificiale. Come descritto nell'Algoritmo\,\ref{alg:neuron-training}, dopo aver inizializzato il vettore di pesi $\mathbf{w}$, per ogni vettore $X_j$ del dataset $\mathcal{D}$ vengono calcolati il segnale $v$ e il valore della funzione di attivazione $z = f(v)$. L'idea alla base dell'algoritmo è quella di modificare il vettore di pesi $\mathbf{w}$ in funzione del risultato della funzione di attivazione rispetto al segnale processato.
 % 
 \begin{algorithm}[ht]
-    \caption{Allenamento del neurone artificiale}\label{alg:PLA}
+    \caption{Allenamento del neurone artificiale}\label{alg:neuron-training}
     \begin{algorithmic}
-        \REQUIRE{Dataset $\mathcal{D}$}
+        \STATE{\textbf{Input: }Dataset $\mathcal{D}$}
+        \STATE
 
         \STATE{Inizializza $\mathbf{w}$ con numeri casuali}
         \STATE$j \gets 1$
@@ -108,15 +109,15 @@ Con un dataset di partenza si può definire un algoritmo generico che sia in gra
     \end{algorithmic}
 \end{algorithm}
 % 
-\noindent In questo modo, una volta processati tutti i vettori presenti nel dataset, è possibile constatare se il neurone sia stato in grado di apprendere il comportamento desiderato in funzione del vettore in ingresso.
+\noindent In questo modo, una volta processati tutti i vettori presenti nel dataset, è possibile constatare se il neurone sia stato in grado di apprendere il comportamento desiderato in funzione del vettore in ingresso\,\cite{flasinski2016introduction}.
 
-Il modello di neurone artificiale che viene tuttora utilizzato nelle reti neurali è il percettrone. Dato un vettore in ingresso $X_j$ e un vettore di pesi $\mathbf{w}$, il segnale $v$ è dato dalla somma algebrica dei prodotti di ciascuna delle componenti:
+Uno tra i modelli di neuroni artificiali utilizzati nelle reti neurali è il percettrone. Dato un vettore in ingresso $X_j$ e un vettore di pesi $\mathbf{w}$, il segnale $v$ è dato dalla somma algebrica dei prodotti di ciascuna delle componenti:
 % 
 \begin{gather*}
-    v = g\left(\mathbf{w}, X_j\right) = \sum_{i = 0}^n w_i\,X_j^i
+    v = g\left(\mathbf{w}, X_j\right) = \sum_{i = 0}^n w_i\,X_j^i = \mathbf{w} \, \cdot \,  X_j
 \end{gather*}
 % 
-\noindent La funzione di attivazione $f(v)$ del percettrone è la funzione \textsl{``segno''}\,(Figura\,\ref{fig:sign-function}), chiamata anche \textsl{gradino bipolare} e definita come segue\,\cite{flasinski2016introduction}. 
+\noindent La funzione di attivazione $f(v)$ del percettrone è la funzione \textsl{``segno''}\,(Figura\,\ref{fig:sign-function}), chiamata anche \textsl{gradino bipolare} e definita come segue. 
 % 
 \begin{figure}[!t]
     \centering
@@ -125,54 +126,23 @@ Il modello di neurone artificiale che viene tuttora utilizzato nelle reti neural
 \end{figure}
 % 
 \begin{gather*}
-    z(v) = \text{\textbf{sign}}(v) =
+    z(v) = \text{\textbf{sign}}(v) = \text{\textbf{sign}}(\mathbf{w} \cdot X_j) =
     \begin{cases}
         1 \hspace{29px} \text{se } v\geq0\\
         -1 \hspace{20px} \text{se } v<0
     \end{cases}
 \end{gather*}
 % 
-\noindent Il particolare più importante del percettrone però è la \textit{learning rule}, ovvero il criterio secondo il quel il vettore di pesi è aggiornato a seconda della predizione del modello. Se la predizione $z_j$ rispetto al vettore $X_j$ è diversa dalla risposta attesa $y_j$, allora il vettore di pesi è modificato come segue.
+\noindent Il particolare più importante del percettrone però è la \textit{learning rule}, ovvero il criterio secondo il quel il vettore di pesi è aggiornato a seconda della predizione del modello. Se la predizione $z_j$ rispetto al vettore $X_j$ è diversa dalla risposta attesa $y_j$, allora il vettore di pesi è modificato come segue\,\cite{nielsen2015neural, flasinski2016introduction}.
 % 
 \begin{gather*}
     w_i \, = \, w_i \, + \, y_j\,X_j^i
 \end{gather*}
 
-La learning rule introdotta nel percettrone, per quanto semplice, spesso viene sostituita dalla learning rule derivante dal \textit{Gradient Descent} (\acs{GD}), un approccio che mira a trovare il minimo di una funzione differenziabile, spesso chiamata funzione ``costo''. Fornito il vettore di pesi $\mathbf{w} = \left[w_0, w_1, \dots, w_n \right]$, durante l'allenamento del neurone, l'algoritmo cerca di modificare tale vettore cercando di minimizzare sempre di più l'errore tra il valore predetto dal modello e il risultato atteso. Più precisamente, data una funzione di costo $L(w)$ — detta anche \textit{loss function} — la learning rule del \acs{GD} vale:
+Al percettrone si aggiunge anche il \textsl{neurone sigmoideo}, che è molto simile al percettrone se non per la funzione di attivazione. Anzichè avere la funzione discontinua ``segno'', viene introdotta la funzione \textsl{sigmoide} $\sigma(v)$, che è una funzione continua e restituisce valori compresi tra zero e uno (Figura\,\ref{fig:sigmoid-function}). Questa funzione, definita di seguito, rimuove le discontinuità della funzione di attivazione del percettrone e fornisce un raggio di valori reali, piuttosto che un risultato booleano.
 % 
 \begin{gather*}
-    \mathbf{w} = \mathbf{w} - \eta\,\nabla L\left(\mathbf{w}\right)
-\end{gather*}
-% 
-\begin{figure}[!b]
-    \centering
-    \input{assets/TikZ/gradient-descent.tex}
-    \caption[Funzionamento del gradient descent in una funzione bidimensionale.]{Funzionamento del gradient descent in una funzione bidimensionale. Si osserva che l'algoritmo, attraverso il gradiente della funzione, riesce a spostarsi verso il minimo (locale o assoluto) della funzione, come una biglia di vetro.}\label{fig:gradient-descent}
-\end{figure}
-% 
-\noindent Dove $\eta$ è un parametro positivo, chiamato \textit{learning rate} e serve per bilanciare la rapidità con cui il vettore dei pesi sia aggiornato durante l'esecuzione dell'algoritmo. La Figura\,\ref{fig:gradient-descent} mostra graficamente come l'approccio \acs{GD} cerchi di raggiungere il minimo della funzione costo ad ogni iterazione. Si osserva che in questo caso la funzione costo è rappresentata in due dimensioni ma in genera questa è una funzione $n$-dimensionale. Questa funzione può essere una qualsiasi funzione errore: una tra le più comuni è la funzione che somma il quadrato degli errori (in gergo chiamata \acs{SSE}, \textit{Sum of Squared Errors}). Per fare un esempio pratico, avendo il vettore di pesi $\mathbf{w}$, un dataset $\mathcal{D}$ — definito come in precedenza — ed una funzione di attivazione $z$, la \acs{SSE} è definita come:
-% 
-\begin{gather*}
-    L(\mathbf{w}) = \sum_{j = 1}^M\,{\left[ y_j - z(\mathbf{w}, X_j) \right]}^2
-\end{gather*}
-% 
-\noindent L'approccio adottato da questo algoritmo, per quanto efficacie non è completamente efficiente. La complessità computazionale richiesta è notevole: ad ogni iterazione dell'allentamento del neurone, è necessario travare il valore della derivata della loss function, che si traduce nel computare la predizione di tutti i vettori di input $X_j$ del dataset $\mathcal{D}$ e compararli con la risposta attesa $y_j$. Questo approccio, per dataset di dimensioni medio-grandi è molto poco efficiente, per quanto preciso. Inoltre è possibile che la discesa del gradiente conduca l'aggiornamento del vettore di pesi in un minimo locale della funzione errore, giungendo quindi ad una soluzione sub-ottima. Questi probliemi possono entrambi essere gestiti da una variante di questo algoritmo, chiamata \textit{Stochastic Gradient Descent} (\acs{SGD}). Per ogni iterazione dell'algoritmo di allenamento, vengono presi un numero $m < M$ di vettori di input con le rispettive risposte attese e aggiornato il vettore $\mathbf{w}$ in base a questo sotto insieme del dataset, chiamato anche $mini-batch$. In questo modo la complessità computazionale viene drasticamente diminuita in quanto calcolare la derivata della loss function per una frazione ridatta del dataset richiede meno risorse. In aggiunta la casualità della scelta del mini-batch può evitare la convergenza in un minimo locale poichè rende la discesa lungo la funzione di errore leggermente più imprevedibile, diminuendo la possibilità di risultati sub-ottimi\,\cite{lu2022gradient, andrychowicz2016learning}.
-
-
-
-
-
-
-
-
-
-
-
-
-Oltre a differire per la learning rule, alcuni modelli differiscono per l'activation function. Oltre alla funzione ``segno'' anche la funzione \textsl{sigmoide} (Figura\,\ref{fig:sigmoid-function}) è largamente utilizzata.
-% 
-\begin{gather*}
-    \sigma(v) \, = \, \frac{1}{1 + e^{-v}}
+    \sigma(v) \, = \, \frac{1}{1 + e^{-v}} \, = \, \frac{1}{1 + e^{-\mathbf{w} \cdot X_j}}
 \end{gather*}
 % 
 \begin{figure}[!t]
@@ -181,19 +151,29 @@ Oltre a differire per la learning rule, alcuni modelli differiscono per l'activa
     \caption[Grafico della funzione sigmoide $\sigma(v)$.]{Grafico della funzione sigmoide $\sigma(v)$.}\label{fig:sigmoid-function}
 \end{figure}
 % 
+Questa importante differenza rende il neurone sigmoideo più flessibile rispetto al percettrone classico e più adatto all'utilizzo nelle reti neurali\,\cite{nielsen2015neural}.
 
+La learning rule introdotta nel percettrone, per quanto semplice, spesso viene sostituita dalla learning rule derivante dal \textit{Gradient Descent} (\acs{GD}), un approccio che mira a trovare il minimo di una funzione differenziabile, spesso chiamata funzione ``costo''. Fornito il vettore di pesi $\mathbf{w} = \left[w_0, w_1, \dots, w_n \right]$, durante l'allenamento del neurone, l'algoritmo cerca di modificare tale vettore cercando di minimizzare sempre di più l'errore tra il valore predetto dal modello e il risultato atteso. Più precisamente, data una funzione di costo $C(w)$ — detta anche \textit{loss function} — la learning rule del \acs{GD} vale:
+% 
+\begin{gather*}
+    \mathbf{w} = \mathbf{w} - \eta\,\nabla C\left(\mathbf{w}\right)
+\end{gather*}
+% 
+\begin{figure}[!b]
+    \centering
+    \input{assets/TikZ/gradient-descent.tex}
+    \caption[Funzionamento del gradient descent in una funzione bidimensionale.]{Funzionamento del gradient descent in una funzione bidimensionale. Si osserva che l'algoritmo, attraverso il gradiente della funzione, riesce a spostarsi verso il minimo (locale o assoluto) della funzione, come una biglia di vetro.}\label{fig:gradient-descent}
+\end{figure}
+% 
+\noindent Dove $\eta$ è un parametro positivo, chiamato \textit{learning rate} e serve per bilanciare la rapidità con cui il vettore dei pesi sia aggiornato durante l'esecuzione dell'algoritmo. Il termine $\nabla C\left(\mathbf{w}\right)$ è invece il gradiente della loss function. Il gradiente di una funzione a più dimensioni è un vettore la cui direzione fa aumentare più rapidamente il valore della funzione; conseguentemente la direzione opposta è la direzione da seguire per raggiungere il minimo della funzione. La Figura\,\ref{fig:gradient-descent} mostra graficamente come l'approccio \acs{GD} cerchi di raggiungere il minimo della funzione costo ad ogni iterazione. Si osserva che in questo caso la funzione costo è rappresentata in due dimensioni ma in genera questa è una funzione $n$-dimensionale. Questa funzione può essere una qualsiasi funzione errore: una tra le più comuni è la funzione che calcola la media del quadrato degli errori (in gergo chiamata \acs{MSE}, \textit{Mean Squared Errors}). Per fare un esempio pratico, avendo il vettore di pesi $\mathbf{w}$, un dataset $\mathcal{D}$ — definito come in precedenza — ed una funzione di attivazione $z$, la \acs{MSE} è definita come:
+% 
+\begin{gather*}
+    C(\mathbf{w}) = \frac{1}{M}\,\sum_{j = 1}^M\,{\left[ y_j - z(\mathbf{w},\,X_j) \right]}^2
+\end{gather*}
+% 
+\noindent L'approccio adottato da questo algoritmo, per quanto efficacie non è completamente efficiente. La complessità computazionale richiesta è notevole: ad ogni iterazione dell'allentamento del neurone, è necessario travare il valore della derivata della loss function, che si traduce nel computare la predizione di tutti i vettori di input $X_j$ del dataset $\mathcal{D}$ e compararli con la risposta attesa $y_j$. Questo approccio, per dataset di dimensioni medio-grandi è molto poco efficiente, per quanto preciso. Inoltre è possibile che la discesa del gradiente conduca l'aggiornamento del vettore di pesi in un minimo locale della funzione errore, giungendo quindi ad una soluzione sub-ottima. Questi probliemi possono entrambi essere gestiti da una variante di questo algoritmo, chiamata \textit{Stochastic Gradient Descent} (\acs{SGD}). Per ogni iterazione dell'algoritmo di allenamento, vengono presi un numero $m < M$ di vettori di input con le rispettive risposte attese e aggiornato il vettore $\mathbf{w}$ in base a questo sotto insieme del dataset, chiamato anche $mini-batch$. In questo modo la complessità computazionale viene drasticamente diminuita in quanto calcolare la derivata della loss function per una frazione ridatta del dataset richiede meno risorse. In aggiunta la casualità della scelta del mini-batch può evitare la convergenza in un minimo locale poichè rende la discesa lungo la funzione di errore leggermente più imprevedibile, diminuendo la possibilità di risultati sub-ottimi. Questo approccio è così importante ed efficace che viene ad oggi utilizzato per allenare le reti neurali\,\cite{lu2022gradient, andrychowicz2016learning, nielsen2015neural}.
 
-
-
-
-
-
-
-
-
-
-
-Una rete neurale non è altro che una struttura composta da neuroni artificiali i quali sono organizzati in livelli (\textit{layers}). In una rete neurale multilivello, è sempre presente un input layer e un output layer. I livelli che si trovano tra questi sono detti livelli nascosti — \textit{hidden} layers. Va osservato che i neuroni dello stesso livello non sono mai collegati ma sono collegati con quelli del livello precedente e del livello successivo.
+Una rete neurale è una struttura composta da neuroni artificiali i quali sono organizzati in livelli (\textit{layers}). In una rete neurale multilivello, è sempre presente un input layer e un output layer. I livelli che si trovano tra questi sono detti livelli nascosti — \textit{hidden} layers. Va osservato che i neuroni dello stesso livello non sono mai collegati ma sono collegati con quelli del livello precedente e del livello successivo.
 % 
 \begin{figure}[!b]
     \centering
@@ -201,69 +181,90 @@ Una rete neurale non è altro che una struttura composta da neuroni artificiali 
     \caption[Rappresentazione di una rete neurale multilivello.]{Rappresentazione di una rete neurale multilivello.}\label{fig:neural-network}
 \end{figure}
 % 
-In particolare, data una rete neurale, i neuroni del livello $r$ ricevono il segnale dai neuroni del livello $r-1$ e, dopo aver elaborato le informazioni, inviano il segnale processato i neuroni del livello $r+1$. Osservando la Figura\,\ref{fig:neural-network} si introduce una nuova notazione per le reti neurali: si definisce con $N^{(r)(k)}$ il neurone $k$-esimo che si trova nel livello $r$; di conseguenza il suo output è identificato dalla notazione $y^{(r)(k)}$ e il suo input è $X^{(r)(k)}_i$, con $i\,\in\,\left[1,\,n\right]$, associato al peso $w^{(r)(k)}_i$. Si osserva che $n$ è il numero di input del neurone, e di conseguenza è il numero di neuroni presenti nel livello precedente; particolarmente l'input $i$-esimo di un neurone generico $k$ in un livello $r$ è uguale all'output del neurone $k$ al livello $r-1$:
+In particolare, data una rete neurale, i neuroni del livello $\ell$ ricevono il segnale dai neuroni del livello $\ell-1$ e, dopo aver elaborato le informazioni, inviano il segnale processato i neuroni del livello $\ell+1$: si dice che la rete è di tipo \textit{feedforward} in quanto non sono presenti cicli nella struttura. Osservando la Figura\,\ref{fig:neural-network} si introduce una nuova notazione per le reti neurali: si definisce con $N^{(\ell)}_j$ il neurone $j$-esimo che si trova nel livello $\ell$; conseguentemente l'output della sua funzione di attivazione è identificato da $a^{(\ell)}_j$. Il peso $w^{(\ell)}_{j\,,i}$ è il peso che collega il neurone $N^{(\ell - 1)}_i$ al neurone $N^{(\ell)}_j$, ovvero il collegamento tra il neurone alla posizione $i$ del livello precedente $\ell-1$ e il neurone $N^{(\ell)}_j$. Inoltre, per ogni neurone vengono esplicitati i \textit{bias}: $b^{(\ell)}_j$ indica il bias associato al $j$-esimo neurone nel livello $r$. A questo punto, presupponendo che si utilizzino dei neuroni sigmoidei all'interno della rete neurale, l'output del neurone  $a^{(\ell)}_j$, vale esettamente:
 % 
 \begin{gather*}
-    y^{(r-1)(i)} = X^{(r)(k)}_i
+     a^{(\ell)}_j = \sigma\left( v \right) = \sigma\left( \sum_i w^{(\ell)}_{j\,,i} \,\, a^{(\ell - 1)}_i + b^{(\ell)}_j \right)
 \end{gather*}
-% 
-\noindent Utilizzando la somma algebrica, illustrata nell'equazione\,\ref{eq:algebric-sum}, l'output di un neurone $k$, in un livello $r$ è dato da:
+
+\noindent Questa formula indica che l'attivazione del neurone $N^{(\ell)}_j$ è dato dalla sigmoide calcolata sull'input del neurone. L'input è dato dalla somma algebrica degli output dei neuroni del livello precedente, moltiplicati per i rispettivi pesi e sommati al bias de neurone. Questa notazione può essere riscritta in forma matriciale per renderla più elegante. Si definisce la matrice $\mathbf{W}^{(\ell)}$ che contiene i pesi che collegano i neuroni del livello $\ell-1$ al livello $\ell$. Allo stesso modo, si può definire il vettore $\mathbf{b}^{(\ell)}$, che contiene i bias dei neuroni nel livello $\ell$. Infine il vettore $\mathbf{a}^{(\ell)}$ contiene i valori delle funzione di attivazione di tutti i neuroni al livello $\ell$. La formula può quindi essere riscritta come segue:
 % 
 \begin{gather*}
-    y^{(r)(k)} = f \left( \sum_i\,w_i^{(r)(k)}\, X_i^{(r)(k)}\right) = f \left( \sum_i\,w_i^{(r)(k)}\, y^{(r-1)(i)}\right)
+    \mathbf{a}^{(\ell)} = \sigma\left( \mathbf{W}^{(\ell)}\, \mathbf{a}^{(\ell -1)} + \mathbf{b}^{(\ell)}\right) = \sigma\left( \mathbf{v}^{(\ell)}\right)
 \end{gather*}
 % 
-\noindent Tale risultato può essere osservato graficamente nella Figura.
+\noindent Questo risultato fornisce una visione di insieme dell'output del livello $\ell$, rispetto che al singolo neurone $N^{(\ell)}_j$. Inoltre si osserva che è stato definito un vettore $\mathbf{v}^{(\ell)}$ il cui valore non è altro che l'input della funzione sigmoide, ovvero la somma pesata degli input del livello $\ell - 1$.
 
-\cite{flasinski2016introduction}
-
-
-Come nel caso di un singolo neurone artificiale, anche una rete neurale deve essere allenata. Per allenare una \acs{NN} i pesi della rete devono essere impostati in modo tale da \textsl{minimizzare} l'errore dato un determinato dataset di partenza. I pesi vengono man mano rifiniti durante la fase di allenamento attraverso la derivata parziale della funzione ``errore'' calcolate sui pesi. Questo approccio è del tutto analogo all'approccio del \textit{Gradient Descent} (\acs{GD})
-
-
-
-si utilizza l'algoritmo della \textit{backpropagation}, introdotto per la prima volta nel 1986. L'idea alla base di questo algoritmo è quella di minimizzare una funzione di errore attraverso l'approccio del \textit{Gradient Descent} (\acs{GD}). Essendo che questo approccio richiede il calcolo del gradiente, è necessario che la funzione di attivazione sia continua e differenziabile: a questo proposito si utilizza la funzione sigmoide (Figura\,\ref{fig:sigmoid-function}) anziché la funzione ``segno'' adottata nel percettrone.
-
-\begin{gather*}
-    s(x) = \sigma(x) \, = \, \frac{1}{1 + e^{-x}}
-    % 
-    \hspace{50px}
-    % 
-    \frac{d}{dx}s(x) = \frac{e^{-x}}{{\left( 1 + e^{-x} \right)}^2} = s(x)\left(1 - s(x)\right)
-\end{gather*}
-% 
-\noindent Per una rete compota da percettroni, la funzione ``segno'' può essere approssimata dalla \textsl{sigmoide simmetrica}, che non è altro che la tangente iperbolica di $\frac{x}{2}$:
+Come per il caso del singolo neurone artificale, anche una \acs{ANN} deve essere allenata. Per allenare una rete neurale si utilizza l'algoritmo della \textit{backpropagation}, introdotto per la prima volta nel 1986. La backpropagation, sfruttando i principi del \acs{GD}, modificare i pesi della rete con l'obettivo di minimizzare una \textsl{cost function} $C$. Questo si traduce nel calcolare un gradiente, in particolare la derivata parziale della funzione $C$ rispetto al peso di un neurone e al suo bias:
 % 
 \begin{gather*}
-    S(x) = 2s(x) - 1 = \tanh\left( \frac{x}{2} \right)
+    \frac{\partial\,C}{\partial\,w^{(\ell)}_{j\,,i}}
+    \hspace{40px}
+    \frac{\partial\,C}{\partial\,b^{(\ell)}_j}
 \end{gather*}
+% 
+\noindent Oltre a questo viene definito anche l'errore del neurone $N^{(\ell)}_j$, chiamato $\delta^{(\ell)}_j$ indicato come:
+% 
+\begin{gather*}
+    \delta^{(\ell)}_j = \frac{\partial\,C}{\partial\,v^{(\ell)}_j}
+\end{gather*}
+% 
+\noindent Questo importante valore, indica di quanto varia la cost function in rapporto ad un piccolo cambiamento nell'input del neurone $N^{(\ell)}_j$. Supponendo di essere al livello $\ell$, modificiare il vettore $\boldsymbol{\delta}^{(\ell)}$, quindi modificare di poco il vettore di input $\mathbf{v}^{(\ell)}$, può portare alla riduzione complessiva della loss function $C$, propagando ai livelli successivi il cambiamento dell'input al livello $\ell$. L'algoritmo della backpropagation fornisce un modo per calcolare il valore $\delta^{(\ell)}_j$ e collegarlo alle derivate pariziali.
+
+L'algoritmo della backpropagation può essere descritto attraverso quattro equazioni fondamentali\,\cite{nielsen2015neural}. La prima equazione fornisce un modo per calcolare il valore $\delta^{(L)}_j$. Come si può osservare dall'equazione\,\ref{eq:BP1}, tale valore è il prodotto di due derivate. La prima derivata parziale indica il cambiamento della cost function rispetto all'output del neurone $N^{(L)}_j$: se il neurone ha poca influenza sull costo finale, allora $\delta^{(L)}_j$ è un valore molto piccolo. La seconda derivata indica quanto la funzione sigmoide stia variano nel punto $v^{(L)}_j$.
+% 
+\begin{gather}
+    \delta^{(L)}_j = \frac{\partial\,C}{\partial\,a^{(L)}_j} \,\, \sigma^\prime \left( v^{(L)}_j \right)
+    \label{eq:BP1}
+\end{gather}
+
+La seconda equazione che descrive la backpropagation mette in relazione $\boldsymbol{\delta}^{(\ell)}$ con l'errore del livello successivo $\boldsymbol{\delta}^{(\ell + 1)}$, come mostrato nell'equazione\,\ref*{eq:BP2}. Moltiplicare la matrice trasposta dei pesi ${\left( \mathbf{W}^{(\ell + 1)} \right)}^T$ con l'errore $\boldsymbol{\delta}^{(\ell + 1)}$ è come, intuitivamente, misurare l'errore in uscite al livello $\ell$. Questo risultato viene moltiplicato con $\sigma^\prime \left( v^{(\ell)} \right)$ attraverso l'operatore ``$\odot$'', ovvero il prodotto \textit{element-wise}\footnote{Dati due vettori, $a = \left[ a_1,\,a_2\right]$ e $b = \left[ b_1,\,b_2\right]$, allora il loro prodotto vale $ a \odot b = \left[ a_1b_1,\,a_2b_2\right]$}. Questo passaggio permette di propagare l'errore ``indietro'' attraverso la funzione di attivazione, fornendo quindi il valore di $\boldsymbol{\delta}^{(\ell)}$. Questa equazione fornisce un modo per calolcare i pesi del livello precedente propagando all'indietro l'errore meidante la trasposta dei pesi e la derivata della funzione di attivazione.
+% 
+\begin{gather}
+    \boldsymbol{\delta}^{(\ell)} = \left[ {\left( \mathbf{W}^{(\ell + 1)} \right)}^T \,\, \boldsymbol{\delta}^{(\ell + 1)} \right] \odot \sigma^\prime \left( v^{(\ell)} \right)
+    \label{eq:BP2}
+\end{gather}
+
+La terza equazione (\ref{eq:BP3}), mette in relazione la derivata della loss function rispetto al bias di un neurone ($b^{(\ell)}_j$) e il suo errore $\delta^{(\ell)}_j$.
+% 
+\begin{gather}
+    \frac{\partial\,C}{\partial\,b^{(\ell)}_j} = \delta^{(\ell)}_j
+    \label{eq:BP3}
+\end{gather}
+
+Infine la quarta equazione (\ref{eq:BP4}) lega la derivata della cost function rispetto al peso di un neurone e l'errore del neurone. Più precisamente, l'errore $\delta^{(\ell)}_j$ del neurone $N^{(\ell)}_j$ è legato alla derivata della funzione di costo rispetto al peso $w^{(\ell)}_{j\,,i}$ mediante il valore in output $a^{(\ell - 1)}_i$ del neurone $i$-esimo che si trova al livello precedente $\ell - 1$. 
+% 
+\begin{gather}
+    \frac{\partial\,C}{\partial\,w^{(\ell)}_{j\,,i}} = a^{(\ell - 1)}_i\,\,\delta^{(\ell)}_j
+    \label{eq:BP4}
+\end{gather}
+
+Dopo aver definito le 4 equazioni fondamentali dell'algoritmo, è possibile comprendere lo pseudocodice della backpropagation, fornito nell'Algoritmo\,\ref{alg:backpropagation}. Si osserva che questo algoritmo calcola i valori degli errori dei neuroni partendo dalla fine e propagandoli all'indietro giungendo infine a computare il gradiente della funzione di costo $C$.
+
+\begin{algorithm}[ht]
+    \caption{Backpropagation}\label{alg:backpropagation}
+    \begin{algorithmic}
+        \STATE{\textbf{Input:} insieme delle funzioni di attivazione dell'input layer, $\mathbf{a}^{(1)}$}
+        \STATE\,
+        \STATE\,
+
+        \STATE{Per ogni $\ell\,\in\,\left[2,\, L\right]$, calcolare $\mathbf{v}^{(\ell)} = \mathbf{W}^{(\ell)}\,\mathbf{a}^{(\ell - 1)} + \mathbf{b}^{(\ell)}$ e $\mathbf{a}^{(\ell)} = \sigma\left(\mathbf{v}^{(\ell)}\right)$} 
+        \STATE\,
 
 
+        \STATE{Calcolare l'errore di predizione $\delta^{(L)}_j = \frac{\partial\,C}{\partial\,a^{(L)}_j} \,\, \sigma^\prime \left( v^{(L)}_j \right)$}
+        \STATE\,
 
+        \STATE{Per ogni $\ell\,\in\,\left[L - 1,\, 2\right]$, calcolare $\boldsymbol{\delta}^{(\ell)} = \left[ {\left( \mathbf{W}^{(\ell + 1)} \right)}^T \,\, \boldsymbol{\delta}^{(\ell + 1)} \right] \odot \sigma^\prime \left( v^{(\ell)} \right)$}
 
+        \STATE\,
+        \STATE\,
+        \STATE{\textbf{Output: } gradiente della cost function, fornito da $\frac{\partial\,C}{\partial\,w^{(\ell)}_{j\,,i}} = a^{(\ell - 1)}_i\,\,\delta^{(\ell)}_j$ e $\frac{\partial\,C}{\partial\,b^{(\ell)}_j} = \delta^{(\ell)}_j$}
 
+    \end{algorithmic}
+\end{algorithm}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\cite{sathyanarayana2014gentle}
-
-% https://www.researchgate.net/profile/Shashi-Sathyanarayana/publication/266396438_A_Gentle_Introduction_to_Backpropagation/links/577d124808aeaa6988aba0bc/A-Gentle-Introduction-to-Backpropagation.pdf
-
-% https://d1wqtxts1xzle7.cloudfront.net/51924347/NeuralNetworks-libre.pdf?1487958246=&response-content-disposition=inline%3B+filename%3DBack_Propagation_Algorithm.pdf&Expires=1725992239&Signature=J-LZ7rIZD5T6Nb9jar55PvgTCF3pDd0H8dGNJVU3ijf1bFEoiAX2yF9fkroyCTvPGm0oAhX8SUhRLSZ26bEVOC08ZV9wUPb8HekE0~cj836hKUsc60DVhhXQ3TjlPE91VTwe0kMkDuimtxQuf8LVgJhSF5zc~sAFzSOmHwPfbiqBTxNoSFRY8xkMRRNoTMWS1GZmoOr83rB3VkzKA6QncuQ85ogs4IHeInFT2nnqBNUbvUGOEyhDUbECy39bE57G1CkhMRIXiT-CZLPJxY1gu2dYjr7~gerF49Lay6w1yNJ5kdgqrMpy5TI8suaIwC0NQZ1obOrERVpDKrJ3Y~Lrhg__&Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA
+\noindent Questo fondamentale algoritmo, calcolando il gradiente della funzione costo per ogni iterazione (o, in gergo, \textsl{epoca}) dell'allenamento della rete cerca di raggingere il minimo della loss function $C$ ottimizzando i valori dei pesi. In questo modo la rete neurale artificiale è in grado di apprendere dai dati forniti in ingresso in modo tale da fornire predizioni valide a dati non presenti nel dataset. Eseguire un algoritmo così potente richiede uno sforzo computazionale notevole: le reti neurali moderne sono composte da migliaia di neuroni per livello che richiedono milioni di pesi da ottimizare precisamente. Proprio per questo motivo, con lo sviluppo di hardware avanzato, solo nell'ultimo decennio si è riusciti ad affrontare queste sfide computazioneli\,\cite{flasinski2016introduction, rojas1996backpropagation, nielsen2015neural, aggarwal2018neural}.
 
 \section{Reti neurali convoluzionali}
 % 
@@ -271,18 +272,7 @@ si utilizza l'algoritmo della \textit{backpropagation}, introdotto per la prima 
 \todo{convolution: filters sono di fatto dei profile sulle sequenze}
 
 
-
-
-
-
-
-
-
-\,\cite{flasinski2016introduction, rojas1996backpropagation}
-
-% file:///C:/Users/Home/Desktop/Books/Introduction%20to%20Artificial%20Intelligence.pdf
-
-
+% Invarianti, notazioni
 \begin{comment}
     Per non diventare matti la notazione è l'opposta di quella sul file di Machine Learnign.
     - ci sono esattamente N feature in un vettore di input, di conseguenza il vettore di pesi è di lunghezza N
@@ -294,32 +284,26 @@ si utilizza l'algoritmo della \textit{backpropagation}, introdotto per la prima 
     Di conseguneza D_j indica il vettore j-esimo composto esattamente da N componenti. La label y_j indica il vero valore dell'input processato
 \end{comment}
 
-\begin{comment}
-Il primo modello di intelligenza artificiale tento di creare il funzionamento di un neurone (ce la foto se vuoi metterla). I primi modelli piu semplici furono delle semplicit input-output function. IN seguito le funzioni divennero piu complicate, piu livelli furono aggiunti e feedback bidiriezionale fino ad arrivare ai modelli odierni di DL.
+% https://www.researchgate.net/profile/Shashi-Sathyanarayana/publication/266396438_A_Gentle_Introduction_to_Backpropagation/links/577d124808aeaa6988aba0bc/A-Gentle-Introduction-to-Backpropagation.pdf
 
-\@ La prima pubblicazione sulla \ac{AI}, fu del 43 (\cite{mcculloch1943logical}) che descrive un modello di computer che impara attraverso un processo paragonabile a quello dei neuroni: vengono quindi introdotti i neuroni MCP che prendono il nome dai due creatori (McCulloch and Pitts). Questo neuropne prendeva in input delle varibili booleane, processarle attraverso una funzione scelta a priori e poit, se il risultato superava una certa threshold, l'output avra un valore. Quyando la threshold è superata si diuce che il neurone si attiva. Aveva molte limitazioni, generava un output binario e richiedava un numero fisso di pesi.
+% https://d1wqtxts1xzle7.cloudfront.net/51924347/NeuralNetworks-libre.pdf?1487958246=&response-content-disposition=inline%3B+filename%3DBack_Propagation_Algorithm.pdf&Expires=1725992239&Signature=J-LZ7rIZD5T6Nb9jar55PvgTCF3pDd0H8dGNJVU3ijf1bFEoiAX2yF9fkroyCTvPGm0oAhX8SUhRLSZ26bEVOC08ZV9wUPb8HekE0~cj836hKUsc60DVhhXQ3TjlPE91VTwe0kMkDuimtxQuf8LVgJhSF5zc~sAFzSOmHwPfbiqBTxNoSFRY8xkMRRNoTMWS1GZmoOr83rB3VkzKA6QncuQ85ogs4IHeInFT2nnqBNUbvUGOEyhDUbECy39bE57G1CkhMRIXiT-CZLPJxY1gu2dYjr7~gerF49Lay6w1yNJ5kdgqrMpy5TI8suaIwC0NQZ1obOrERVpDKrJ3Y~Lrhg__&Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA
 
-Uno dei primi articoli che introducono una metodologia per testare l'intelligenza di un modello fu il testo di turing nel 1950. Questo test, chiamato Test di Turing, si domandava se una macchina fosse in grado di imitare l'intelligenza umana (\cite[Computing machinery and intelligence]{turing2009computing}). Il test prende in causa un interrogatore umano che fa la stessa domanda a due ascoltatori, una persona ed una macchina. Se l'interrogatopra non riesce a distingure l'uomo dalla macchina allora la macchina ha superato il test di Turing. Questo test è stato da sempre l'obiettivo dellàintelligenza artificiale anche se ad oggi alcuni dubbi stanno sorgendo. La conferenza del 1956 a Dartmouth (organizzata da Marvin Minsky, John McCarty, Claude Shannon e Nathan Rochester) è considerata il momento in cui l'\ac{AI} è stata globalmente riconosciuta. 
+% file:///C:/Users/Home/Desktop/Books/Introduction%20to%20Artificial%20Intelligence.pdf
 
-Un metodo piu sofisticato venne introdotto nerl 1958 da Resenblatt, chiamato percettrone il quale precessava input non booleani e pesi per bilanciare. Una funzione non lineare processa la somma dei prodotto degli input e dei pesi che rende il modell piu flessibile: questo sara la base per le reti neurali.
+% file:///C:/Users/Home/Desktop/Books/Neural%20networks%20and%20deep%20learning.pdf
 
-Il percettorne di Resenblatt aveva fatto molto clamore ma le aspettative dell'opinione pubblica non furoino incontrate. Le aspettative del pubblico non furono assolutamente incontrata, tanto che nel 68 un paper di Minsky e Papert dimostro le forte limitazioni del percettrone, dove di fatto veniva descritto che il percettrone non sarebbe stato in grado di emulare una operazione di or esclusivo con due input (non erano linearmente separabili). Nel 73 una seconda pubblicazione di Lighthill sottolinea le forti aspettativde del pubblico e gli scarsi risultati ottenuti dal progresso. Dal 74 all'80 ci fu il primo invero dell'intelligenza artificale dove essenzialmente nulla accadde e tutti persereo l'interesse al riogurado (controllo bene le fonto che qua me la sono un po inventata ecco letsgoski). 
+\section*{3b1b video}
+Le reti neurali sono ispirate da un cervello. Il neurone artificiale, in questo caso è qualcosa che contiene un numero, tra 0 e 1. La rete inizia con 28 * 28 input, che sono i pixel dell'immagine, Ognuno di questi contiene il valore percentuale di gricio che contiene il pixel. Questo numero nel neurono è detto activation. Questo 784 valor rappresentano il primo layer della rete, l'imput layer. L'ultimo layer contiene gli aoutput, che sono in questo caso 10 neuroni, che determinano che numero è tra 0 e 9. Il numero al suo interno indica la probaviltà che il numero rappresentato sia quello. Gli hidden layers esistono, non sappiamo altro per ora. Le attivazioni du un livello determinano le attivazioni in quelli successivi (da sinisra a destra).
 
-Nel 1985 l'inverdo dell'ai fini quando venne introdotto il Gradent Descent Optimization per minimizzare l'errore in una rete (Rumelhart, Hinton and Williams). Inoltre nell 86 Rumelhart e colleghi espansero il lavoro introducento il conetto di back-propagation nelle reti neurali multilivello (molti livelli di neuroni attaxccati tra loro). QUersto algoritmo rivoluziono le capacita di imparare delle reti. Il secondo inverno dell \ac{AI} inizio negli anni 90, dove ci si rese conto che queste reti neurali non erano scalabili: cera troppa poca potenza di calcolo.
+Pesi che legano gli input neuron agli neuroni del livello seguente. L'activetion del 1 livello è dato dalla wighted sum dei pesi dei link. La somma pesata generalmente è un numero reale. Si usa quindi la funzione sigmoide che mappa i valori da 0 ad 1 (logistic curve). Attivazione è una misura di quanto positiva sia la somma pesata. Bias: how high the sum should be before the neuron starts to get neamingfull active. Ogni neurone ha il suo bias particolare. Learning is get a valid setting of the weight so that it can resolve the prediction. 
 
-Questo inverno venne causato dalle aspettative sulle capacita delle reti neurali che pero non abdavanbo di paripasso con lo sviluppo della potenza computazionale. Per questo motivo i ricercatori si spostaro su altri alogirtimi, che richiedevano meno potenza di calcolo come le support evctor machines (1963, Vapnik and Chervonenkis). Quando quiesti algoritmi furono implementati in kernel non lineari nel 92 (kernl trick) si fu in grado di rsolvere iperpiano non lineari senza la necessita di requisiti computazionali elevati. 
+Algoritmo tale per cui, dati molti dati in ingresso, sono aggiustati tutti i weight and bias, tale per cui il livello predittivo sia correcto. Finding minumum of a certai error function. Funzione costo che in genere è proprio la SSE.\@ La somma è piccola se il risultato è molto vicino a quello atteso mentre è grande se non ci azzecca una ciola. È importante dire anche come sistemare i pesi in modo tale l'errore diminuisca.
 
-Quando alla meta degli anni 90 la potenza computazionale crebbe, l'attenzione per la \ac{AI} auimeto di conseguenza. Nel 97, IBM sviluppo un super computer, chiamato Deep Blue, che sconfisse Kasparov a scacchi. Quersto evento rese le reti neurali risolrgere, con l'introduzioned elle reti nmeurali convoluzionali.
-
-Nel 98 venne pubblicata LeNet-5, che è una rete convoluzionale a sette livelli. Viene usata la convoluzione per fare subsampling per poi passae ai livelli fully connected per predirre l'output. Anche in questo caso il modello era difficile da far scalare a causa di harder e data contstraints. Questo problema continuo fino all'ultimo decennio, dove due grandi avanzamente furono cruciali: lo storage dei dati e la GPU (graphical processing unit). I dati furono più accessibili e con meno costi. COn un alto livello di dati disponibili, la performance degli algoritmi di madhine learnign amutneto.
-
-Questo introdusse il deeplearninng, nel 2006 sbloccando una performance eccellente nella speech recognition che prima era molto difficile. La nascita delle GPU introdusse una potenza di calcolo tale per cui si potevano introdurre livelli molto più complessi 
-\end{comment}
-
-\begin{comment}
-Nel 1950 Alan turing pubbliuca ``Computing machinery and intewlligence'' dove viene introdotto il concetto di macchina intelligente. Viene introdotto anche il test di turing che è un test che determina se una mchhina e piu o meno capace di imitare l'uomo. Nel 1956, la onferenza di Darmont (c'è Shanno, Minsky che copnia il temrine intelligenza aertrifixcale). Gli obbbiettivi era quelli di machine translation. Rosenblat negli anni 60 si inveta il percettrone, rete neruale semplicissima. Agli anni 60 seguono due risultati allo stop dell IA, vhiamto inverno della intelligenza artificiazle. Minsky pubblica un libro, chiamato perceptrons dove viene dimostrato che il percettoprne èin grado di risolvere solo probleimi semplic, libnearmente seaprabili. Esce un report, Alpac, dove viene osservato che nemmeno la task di traduzione funziona.
-
-Dagli anni 80, viene inventata la backpropagation dove le reti neurali diventano efficaci. Qui nascono anche i sistemi esperti, che sono dei sistemi che, per esempio, si basano su delle regole logiche: qualcosa dis uper dettagliato ed un esperto inietta dentro la sua conoscienza. Nel 1996/1997 Gary kasparov sfidas DeepBLUE, progettato da IBM.\@ La prima sfida, Kasparov vince il mach overall ma perde due partite. Nella seconda edizione del 97, deepBLUE vince tutto. Per la prima volta, un esperto viene sconmfitto da una macchina. Negli anni 2000 arriva il machine learning: apprendimento automatico. Una macchina che apprende dai dati.  Reti neurali sono un sottoinsieme del ML, il deep learning sono un sottinsieme di rete neruale (LLM sono un soittinseeme di deep NN). 
-\end{comment}
+% Backpropagation
+Partendao da una rete neurale molto semplice, composta da 4 livelli, con un neurone ciascuno. QUesta rete ha 3 pesi e 3 bias. Vogliamo capire quanto sensibile è la funzione costo rspetto a questi valori.
 
 
+
+\subsection*{Tipa che parla}
+% ReLu introduction
+All'inizion venuva usata la sigmoide anche se le reti moderne non usano più la sigmoide bensi la relu, anche perchè è molto piu semplice da allenare: rectified linear unit: $\max(0, a)$

@@ -193,7 +193,7 @@ In particolare, data una rete neurale, i neuroni del livello $\ell$ ricevono il 
     \mathbf{a}^{(\ell)} = \sigma\left( \mathbf{W}^{(\ell)}\, \mathbf{a}^{(\ell -1)} + \mathbf{b}^{(\ell)}\right) = \sigma\left( \mathbf{v}^{(\ell)}\right)
 \end{gather*}
 % 
-\noindent Questo risultato fornisce una visione di insieme dell'output del livello $\ell$, rispetto che al singolo neurone $N^{(\ell)}_j$. Inoltre si osserva che è stato definito un vettore $\mathbf{v}^{(\ell)}$ il cui valore non è altro che l'input della funzione sigmoide, ovvero la somma pesata degli input del livello $\ell - 1$.
+\noindent Questo risultato fornisce una visione di insieme dell'output del livello $\ell$, rispetto che al singolo neurone $N^{(\ell)}_j$. Inoltre si osserva che è stato definito un vettore $\mathbf{v}^{(\ell)}$ il cui valore non è altro che l'input della funzione sigmoide\footnote{Nelle reti neurali moderne questa funzione è rimpiazzata dalla funzione \textsl{ReLu} che è più semplice da gestire, rendendo l'allenamento della rete meno oneroso.}, ovvero la somma pesata degli input del livello $\ell - 1$.
 
 Come per il caso del singolo neurone artificale, anche una \acs{ANN} deve essere allenata. Per allenare una rete neurale si utilizza l'algoritmo della \textit{backpropagation}, introdotto per la prima volta nel 1986. La backpropagation, sfruttando i principi del \acs{GD}, modificare i pesi della rete con l'obettivo di minimizzare una \textsl{cost function} $C$. Questo si traduce nel calcolare un gradiente, in particolare la derivata parziale della funzione $C$ rispetto al peso di un neurone e al suo bias:
 % 
@@ -211,7 +211,7 @@ Come per il caso del singolo neurone artificale, anche una \acs{ANN} deve essere
 % 
 \noindent Questo importante valore, indica di quanto varia la cost function in rapporto ad un piccolo cambiamento nell'input del neurone $N^{(\ell)}_j$. Supponendo di essere al livello $\ell$, modificiare il vettore $\boldsymbol{\delta}^{(\ell)}$, quindi modificare di poco il vettore di input $\mathbf{v}^{(\ell)}$, può portare alla riduzione complessiva della loss function $C$, propagando ai livelli successivi il cambiamento dell'input al livello $\ell$. L'algoritmo della backpropagation fornisce un modo per calcolare il valore $\delta^{(\ell)}_j$ e collegarlo alle derivate pariziali.
 
-L'algoritmo della backpropagation può essere descritto attraverso quattro equazioni fondamentali\,\cite{nielsen2015neural}. La prima equazione fornisce un modo per calcolare il valore $\delta^{(L)}_j$. Come si può osservare dall'equazione\,\ref{eq:BP1}, tale valore è il prodotto di due derivate. La prima derivata parziale indica il cambiamento della cost function rispetto all'output del neurone $N^{(L)}_j$: se il neurone ha poca influenza sull costo finale, allora $\delta^{(L)}_j$ è un valore molto piccolo. La seconda derivata indica quanto la funzione sigmoide stia variano nel punto $v^{(L)}_j$.
+L'algoritmo della backpropagation può essere descritto attraverso quattro equazioni fondamentali\,\cite{nielsen2015neural}. La prima equazione fornisce un modo per calcolare il valore $\delta^{(L)}_j$, ovvero l'errore di predizione nel livello di output $L$. Come si può osservare dall'equazione\,\ref{eq:BP1}, tale valore è il prodotto di due derivate. La prima derivata parziale indica il cambiamento della cost function rispetto all'output del neurone $N^{(L)}_j$: se il neurone ha poca influenza sull costo finale, allora $\delta^{(L)}_j$ è un valore molto piccolo. La seconda derivata indica quanto la funzione sigmoide varia nel punto $v^{(L)}_j$.
 % 
 \begin{gather}
     \delta^{(L)}_j = \frac{\partial\,C}{\partial\,a^{(L)}_j} \,\, \sigma^\prime \left( v^{(L)}_j \right)
@@ -264,11 +264,12 @@ Dopo aver definito le 4 equazioni fondamentali dell'algoritmo, è possibile comp
     \end{algorithmic}
 \end{algorithm}
 
-\noindent Questo fondamentale algoritmo, calcolando il gradiente della funzione costo per ogni iterazione (o, in gergo, \textsl{epoca}) dell'allenamento della rete cerca di raggingere il minimo della loss function $C$ ottimizzando i valori dei pesi. In questo modo la rete neurale artificiale è in grado di apprendere dai dati forniti in ingresso in modo tale da fornire predizioni valide a dati non presenti nel dataset. Eseguire un algoritmo così potente richiede uno sforzo computazionale notevole: le reti neurali moderne sono composte da migliaia di neuroni per livello che richiedono milioni di pesi da ottimizare precisamente. Proprio per questo motivo, con lo sviluppo di hardware avanzato, solo nell'ultimo decennio si è riusciti ad affrontare queste sfide computazioneli\,\cite{flasinski2016introduction, rojas1996backpropagation, nielsen2015neural, aggarwal2018neural}.
+\noindent Questo fondamentale algoritmo, calcolando il gradiente della funzione costo per ogni iterazione — o, in gergo, \textsl{epoca} — dell'allenamento della rete cerca di raggingere il minimo della loss function $C$ ottimizzando i valori dei pesi. In questo modo la rete neurale artificiale è in grado di apprendere dai dati forniti in ingresso in modo tale da fornire predizioni valide a dati non presenti nel dataset. Eseguire un algoritmo così potente richiede uno sforzo computazionale notevole: le reti neurali moderne sono composte da migliaia di neuroni per livello che richiedono milioni di pesi da ottimizare precisamente. Proprio per questo motivo, con lo sviluppo di hardware avanzato, solo nell'ultimo decennio si è riusciti ad affrontare queste sfide computazioneli\,\cite{flasinski2016introduction, rojas1996backpropagation, nielsen2015neural, aggarwal2018neural}.
+
+\todo{parla anche delle metodologie di evaluation}
 
 \section{Reti neurali convoluzionali}
 % 
-\todo{parla anche delle metodologie di evaluation}
 \todo{convolution: filters sono di fatto dei profile sulle sequenze}
 
 
@@ -292,6 +293,7 @@ Dopo aver definito le 4 equazioni fondamentali dell'algoritmo, è possibile comp
 
 % file:///C:/Users/Home/Desktop/Books/Neural%20networks%20and%20deep%20learning.pdf
 
+\begin{comment}
 \section*{3b1b video}
 Le reti neurali sono ispirate da un cervello. Il neurone artificiale, in questo caso è qualcosa che contiene un numero, tra 0 e 1. La rete inizia con 28 * 28 input, che sono i pixel dell'immagine, Ognuno di questi contiene il valore percentuale di gricio che contiene il pixel. Questo numero nel neurono è detto activation. Questo 784 valor rappresentano il primo layer della rete, l'imput layer. L'ultimo layer contiene gli aoutput, che sono in questo caso 10 neuroni, che determinano che numero è tra 0 e 9. Il numero al suo interno indica la probaviltà che il numero rappresentato sia quello. Gli hidden layers esistono, non sappiamo altro per ora. Le attivazioni du un livello determinano le attivazioni in quelli successivi (da sinisra a destra).
 
@@ -307,3 +309,4 @@ Partendao da una rete neurale molto semplice, composta da 4 livelli, con un neur
 \subsection*{Tipa che parla}
 % ReLu introduction
 All'inizion venuva usata la sigmoide anche se le reti moderne non usano più la sigmoide bensi la relu, anche perchè è molto piu semplice da allenare: rectified linear unit: $\max(0, a)$
+\end{comment}

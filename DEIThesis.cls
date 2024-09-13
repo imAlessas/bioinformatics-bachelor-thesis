@@ -95,7 +95,7 @@
 
 % plots, drawings etc...
 \RequirePackage{tikz}
-\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, matrix}
 
 % references
 \RequirePackage[autostyle]{csquotes}

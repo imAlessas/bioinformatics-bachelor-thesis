@@ -10,7 +10,6 @@
   node/.style={thick,circle,draw=myblue,minimum size=22,inner sep=0.5,outer sep=0.6},
   node in/.style={node,black!90,draw=myblue!30!black,fill=myblue!20},
   node hidden/.style={node,black!90,draw=black!70,fill=mylightgray!20},
-%   node convol/.style={node,orange!20!black,draw=myorange!30!black,fill=myorange!20},
   node out/.style={node,black!90,draw=myred!30!black,fill=myred!20},
   connect/.style={thick,mylightgray}, %,line cap=round
   node 1/.style={node in}, % node styles, numbered for easy mapping with \nstyle
@@ -24,7 +23,7 @@
     \message{^^JNeural network, shifted}
     \readlist\Nnod{4,5,5,5,3} % array of number of nodes per layer
     \readlist\Nstr{n,m,m,m,p} % array of string number of nodes per layer
-    \readlist\Cstr{\strut N^{(\prev)},N^{(\prev)},N^{(\prev)},N^{(\prev)},N^{(\prev)}} % array of coefficient symbol per layer
+    \readlist\Cstr{\strut N^{(\lay)},N^{(\lay)},N^{(\lay)},N^{(\lay)},N^{(\lay)}} % array of coefficient symbol per layer
     \def\yshift{0.8} % shift last node for dots
     
     \message{^^J  Layer}
@@ -55,25 +54,4 @@
     \node[above=0.3,align=center,mylightgray!60!black] at (N3-1.90) {hidden layers};
     \node[above=1.2,align=center,myred!60!black] at (N\Nnodlen-1.90) {output\\[-0.2em]layer};
 
-    % % Input arrows
-    % \draw[->,myblue!60!black] (0.3,0.5) -- ++(N1-1) node[pos=-0.2]{$X_1$};
-    % \draw[->,myblue!60!black] (0.3,0.5) -- ++(N1-2);
-    % \draw[->,myblue!60!black] (0.3,0.5) -- ++(N1-3);
-    % \draw[->,myblue!60!black] (0.3,0.5) -- ++(N1-4);
-    
-    % \draw[->,myblue!60!black] (0.3,-0.5) -- ++(N1-1)node[pos=-0.2, above]{$X_2$};
-    % \draw[->,myblue!60!black] (0.3,-0.5) -- ++(N1-2);
-    % \draw[->,myblue!60!black] (0.3,-0.5) -- ++(N1-3);
-    % \draw[->,myblue!60!black] (0.3,-0.5) -- ++(N1-4);   
-    
-    % \draw[->,myblue!60!black] (0.3,-1.5) -- ++(N1-1)node[pos=-0.2, above]{$X_n$};
-    % \draw[->,myblue!60!black] (0.3,-1.5) -- ++(N1-2);
-    % \draw[->,myblue!60!black] (0.3,-1.5) -- ++(N1-3);
-    % \draw[->,myblue!60!black] (0.3,-1.5) -- ++(N1-4);
-        
-    % % Output arrows
-    % \draw[->,myred!60!black] (N\Nnodlen-1.0) -- ++(0.5,0) node[midway,above] {$y^{(5)}_1$};
-    % \draw[->,myred!60!black] (N\Nnodlen-2.0) -- ++(0.5,0) node[midway,above] {$y^{(5)}_2$};
-    % \draw[->,myred!60!black] (N\Nnodlen-3.0) -- ++(0.5,0) node[midway,above] {$y^{(5)}_k$};
-    
 \end{tikzpicture}

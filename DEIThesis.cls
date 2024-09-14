@@ -512,12 +512,12 @@
   \addcontentsline{toc}{chapter}{\bibname}
   \printbibliography
   
-  % \cleardoublepage
-  % \phantomsection
+  \cleardoublepage
+  \phantomsection
 
   % add acknowledgments
   % \addcontentsline{toc}{chapter}{\acknowledgmentsname}
-  % \acknowledgments
+  \acknowledgments
 }
 
 

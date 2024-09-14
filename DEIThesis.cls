@@ -472,10 +472,14 @@
 
 % custom style for acronyms
 \newcommand{\acronyms}{
+  \cleardoublepage
   \phantomsection
   % \addcontentsline{toc}{chapter}{\listacronymname}
   \chapter*{\listacronymname}
-  \input{frontmatter/glossary}
+
+  \markboth{}{} % remove headers
+
+  \input{frontmatter/glossary} % Load your acronym file
   \cleardoublepage
 }
 

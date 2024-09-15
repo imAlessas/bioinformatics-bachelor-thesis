@@ -65,6 +65,14 @@ Ogni training sample consisteva nel 1000bp sequences, centrata sul frammento (bi
 
 
 \section{Basset}
+% Basset, as an allusion to the extraordinary abilities of these hound dogs to learn a scent that they are subsequently able to detect and pursue.
+Weight matrixes that learn patterns. Nel livello convluzionale l-algoritmo scans le PWM (ovvero i filtri). Come nella altre CNN, durante l'allenamento i kernel imparano a riconoscere pattern importatni. IN questo modo non è ecessario specioficarliu manualmente.
+% Prior work has demonstrated that with a sufficiently large data set, deep neural networks can learn far more expressive and accurate models than other common approaches like random forests or kernel methods
+Dopo ogni livello convluzionale viene appliocata una relu (rectifier operation). Dopo di che viene fatto un max pooling. % This operation reduces the dimension of the input to the next layer (and thus the computation required in training).
+Successivi livelli convuluzionali fanno la stessa cosa del primo. Per le sequene di DNA, i livelli usccessivi catturano interazioni spaziali con le pWM iniziali. SOno presenti 3 livelli convopluzionali (ciascuno con il recfier e la max pooling) e infine due livelli fully connected. Il livello finale pusha fuori 164 predizioni.
+
+Sono stati utilizzati il test AUC che plotta false positive vs true popsitive graph. Come deepsea, anche basset è stato dimostrato essere piu pro di gkm-SVM
+
 
 \section{DeepSATA}
 

@@ -284,9 +284,9 @@
   \cleardoublepage
 
   % insert list of tables
-  \phantomsection
-  \listoftables
-  \cleardoublepage
+  % \phantomsection
+  % \listoftables
+  % \cleardoublepage
 
   % insert list of algorithms (uncomment if needed)
   % \phantomsection

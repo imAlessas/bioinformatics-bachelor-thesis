@@ -3,7 +3,7 @@
 
 In questo capitolo verranno descritti tre tool basati sulle reti neurali convoluzionali, pubblicati con l'obiettivo di far più chiarezza sulla comprensione funzionale delle mutazioni non condificanti. I modelli in questione sono \textsl{DeepSEA}\,\cite[``Predicting effects of noncoding variants with deep learning--based sequence model'']{zhou2015predicting}, \textsl{Basset}\,\cite[``Basset: learning the regulatory code of the accessible genome with deep convolutional neural networks'']{kelley2016basset} e \textsl{DeepSATA}\,\cite[``DeepSATA: A Deep Learning-Based Sequence Analyzer Incorporating the Transcription Factor Binding Affinity to Dissect the Effects of Non-Coding Genetic Variants'']{ma2023deepsata}.
 
-Di questi modelli si esploreranno importanti carattersitiche strutturali della rete, tra cui il numero e il tipo di layer presenti, il dataset utilizzato
+Di questi modelli si esploreranno importanti carattersitiche strutturali della rete, tra cui il numero e il tipo di layer presenti, il dataset iniziale utilizzato e 
 
 \todo{finisci introduzione}
 \todo{I picchi delle sequenze sono le regioni aperte del DNA}
@@ -129,7 +129,32 @@ Hanno fatto anche in questo caso il flanking di 600 bp: To merge the peaks into 
 
 \section{DeepSATA}\label{sec:DeepSATA}
 % 
-Pubblicato nel 2023, DeepSATA è il terzo tool basato su una \acs{CNN} che si occupa di
+Pubblicato nel 2023, DeepSATA è il terzo tool basato su una \acs{CNN} che si occupa di prevedere l'effetto funzionale di mutazioni non codificanti nei siti di \acs{TF} binding non solo in sequenze genomiche umane, ma anche di altre specie animali quali maiali, galline, bovini e topi.
+
+DeepSATA è un modelo basato su DeepSEA.\@ È quindi composto da tre layer convoluzionali, con rispettivamente da 320, 480 e 960 kernel. Ogni livello convluzionale è seguito da un layer che applica la funzione \acs{ReLU} e poi un max pooling layer estrae dal risultato le feature predominanti. Infine è presente anche un dropout layer che, come per DeepSEA, aiuta la rete a prevenire il rischio di overfitting. Anche in questo tool, ai tre layer convoluzionali, seguono dei fully-conected layer che preparano i dati all'output layer che, attraverso la funzione sigmoide, 
+
+
+
+
+
+
+
+\begin{comment}
+To prepare the
+input of training, we partitioned the whole genome into 200 bp consecutive bins. Bins that
+overlapped with ATAC-seq peaks by more than half of their length were labelled as positive
+1, with negative labels of 0 otherwise. Considering the high burden of computing, we
+randomly shuffled these genomic bins using the ‘shuf’ command and selected 10% of them
+for training. For each training bin, a 1000 bp sequence centered on a 200 bp bin is extracted
+from a reference genome. Each bin is represented by a three-dimensional 1000 × 4 × (N + 1)
+matrix, with the first dimension representing the sequence centered around the 200 bp bin,
+the second dimension representing the four possible DNA nucleotides at each base (A, T, C,
+or T), and the third dimension represent the encoding schedules of the DNA sequence and
+the TF binding configurations. The third dimension consists of a series of successive twodimensional layers; for example, layer 1 represents the one-hot encoding of the current DNA
+sequence, with vectors [1,0,0,0], [0,1,0,0], [0,0,1,0], and [0,0,0,1] representing the nucleotides
+A, T, C, and G, respectively
+\end{comment}
+
 
 % s. We conducted 1a performance comparison among DeepSATA, DeepSEA and Basset using a receiver operating characteristic curve (ROC) analysis and calculated the area under the curve (AUC)
 
@@ -156,3 +181,6 @@ In maniera del tutto analoga a DeepSEA.\@ Specifically, the genome was divided i
 
 
 
+\begin{comment}
+In our study, we utilized DeepSATA to evaluate its predictive capabilities for chromatin features in five distinct species: mice, pigs, cattle, humans, and chickens. We collected open chromatin accessibility datasets and corresponding transcription factor binding motifs, which are summarized in Table 1 and Supplementary Tables S1 and S2. The performance of the DeepSATA, DeepSEA, and Basset models was assessed for each species by comparing their average AUC values across different chromatin features. DeepSATA demonstrated superior performance across all species, with average AUC values of 0.854, 0.779, 0.772, 0.759, and 0.744 for mice, pigs, cattle, humans, and chickens, respectively (Figure 2A and Supplementary Table S3). In comparison, DeepSEA had average AUC values of 0.796, 0.775, 0.769, 0.755, and 0.736, respectively (Figure 2B and Supplementary Table S3), while Basset had average AUC values of 0.778, 0.719, 0.768, 0.717, and 0.722, respectively (Figure 2C and Supplementary Table S3). It is worth noting that DeepSATA consistently outperformed DeepSEA and Basset in all chromatin features for pigs and mice (Supplementary Table S3). The relative improvement was particularly significant in the cerebrum tissue of the mice, where DeepSATA achieved an AUC of 0.829 compared to DeepSEA’s 0.659 for female mice and an AUC of 0.828 compared to DeepSEA’s 0.653 for male mice, representing a relative improvement of over 25%. Interestingly, our findings indicate that the DeepSATA, DeepSEA, and Basset models performed better for the Duroc pig breed compared to other pig breeds (Supplementary Table S3). This suggests a superior ability to recognize regulatory functional patterns in the non-coding genomic regions  pecific to Duroc pigs. In the case of cattle, the chromatin feature of the hypothalamus was most effectively captured, with AUC values of 0.887 for DeepSATA, 0.883 for DeepSEA, and 0.895 for Basset (Supplementary Table S3). What particularly encouraged us was the remarkable performance of DeepSATA in accurately recognizing the regulatory patterns of the cerebellum in chickens, achieving AUC values as high as 0.972, while DeepSEA achieved 0.971 and Basset achieved 0.953 (Supplementary Table S3). Additionally, in the following analysis, we selected DeepSEA as the baseline comparison, since it achieved better prediction performance compared with Basset. Overall, these results clearly demonstrate the effectiveness of DeepSATA in accurately identifying the regulatory patterns of chromatin features in different animal species
+\end{comment}

@@ -1,17 +1,41 @@
 %!TEX root = ../main.tex
 \chapter{Reti convoluzionali e varianti non codificanti}\label{chp:CNN-non-coding-variants}
+
+In questo capitolo verranno descritti tre tool basati sulle reti neurali convoluzionali, pubblicati con l'obiettivo di far più chiarezza sulla comprensione funzionale delle mutazioni non condificanti. I modelli in questione sono \textsl{DeepSEA}\,\cite[``Predicting effects of noncoding variants with deep learning--based sequence model'']{zhou2015predicting}, \textsl{Basset}\,\cite[``Basset: learning the regulatory code of the accessible genome with deep convolutional neural networks'']{kelley2016basset} e \textsl{DeepSATA}\,\cite[``DeepSATA: A Deep Learning-Based Sequence Analyzer Incorporating the Transcription Factor Binding Affinity to Dissect the Effects of Non-Coding Genetic Variants'']{ma2023deepsata}.
+
+Di questi modelli si esploreranno importanti carattersitiche strutturali della rete, tra cui il numero e il tipo di layer presenti, il dataset utilizzato
+
+\todo{finisci introduzione}
+\todo{I picchi delle sequenze sono le regioni aperte del DNA}
+
+
+\section{DeepSEA}\label{sec:DeepSEA}
+% 
+Il primo tool che verrà analizzato è DeepSEA (\textit{Deep learning-based Saquence Analizer}), introdotto nel 2015 con l'obiettivo di predire l'effetto delle varianti non codifcanti nella cromatina. Al fine di garantire una previsione accurata, questo modello considera lunghe sequenze di \acs{DNA} in modo da conoscere in maniera migliore il contesto in cui avviene la mutazione e quindi comprenderne le funzionalità, anche grazie alla struttura gerarchica dei livelli convoluzionali, che permettono di esaminare pattern locali e globali. 
+Inoltre, DeepSEA è in grado di imparare contemporaneamente diverse funzionalità della cromatina utilizzando un approccio di multitask learning, che permette di addestrare il modello su più compiti correlati nello stesso momento. Per comprendere in maniera più approfondita gli effetti funzionali delle mutazioni non codificanti, è stato allenato in modo da predire 919 profili di cromatina suddivisi in tre macro categorie:
 % 
 \begin{itemize}
-    \item DeepSEA\,\cite[``Predicting effects of noncoding variants with deep learning--based sequence model'']{zhou2015predicting}
-    \item Basset\,\cite[``Basset: learning the regulatory code of the accessible genome with deep convolutional neural networks'']{kelley2016basset}
-    \item DeepSATA\,\cite[``DeepSATA: A Deep Learning-Based Sequence Analyzer Incorporating the Transcription Factor Binding Affinity to Dissect the Effects of Non-Coding Genetic Variants'']{ma2023deepsata}
+    \item 690 tipi di sequenze associate ai siti di binding dei fattori di trascrizone (\acs{TF}), che giocano un ruolo fondamentale durante la trascrizione;
+    \item 125 profili di regioni ipersensibili all'enzima DNasi I (\acs{DHS}), che indicano la presenza o meno di elementi regolativi nel \acs{DNA}, anche questi importanti durante la fase di trascrizione;
+    \item 104 profili di modifiche istoniche, ovvero mutazioni negli istoni che rendono poco accessibile il \acs{DNA} nella cromatina, impedendo quindi una corretta trascrizione;
 \end{itemize}
+% 
 
-\todo{Introduzione dei tre tool. I.E. in questo capitolo verranno confrontati i tre tool, osservando il loro design della rete, encoding, training set etc}
+Il modello — implementato con la libreria \href{https://github.com/torch/torch7}{\textsl{Torch7}} — è composto da esattmente tre livelli convoluzionali: il primo livello contiene 320 filtri, il secondo 480 e l'ultimo contiene 960 kernel. I filtri sono delle \textit{Position Weight Matrix} (\acs{PWM}) che analizzano la sequenza in input e, attraverso la convoluzione, estraggono pattern significativi, man mano spostando la finestra di una base della sequenza. Nel primo livello il kernel ha dimesnione $M\times 4$, dove $M$ è la lunghezza della finestra mentre $4$ sono il numero delle basi azotate. I livelli convoluzionali successivi hanno invece dimensione $M\times k$, dove in questo caso $k$ è il numero di kernel che sono stati utilizzati nel livello convoluzionale precedente. Dopo ogni livello convoluzionale viene applicata una \acs{ReLU} (Figura\,\ref{fig:relu-function}) e poi viene inserito un max-pooling layer, volto ad estrarre la feature predominante dal risultato della convoluzione. In questo caso la finestra di pooling non ha uno step di uno, bensì lo step coincide con la lunghezza della finestra stessa. Infine, dopo i tre livelli convoluzionali, è presente un fully connected layer — che riceve il risultato del max-pooling layer della terza convoluzione e ci applica una \acs{ReLU} — e l'output layer, che processa le informazioni con una funzione sigmoide (Figura\,\ref{fig:sigmoid-function}) la quale calcola la probabilità che la sequenza in input corrisponda o meno a una tra i 919 profili.
 
-\section{DeepSEA}
-DeepSEA, \textit{Deep learning based sequence analizer}, per predirre l'effetto della varianti non codifcanti. Prima di tutti si sono dovute imparare i codici delle sequenzie regolatorie, in particolare imparando a distinguere i dati nelle cromatine, tra cui le regioni di aggancio dei \acs{TF}, I siti ipersensibili al DNase I (DHS) e i siti dove si attaccano gli istoni per fare la cromatina. I DHS sono regioni della cromatina che sono ipersensibili agli enzimi DNase che sono meno densi e rendono il DNA più accessibile. Qui il DNA può essere degradto dagli enzimi.
-% In genetics, DNase I hypersensitive sites (DHSs) are regions of chromatin that are sensitive to cleavage by the DNase I enzyme. In these specific regions of the genome, chromatin has lost its condensed structure, exposing the DNA and making it accessible. This raises the availability of DNA to degradation by enzymes, such as DNase I. These accessible chromatin zones are functionally related to transcriptional activity, since this remodeled state is necessary for the binding of proteins such as transcription factors.
+I 919 profili di cromatina sono stati ottenuti dai progetti ``\textit{Encyclopedia of \acs{DNA} Elements}'' (\acs{ENCODE}) e ``\textit{Roadmap Epigenomics}''. Le sequenze estratte sono state divise in frammenti (\textit{bin}) da 200bp\footnote{Con ``bp'', si intende \textit{base pair}, ovvero la lunghezza della sequenza espressa nel numero di coppie di basi.}, per un totale di $521\,636\,200$bp. Ciascuno di questi bin è stato poi etichettato ad uno tra i 919 profili di cromatina se almeno più della metà della sequenza corrispondeva al profilo teorico. Ogni bin estratto è stato centrato su una sequenza di 1000bp di genoma umano, al fine di fornire a DeepSEA maggiore contesto per ricavare informazioni più significative. Infine,ciascuna sequenza di input è stata trasformata in una matrice $1000\times 4$ attraverso il \textit{One-Hot encoding} e associata al rispettivo vettore di \textit{label} che contiene la risposta attesa dalla rete. 
+
+Per allenare DeepSEA in maniera efficace si è definita la cost function come la \textit{Negative Log Likelihood} (\acs{NLL}) — chiamata anche \textit{Binary Cross Entropy} — definita come segue:
+% 
+\begin{gather*}
+    \mathbf{NLL} = - \sum_s \sum_p\, \log\left[ y_{s,\,p}\,\sigma_p\left(X_s\right)  + \left( 1- y_{s,\,p} \right)\left(1 - \sigma_p\left(X_s\right) \right) \right]
+\end{gather*}
+% 
+\noindent In questa formula, $s$ è l'indice del campione $s$-esimo ($X_s$) del dataset e $p$ è l'indice del profilo della cromatina. Ne consegue che il valore $y_{s,\,p}$ è il valore corretto del campione $s$ rispetto al profilo di cromatina $p$ mentre $\sigma_p\left(X_s\right)$ è la predizione di DeepSEA sul campione $X_s$ rispetto al profilo $p$. L'effettiva cost function in realtà è definita come la funzione \acs{NLL} sommata ad altri valori con l'obiettivo di evitare situazioni di \textit{overfitting}\footnote{L'overfitting è la situazione in cui il modello è completamente allineato con il dataset di allenamento, diventando quindi meno accurato nella predizioni di dati che non sono presenti nel datase.}. Il gradiente della loss function è stato calcolato attraverso l'algoritmo della backpropagation, per poi essere utilizzato nell'ottimizzazione della rete. L'algoritmo di ottimizzazione utilizzato è stato il \acs{SGD} con momento, che è una variante utilizzata per aumentare ancora di più le possibilità di non cadere nei minimi locali\,\cite{aggarwal2018neural}. Inoltre si è scelto di applicare il \textit{dropout training} il quale implica di annullare l'effetto di alcuni neuroni durante le epoche dell'allenamento al fine di rendere la rete più robusta al rischio di overfitting\,\cite{nielsen2015neural}.
+
+L'efficacia predittiva del modello è stata valutata tramite l'AUC (\textit{Area Under the Curve}), una metrica che misura la capacità del modello di distinguere tra i vari profili, con valori compresi tra 0 e 1. Il modello ha ottenuto un'AUC di $0.958$ per i siti di binding dei fattori di trascrizione (\acs{TF}), $0.923$ per i siti \acs{DHS} e $0.856$ per le modifiche istoniche.
+
+\begin{comment}
 Il modello è stato elaborato per predire l'effetto delle varianti non codificanti sulla cromatina. Sono presenti tre features importanti in questo modello:
 \begin{enumerate}
     \item Il modello considera non solo sequenze brevi ma anche lunghe in modo da catturare informazioni più rilevanti contenute su sequenze più ampie, in modo da avere una visione ad insieme delle funzionalità
@@ -25,9 +49,9 @@ L'articolo sottolinea l'importanza di utilizzare un contesto di sequenza più am
 
 
 \subsection*{Model Design}
-Il modello presenta sequenze di conv layer e max pooling layer per estrarre man mano le features in scale spaziali diverse (capisci meglio). Alli fine cè un fullly connected che permette di eleborare le informazioni e, attraverso una sgmoide, calcola la probabilità di ciascuno dei chromatine facur feature. I kerne sono le wieght matrixes. L'output di cascun conv layer è processato prima da un RElu. L'operazione di convoulzuone nel primo livello equivale a calcolare le PWM scores in un finestra, con step di 1. Nei livelli convoluzionali successivi, il kernel è una PWM sull'output del layer precedente. 
+Il modello presenta sequenze di conv layer e max pooling layer per estrarre man mano le features in scale spaziali diverse (capisci meglio). Alla fine cè un fully connected che permette di eleborare le informazioni e, attraverso una sgmoide, calcola la probabilità di ciascuno dei chromatine facur feature. I kerne sono le wieght matrixes. L'output di cascun conv layer è processato prima da un RElu. L'operazione di convoulzuone nel primo livello equivale a calcolare le PWM scores in un finestra, con step di 1. Nei livelli convoluzionali successivi, il kernel è una PWM sull'output del layer precedente. 
 \todo{Illustra brevemente una PWM}
-Nei livelli successivi al primo, il kernel è di dimension MxN, dove N è il numero di kernel utilizzati nel layer precedente. Se nel primo livello sono state utilizzate 10 PWM 12x4, nel lvl successivo sarà usata un kernel di dimension 12X10. Dopo il convlayer viene pushato un relu e poi u pooling: step = dimensione della pooling window.
+Nei livelli successivi al primo, il kernel è di dimension MxN, dove N è il numero di kernel utilizzati nel layer precedente. Se nel primo livello sono state utilizzate 10 PWM $12\times4$, nel lvl successivo sarà usata un kernel di dimension 12X10. Dopo il convlayer viene pushato un relu e poi u pooling: step = dimensione della pooling window.
 
 In DeepSEA sono presenti 3 livelli convluzionali, il primo con 320 kernel, il secondo con 480 ed il terzo con 960. DOpo la convoluzione è presente un fully connected layer, dove i neuroni ricevono il risultato delle convoluzioni e fanno una relu con la matrice dei pesi che colelga 3conv-FCL (fylly conn layer)
 
@@ -36,55 +60,99 @@ The last layer, the sigmoid output layer, makes predictions for each of the 919 
 \subsection*{Model Training}
 Si è definita la funzione obiettivo (cost function) come la somma del logaritmo negativo della likelihood (NLL), sommati ad altri parametri per evitare overfitting.
 % 
-\begin{gather*}
-    \mathbf{NLL} = - \sum_s \sum_f\, \log\left[ y_f^s\,\sigma_f\left(X^s\right)  + \left( 1- y_f^s \right) \, \left(1 - \sigma_f\left(X^s\right) \right) \right]
-\end{gather*}
+
 % 
-Dove $s$ indica l'indece del sample e $f$ indica la sua feature (ovvero i vari tipo di output, che sono 919). Inoltre $y_f^s$ indica il label 0,1 rispetto alla al tipo di cromatine featre $f$ e al sample $s$. Infine $\sigma_f\left(X^s\right)$ indica il valore predetto dalla rete dato il sample $s$ sulla feture $f$.
+% Dove $s$ indica l'indece del sample e $f$ indica la sua feature (ovvero i vari tipo di output, che sono 919). Inoltre $y_f_s$ indica il label 0,1 rispetto alla al tipo di cromatine featre $f$ e al sample $s$. Infine $\sigma_f\left(X_s\right)$ indica il valore predetto dalla rete dato il sample $s$ sulla feture $f$.
 
 A questa funzione vengono sommati altri attributi alla NLL al fine di evitare l'verfitting.\todo{Vedi se inserirla oppure skippare sta parte perchè è poco importante ma difficile da spiegare in quanto relies on knowledge we do not have LMAO1}
 % 
 \begin{gather*}
-    C = \mathbf{NLL} + \lambda_1\vert\vert W \vert\vert_2^2 + \lambda_2 \vert\vert H^{-1} \vert\vert_1
+C = \mathbf{NLL} + \lambda_1\vert\vert W \vert\vert_2^2 + \lambda_2 \vert\vert H^{-1} \vert\vert_1
 \end{gather*}
 % 
 
-Il gradiente di questa funzione è stato calcolato mediante la backpropagation ed è stato poi tulizzato il SGD with momentum per trainarla (questo algoritmo viene usato per ridurre il rumore nel dataset con una exponential average). Inoltre è stato usato il dropaut training per prevenire l'oberfitting e regolarizzare la rete\,\cite{srivastava2014dropout}
 
-% SGD momentum: https://towardsdatascience.com/stochastic-gradient-descent-with-momentum-a84097641a5d
 
-implementazione con Torch7library
 
 \subsection*{Training dataset}
+
+% , ottenuti dai progetti ``\textit{Encyclopedia of DNA Elements}'' (\acs{ENCODE}) e ``\textit{Roadmap Epigenomics}'' e
 
 Le labels sono stte ricavate da ENCODE e Roadmap Epigenomica. Splittato il genoma in segmenti da 200bp. Per ogi frammento sono state associate le 919 chromatine features. Se più del 50\% del frammento era nella peak region della feature, era labellato a 1, altrimenti zero.
 
 Ogni training sample consisteva nel 1000bp sequences, centrata sul frammento (bin) di 200 basi ed associata al vettore di etichette che ontiene le 919 features. In questo modo, le due sequenze di 400 bp ai lati davaano più contesto in modo da interpretare meglio il risultato.
 
 % For evaluating performance on the test set, we used area under the receiver operating characteristic curve (AUC). The predicted probability for each sequence was computed as the average of the probability predictions for the forward and complementary sequence pairs.
+\end{comment}
 
 
-\section{Basset}
-% Basset, as an allusion to the extraordinary abilities of these hound dogs to learn a scent that they are subsequently able to detect and pursue.
-Weight matrixes that learn patterns. Nel livello convluzionale l-algoritmo scans le PWM (ovvero i filtri). Come nella altre CNN, durante l'allenamento i kernel imparano a riconoscere pattern importatni. IN questo modo non è ecessario specioficarliu manualmente.
+
+
+Utilizzando reti neurali convoluzionali profonde (CNN), Basset è in grado di apprendere in modo efficace i motivi sequenziali e la logica regolativa che determinano l'accessibilità del DNA in contesti cellulari specifici. Questo approccio consente di ottenere previsioni accurate riguardo a come le sequenze di DNA influenzano l'espressione genica.
+
+
+\section{Basset}\label{sec:Basset}
+% 
+Basset\footnote{Il nome richiama il bassotto, noto per le sue capacità olfattive, in analogia con l'abilità del modello di riconoscere pattern.} è un potente strumento sviluppato nel 2016, progettato per analizzare sequenze di DNA e prevedere l'accessibilità di 164 siti ipersensibili alla DNase I (\acs{DHS}), che indicano la presenza di elementi regolativi. Mediante le \acs{ConvNet}, questo modello è quindi in grado di fornire importanti informazioni rigaurdo la fase di trascrizione da \acs{DNA} ad \acs{RNA} anlizzando questi particolari siti della cromatina. Proprio come DeepSEA, la presenza di più livelli convoluzionali facilita la comprensione degli aspetti funzionali derivanti dalle mutazioni nei \acs{DHS}.
+
+Anche Basset, come DeepSEA, è stato implementato utilizzando la libreria \href{https://github.com/torch/torch7}{\textsl{Torch7}}. Questo tool dà la possibilità di personalizzare il modello a piacimento, indicando il numero per ciascun tipo di livello, il numero di filtri (\acs{PWM}) nei livelli convoluzionali, la loro dimensione, la grandezza delle finestre di pooling, il numero di neuroni nei fully-connected layer e vari iperparametri per la fase di allenamento e di test. Attraverso l'ottimizzazione Bayesiana si sono trovati i layer e gli iperparametri ideali per l'architettura. La struttura è composta da tre livelli convoluzionali: il primo livello contiene 300 filtri di lunghezza 19bp, il secondo è composto da 200 kernel di lunghezza 11bp e il terzo layer ne contiene 200 di lunghezza 7bp. È importante sottolineare che dopo ciascun livello convoluzionale, segue un livello che normalizzi l'output della convoluzione (\textit{batch normalization}) seguito da una \acs{ReLU} ed un max-pooling layer. In seguito ai tre livelli convoluzionali sono presenti tre fully connected layer, alternati con due \acs{ReLU} ed infine l'output layer, che attraverso la funzione sigmoide calcola la probabilità che l'input appartenga ad uno dei 164 \acs{DHS}.
+
+Dei siti ipersensibili alla DNasi I, 125 sono stati estratti da \acs{ENCODE} e 39 ``\textit{Roadmap Epigenomics}''. I dati estratti sono stati processati e tutti i siti sono stati isolati ed arricchiti fino ad avere un dataset iniziale di compostp da sequenze di 600bp, per un totale di $2\,071\,886$bp. Ciascuna delle sequenze presenti nel dataset sono state poi associate al vettore di label che indicava a quale dei 164 tipi la sequenza apparteneva. Dei 164 tipi, il $17\%$ dei siti sono stati associati a promoters, il $47\%$ è stato classificato come siti intragenici — ovvero all'interno dei geni — e il restante $36\%$ è stato etichettato come siti intergenici — cioè tra i geni. Infine, prima di essere utilizzati nella rete, i siti sono stati processati mediante il One-Hot encoding, formando quindi sequenze di input di dimensione $600\times 4$. Del dataset totale, $71\,886$ basi sono state utilizzate per la fase di test e altre $70\,000$ per la fase di validazione.
+
+Il modello è stato allenato attraverso il \acs{GD} stocastico, cercando di ottimizzare la funzione binary cross entropy, il cui gradiente è stato calcolato mediante la backpropagation. Per prevenire il rischio di overfitting si è applicata la tecnica dell'\textit{early stopping}, facendo terminare l'allenamento dopo 12 epoche che la \textit{validation loss} rimane invariata. Dopo l'allenamento e la validazione, il modello è stato testato, ottenendo un valore AUC medio di $0.895$ sui \acs{DHS}.
+
+\begin{comment}
+\subsection*{Model Design}
+Weight matrixes that learn patterns. Nel livello convluzionale l'algoritmo scans le PWM (ovvero i filtri). Come nella altre CNN, durante l'allenamento i kernel imparano a riconoscere pattern importatni. IN questo modo non è ecessario specioficarliu manualmente.
 % Prior work has demonstrated that with a sufficiently large data set, deep neural networks can learn far more expressive and accurate models than other common approaches like random forests or kernel methods
 Dopo ogni livello convluzionale viene appliocata una relu (rectifier operation). Dopo di che viene fatto un max pooling. % This operation reduces the dimension of the input to the next layer (and thus the computation required in training).
 Successivi livelli convuluzionali fanno la stessa cosa del primo. Per le sequene di DNA, i livelli usccessivi catturano interazioni spaziali con le pWM iniziali. SOno presenti 3 livelli convopluzionali (ciascuno con il recfier e la max pooling) e infine due livelli fully connected. Il livello finale pusha fuori 164 predizioni.
 
 Sono stati utilizzati il test AUC che plotta false positive vs true popsitive graph. Come deepsea, anche basset è stato dimostrato essere piu pro di gkm-SVM
 
+Il primo layer convoluzionale ha 300 filters. Dopo ciascun convlayer viene fatta una relu e poi una maxpool.
+    
+È stata usata la libreria Torch7 di python per l'implementazione.
 
-\section{DeepSATA}
+Dopo il terzo layer convoluzionale si applica un doppoio layer fully conncted che operano una sigmoid transformation per mandare in output i 164 tipi di cellule. INltre We trained to minimize the binary cross entropy loss function, summed over these 164 outputs. Si è calcolto il gradiente della funzione obiettivo con la backpropagation.
 
-% s. We conducted a performance comparison among DeepSATA, DeepSEA and Basset using a receiver operating characteristic curve (ROC) analysis and calculated the area under the curve (AUC)
+\subsection*{Dataset}
+
+We downloaded DNase-seq peak BED format files for 125 cell types from the ENCODE Project Consortium (2012) and 39 cell types from the Roadmap Epigenomics Consortium (2015).
+
+Hanno fatto anche in questo caso il flanking di 600 bp: To merge the peaks into one set, we first extended each one from its midpoint to 600 bp
+\end{comment}
+
+
+
+
+
+\section{DeepSATA}\label{sec:DeepSATA}
+% 
+Pubblicato nel 2023, DeepSATA è il terzo tool basato su una \acs{CNN} che si occupa di
+
+% s. We conducted 1a performance comparison among DeepSATA, DeepSEA and Basset using a receiver operating characteristic curve (ROC) analysis and calculated the area under the curve (AUC)
 
 Dl-based sequence analizer che incorpora i TF binding sites for crossspecies prediction. Questo modello è cotroutio basandosi su DeepSEA.\@ DeepSATA è stato procettato per identificare le regioni parte della cormatina (OCR) e le varianti non codificanti (functional annotation).
 
-Per sequenze di DNA, DeepSATA estendo il concetto di one hot encoding in uno spazio tridimensionale che incorpara i TF bining sites che sono importanti nei contesti biologici specifci. Questi TF sono sono selezionati in modo da arricchire i motivi di DNA binding nelle OCR.\@ Ogni layer bidimensionale codifica la binding affinity di uno specifico TF. L'encoding trategi utilizzata è quella della position weight probability matrix (PWPM) del TF site.
+Per sequenze di DNA, DeepSATA estendo il concetto di one hot encoding in uno spazio tridimensionale che incorpara i TF bining sites che sono importanti nei contesti biologici specifci. Questi TF sono sono selezionati in modo da arricchire i motivi di DNA binding nelle OCR.\@ Ogni layer bidimensionale codifica la binding affinity di uno specifico TF.\@ L'encoding trategi utilizzata è quella della position weight probability matrix (PWPM) del TF site.
 
 \subsection*{Model design}
 
 
 \subsection*{Training Dataset}
 
-In maniera del tutto analoga a DeepSEA. Specifically, the genome was divided into bins of 200 base pairs (bp). Each bin was assigned a label of 1 if more than half of the 200 bp fell within the ATAC peak regions and a label of 0 if not. Anche qui ci sono 400 flaning sequnces con deepsea.
+In maniera del tutto analoga a DeepSEA.\@ Specifically, the genome was divided into bins of 200 base pairs (bp). Each bin was assigned a label of 1 if more than half of the 200 bp fell within the ATAC peak regions and a label of 0 if not. Anche qui ci sono 400 flaning sequnces con deepsea.
+
+
+\begin{comment}
+\section{Codifica}
+
+\section{Struttura della rete}
+
+\section{Dataset}
+\end{comment}
+
+
+
+

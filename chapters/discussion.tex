@@ -2,6 +2,27 @@
 
 \chapter{Discussione}\label{chp:discussion}
 
+
+
+\begin{table}[!h]
+    \centering
+    \renewcommand{\arraystretch}{2}
+    \begin{tabular}{|c|c|c|c|c|c|} % chktex-file 44
+        \hline % chktex-file 44
+        \textbf{Modello} & \textbf{Struttura} & \textbf{Codifica} & \textbf{Kernel} & \textbf{Dataset} & \textbf{Funzione costo}\\ 
+        \hline\hline % chktex-file 44
+        \hyperref[sec:DeepSEA]{\textsl{DeepSEA}} & & One-hot Encoding & \acs{PWM} & & \textsl{Binary Cross Entropy} \\ 
+        % 
+        \hyperref[sec:Basset]{\textsl{Basset}} & & One-hot Encoding & \acs{PWM} & & \textsl{Binary Cross Entropy} \\ 
+        % 
+        \hyperref[sec:DeepSATA]{\textsl{DeepSATA}} & & One-hot Encoding & & &  \\ 
+        \hline
+    \end{tabular}
+    \renewcommand{\arraystretch}{1}
+\end{table}
+
+\
+
 \todo{Tabella che specifica e riassume per ogni tool encoding, dataset etc}
 \todo{riassume quanto analizzato prima, riporta i risultati del paper piu recente in modo da avere un momento in cui riassumo la situa}
 \todo{Sperimentalmente, per risorse a disposizione, per il confronto ci si basa sui risultati dell'ultimo paper}

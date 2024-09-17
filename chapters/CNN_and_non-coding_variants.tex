@@ -1,7 +1,7 @@
 %!TEX root = ../main.tex
 \chapter{Reti convoluzionali e varianti non codificanti}\label{chp:CNN-non-coding-variants}
 
-In questo capitolo verranno descritti tre tool basati sulle reti neurali convoluzionali, pubblicati con l'obiettivo di far più chiarezza sulla comprensione funzionale delle mutazioni non condificanti. I modelli in questione sono \textsl{DeepSEA}\,\cite[``Predicting effects of noncoding variants with deep learning--based sequence model'']{zhou2015predicting}, \textsl{Basset}\,\cite[``Basset: learning the regulatory code of the accessible genome with deep convolutional neural networks'']{kelley2016basset} e \textsl{DeepSATA}\,\cite[``DeepSATA: A Deep Learning-Based Sequence Analyzer Incorporating the Transcription Factor Binding Affinity to Dissect the Effects of Non-Coding Genetic Variants'']{ma2023deepsata}.
+In questo capitolo verranno descritti tre tool basati sulle reti neurali convoluzionali, pubblicati con l'obiettivo di far più chiarezza sulla comprensione funzionale delle mutazioni non condificanti. I modelli in questione sono \textsl{DeepSEA}\,\cite{zhou2015predicting}, \textsl{Basset}\,\cite{kelley2016basset} e \textsl{DeepSATA}\,\cite{ma2023deepsata}.
 
 Di questi modelli si esploreranno importanti carattersitiche strutturali della rete, tra cui il numero e il tipo di layer presenti, il dataset iniziale utilizzato e 
 
@@ -33,7 +33,13 @@ Per allenare DeepSEA in maniera efficace si è definita la cost function come la
 % 
 \noindent In questa formula, $s$ è l'indice del campione $s$-esimo ($X_s$) del dataset e $p$ è l'indice del profilo della cromatina. Ne consegue che il valore $y_{s,\,p}$ è il valore corretto del campione $s$ rispetto al profilo di cromatina $p$ mentre $\sigma_p\left(X_s\right)$ è la predizione di DeepSEA sul campione $X_s$ rispetto al profilo $p$. L'effettiva cost function in realtà è definita come la funzione \acs{NLL} sommata ad altri valori con l'obiettivo di evitare situazioni di \textit{overfitting}\footnote{L'overfitting è la situazione in cui il modello è completamente allineato con il dataset di allenamento, diventando quindi meno accurato nella predizioni di dati che non sono presenti nel datase.}. Il gradiente della loss function è stato calcolato attraverso l'algoritmo della backpropagation, per poi essere utilizzato nell'ottimizzazione della rete. L'algoritmo di ottimizzazione utilizzato è stato il \acs{SGD} con momento, che è una variante utilizzata per aumentare ancora di più le possibilità di non cadere nei minimi locali\,\cite{aggarwal2018neural}. Inoltre si è scelto di applicare il \textit{dropout training} il quale implica di annullare l'effetto di alcuni neuroni durante le epoche dell'allenamento al fine di rendere la rete più robusta al rischio di overfitting\,\cite{nielsen2015neural}.
 
-L'efficacia predittiva del modello è stata valutata tramite l'AUC (\textit{Area Under the Curve}), una metrica che misura la capacità del modello di distinguere tra i vari profili, con valori compresi tra 0 e 1. Il modello ha ottenuto un'AUC di $0.958$ per i siti di binding dei fattori di trascrizione (\acs{TF}), $0.923$ per i siti \acs{DHS} e $0.856$ per le modifiche istoniche.
+% L'efficacia predittiva del modello è stata valutata tramite l'AUC (\textit{Area Under the Curve}), una metrica che misura la capacità del modello di distinguere tra i vari profili, con valori compresi tra 0 e 1. Il modello ha ottenuto un'AUC di $0.958$ per i siti di binding dei fattori di trascrizione (\acs{TF}), $0.923$ per i siti \acs{DHS} e $0.856$ per le modifiche istoniche (Figura\,\ref{fig:deepSEA-AUC}).
+
+% \begin{figure}[!b]
+%     \centering
+%     \includegraphics[width=1\textwidth]{assets/imgs/DeepSEA-AUC.jpg}   
+%     \caption[DeepSEA evaluation]{DeepSEA evaluation}\label{fig:deepSEA-AUC}
+% \end{figure}
 
 \begin{comment}
 Il modello è stato elaborato per predire l'effetto delle varianti non codificanti sulla cromatina. Sono presenti tre features importanti in questo modello:
@@ -88,18 +94,17 @@ Ogni training sample consisteva nel 1000bp sequences, centrata sul frammento (bi
 
 
 
-Utilizzando reti neurali convoluzionali profonde (CNN), Basset è in grado di apprendere in modo efficace i motivi sequenziali e la logica regolativa che determinano l'accessibilità del DNA in contesti cellulari specifici. Questo approccio consente di ottenere previsioni accurate riguardo a come le sequenze di DNA influenzano l'espressione genica.
 
 
 \section{Basset}\label{sec:Basset}
 % 
 Basset\footnote{Il nome richiama il bassotto, noto per le sue capacità olfattive, in analogia con l'abilità del modello di riconoscere pattern.} è un potente strumento sviluppato nel 2016, progettato per analizzare sequenze di DNA e prevedere l'accessibilità di 164 siti ipersensibili alla DNase I (\acs{DHS}), che indicano la presenza di elementi regolativi. Mediante le \acs{ConvNet}, questo modello è quindi in grado di fornire importanti informazioni rigaurdo la fase di trascrizione da \acs{DNA} ad \acs{RNA} anlizzando questi particolari siti della cromatina. Proprio come DeepSEA, la presenza di più livelli convoluzionali facilita la comprensione degli aspetti funzionali derivanti dalle mutazioni nei \acs{DHS}.
 
-Anche Basset, come DeepSEA, è stato implementato utilizzando la libreria \href{https://github.com/torch/torch7}{\textsl{Torch7}}. Questo tool dà la possibilità di personalizzare il modello a piacimento, indicando il numero per ciascun tipo di livello, il numero di filtri (\acs{PWM}) nei livelli convoluzionali, la loro dimensione, la grandezza delle finestre di pooling, il numero di neuroni nei fully-connected layer e vari iperparametri per la fase di allenamento e di test. Attraverso l'ottimizzazione Bayesiana si sono trovati i layer e gli iperparametri ideali per l'architettura. La struttura è composta da tre livelli convoluzionali: il primo livello contiene 300 filtri di lunghezza 19bp, il secondo è composto da 200 kernel di lunghezza 11bp e il terzo layer ne contiene 200 di lunghezza 7bp. È importante sottolineare che dopo ciascun livello convoluzionale, segue un livello che normalizzi l'output della convoluzione (\textit{batch normalization}) seguito da una \acs{ReLU} ed un max-pooling layer. In seguito ai tre livelli convoluzionali sono presenti tre fully connected layer, alternati con due \acs{ReLU} ed infine l'output layer, che attraverso la funzione sigmoide calcola la probabilità che l'input appartenga ad uno dei 164 \acs{DHS}.
+Anche Basset, come DeepSEA, è stato implementato utilizzando la libreria \href{https://github.com/torch/torch7}{\textsl{Torch7}}. Questo tool dà la possibilità di personalizzare il modello a piacimento, indicando il numero per ciascun tipo di livello, il numero di filtri (\acs{PWM}) nei livelli convoluzionali, la loro dimensione, la grandezza delle finestre di pooling, il numero di neuroni nei fully-connected layer e vari iperparametri per la fase di allenamento e di test. Attraverso l'ottimizzazione Bayesiana si sono trovati i layer e gli iperparametri ideali per l'architettura. La struttura è composta da tre livelli convoluzionali: il primo livello contiene 300 filtri di lunghezza 19bp, il secondo è composto da 200 kernel di lunghezza 11bp e il terzo layer ne contiene 200 di lunghezza 7bp. È importante sottolineare che dopo ciascun livello convoluzionale, segue un livello che normalizzi l'output della convoluzione (\textit{batch normalization}) seguito da una \acs{ReLU} ed un max-pooling layer. In seguito ai tre livelli convoluzionali sono presenti tre fully connected layer, alternati con due \acs{ReLU} e due dropout layer (con coefficiente di 0.3) che, in maniera molto simile a DeepSEA sono utilizzati per prevenire il rischio di overfitting, annullando il contributo di alcuni neuroni casuali durante l'allenamento. Infine l'output layer, attraverso la funzione sigmoide, calcola la probabilità che l'input appartenga ad uno dei 164 \acs{DHS}.
 
 Dei siti ipersensibili alla DNasi I, 125 sono stati estratti da \acs{ENCODE} e 39 ``\textit{Roadmap Epigenomics}''. I dati estratti sono stati processati e tutti i siti sono stati isolati ed arricchiti fino ad avere un dataset iniziale di compostp da sequenze di 600bp, per un totale di $2\,071\,886$bp. Ciascuna delle sequenze presenti nel dataset sono state poi associate al vettore di label che indicava a quale dei 164 tipi la sequenza apparteneva. Dei 164 tipi, il $17\%$ dei siti sono stati associati a promoters, il $47\%$ è stato classificato come siti intragenici — ovvero all'interno dei geni — e il restante $36\%$ è stato etichettato come siti intergenici — cioè tra i geni. Infine, prima di essere utilizzati nella rete, i siti sono stati processati mediante il One-Hot encoding, formando quindi sequenze di input di dimensione $600\times 4$. Del dataset totale, $71\,886$ basi sono state utilizzate per la fase di test e altre $70\,000$ per la fase di validazione.
 
-Il modello è stato allenato attraverso il \acs{GD} stocastico, cercando di ottimizzare la funzione binary cross entropy, il cui gradiente è stato calcolato mediante la backpropagation. Per prevenire il rischio di overfitting si è applicata la tecnica dell'\textit{early stopping}, facendo terminare l'allenamento dopo 12 epoche che la \textit{validation loss} rimane invariata. Dopo l'allenamento e la validazione, il modello è stato testato, ottenendo un valore AUC medio di $0.895$ sui \acs{DHS}.
+Il modello è stato allenato attraverso il \acs{GD} stocastico, cercando di ottimizzare la funzione binary cross entropy, il cui gradiente è stato calcolato mediante la backpropagation. Per prevenire il rischio di overfitting si è applicata la tecnica dell'\textit{early stopping}, facendo terminare l'allenamento dopo 12 epoche che la \textit{validation loss} rimane invariata. % Dopo l'allenamento e la validazione, il modello è stato testato, ottenendo un valore AUC medio di $0.895$ sui \acs{DHS}.
 
 \begin{comment}
 \subsection*{Model Design}
@@ -129,58 +134,42 @@ Hanno fatto anche in questo caso il flanking di 600 bp: To merge the peaks into 
 
 \section{DeepSATA}\label{sec:DeepSATA}
 % 
-Pubblicato nel 2023, DeepSATA è il terzo tool basato su una \acs{CNN} che si occupa di prevedere l'effetto funzionale di mutazioni non codificanti nei siti di \acs{TF} binding non solo in sequenze genomiche umane, ma anche di altre specie animali quali maiali, galline, bovini e topi.
+Pubblicato nel 2023, DeepSATA è il terzo tool basato su una \acs{CNN} che si occupa di identificare le \acs{OCR} — regioni aperte della cromatina — cercando di comprenderne anche la funzione. In particolare DeepSATA si concentra sulle mutazioni non codificanti nei siti di \acs{TF} binding non solo in sequenze genomiche umane, ma anche di altre specie animali quali maiali, galline, bovini e topi.
 
-DeepSATA è un modelo basato su DeepSEA.\@ È quindi composto da tre layer convoluzionali, con rispettivamente da 320, 480 e 960 kernel. Ogni livello convluzionale è seguito da un layer che applica la funzione \acs{ReLU} e poi un max pooling layer estrae dal risultato le feature predominanti. Infine è presente anche un dropout layer che, come per DeepSEA, aiuta la rete a prevenire il rischio di overfitting. Anche in questo tool, ai tre layer convoluzionali, seguono dei fully-conected layer che preparano i dati all'output layer che, attraverso la funzione sigmoide, 
+DeepSATA è un modelo basato su DeepSEA.\@ È quindi composto da tre layer convoluzionali, con rispettivamente da 320, 480 e 960 kernel (anche in questo caso rappresentati da \acs{PWM}). Ogni livello convluzionale è seguito da un layer che applica la funzione \acs{ReLU} e poi un max pooling layer estrae dal risultato le feature predominanti. Dopo ciascun livello convoluzionale è presente anche un dropout layer che, come per Basset, aiuta la rete a prevenire il rischio di overfitting. I primi due livelli di dropout hanno un coefficiente di 0.2 mentre il terzo ha un coeffciente di 0.5. Anche in questo tool, ai tre layer convoluzionali, seguono dei fully-conected layer che preparano i dati all'output layer che, attraverso la funzione sigmoide, viene calcolata la probabilita secondo il quale l'input fornito appartenga ad una tra le \acs{OCR} disponibili.
 
+A differenza di DeepSEA, il formato della sequenza in input è tridimensionale anzichè a due dimensioni. In particolare La sequenza in input è di dimensione $M \times 4 \times (N + 1)$, dove $M$ è la lunghezza della sequenza in input e $4$ sono le basi azotate. Infine $N + 1$, ovvero la profondità della matrice tridimensionale indica le affinità specifiche che ha la sequenza di input con gli $N$ fattori di trascrizione. A questo numero si aggiunge 1, che è lo strato della codifica OneHot della sequenza. In questo modo i \acs{TF} associati alla sequenza di input aiutano a comprendere in maniera migliore gli effetti delle mutazioni nella sequenza. I \acs{TF} sono stati ottenuti dal database \textsl{JASPAR} e, mediante \textsl{FIMO}\footnote{Questo software identifica dei motif conosciuti all'interno della sequenza fornita in input.}, sono stati identificati i motif più diffusi. Di questi, sono stati selezionai i primi $N$ \acs{TF} più presenti da inserire nel dataset iniziale. Per motivi legati alle risorse disponibili, gli autori dell'articolo hanno scelto $N=10$ siti di legame dei \acs{TF}. 
 
+Il dataset che contiene sequenze di più specie è stato raccolto rispettivamente dai seguenti database:
+\begin{itemize}
+    \item Le sequenze relative ai topi sono state ottenute dall'\textit{\acs{NCBI} Sequence Read Archive} (\acs{SRA});
+    \item I tratti di genoma unamo sono stati ricavati da \acs{ENCODE};
+    \item Le sequenze genomiche dei maili sono state ottenute dal \textit{Gene Expression Omnibus} (\acs{GEO});
+    \item Le porzioni di \acs{DNA} relative a bovini e polli sono state scaricate dal sito dell'Università della California (\textsl{UC Davis}), nella sezione \textit{Farm Clusters}.
+\end{itemize} 
+% 
+\noindent Dopo aver raccolto tutti i dati necessari, in maniera del tutto analoga a DeepSEA, sono stati divisi in bin da 200bp ed etichettati a seconda della \acs{OCR} che rappresentavano: se più della metà della sequenza aveva una corrispondenza con una \acs{OCR}, veniva impostata l'etichetta ad 1 per quella particolare regione della cromatina, altrimenti 0. In secondo luogo, sono stati centrati con sequenze lunghe 400bp per avere sequenze di 1000bp come input, chiamate anche \textit{Open Chromatin Bin} (\acs{OCB}). Di conseguenza, ciascun bin di input, una volta effettuato il OneHot encoding è rappresentato da una matrice di dimensione $1000 \times 4 \times 11$.
 
+Essendo DeepSATA un modello basato su DeepSEA, il modelli è stato allenato attraverso il \acs{GD} stocastico con momento per ottimizzare la funzione di binary cross entropy. In maniera del tutto analoga, il gradiente di questa funzione è stato calcolato mediante l'algoritmo della backpropagation
 
-
-
-
+% 
 \begin{comment}
-To prepare the
-input of training, we partitioned the whole genome into 200 bp consecutive bins. Bins that
-overlapped with ATAC-seq peaks by more than half of their length were labelled as positive
-1, with negative labels of 0 otherwise. Considering the high burden of computing, we
-randomly shuffled these genomic bins using the ‘shuf’ command and selected 10% of them
-for training. For each training bin, a 1000 bp sequence centered on a 200 bp bin is extracted
-from a reference genome. Each bin is represented by a three-dimensional 1000 × 4 × (N + 1)
-matrix, with the first dimension representing the sequence centered around the 200 bp bin,
-the second dimension representing the four possible DNA nucleotides at each base (A, T, C,
-or T), and the third dimension represent the encoding schedules of the DNA sequence and
-the TF binding configurations. The third dimension consists of a series of successive twodimensional layers; for example, layer 1 represents the one-hot encoding of the current DNA
-sequence, with vectors [1,0,0,0], [0,1,0,0], [0,0,1,0], and [0,0,0,1] representing the nucleotides
-A, T, C, and G, respectively
-\end{comment}
 
+DeepSATA è uno framework user-friendly, progettato per identificare le regioni aprte di cromatina (OCR) lungo l'intero genoma e le functional annotation delle varianti non codificanti (con annotazione funzionale si intende il processo di descrivere la struttura e la funzione di un componente del genoma).
 
-% s. We conducted 1a performance comparison among DeepSATA, DeepSEA and Basset using a receiver operating characteristic curve (ROC) analysis and calculated the area under the curve (AUC)
+Il modello è composto da 3 layer, con 320, 480 e 960, ciascuno dei quali seguito da una relu, max pooling e dropout. E applicata la sigmoide per per generare gli output, ovvero la probabilita per la cromatina. Vengono citati ancora una volta i 200 bins flankati di 400 a dtesta e sinistra per dare contesto. Ogni sequenza in input era tridimensionale. Ricordiamo che la terza dimensione, N + 1, rappresenta le configurazioni di legame dei fattori di trascrizione (TF). In particolare, il primo strato in questa dimensione è la codifica one-hot della sequenza di DNA stessa, mentre i successivi strati (dallo strato 2 allo strato N + 1) codificano le affinità di legame e le posizioni specifiche di ciascun TF. Questo approccio consente al modello di considerare non solo la composizione della sequenza ma anche come diversi TF interagiscono con essa, fornendo un contesto ricco e complesso per l'analisi della regolazione genica.
 
-Dl-based sequence analizer che incorpora i TF binding sites for crossspecies prediction. Questo modello è cotroutio basandosi su DeepSEA.\@ DeepSATA è stato procettato per identificare le regioni parte della cormatina (OCR) e le varianti non codificanti (functional annotation).
+I dati relativi alle specie, sono stati presi dai seguenti databasse:
+\begin{itemize}
+    \item Topi, e NCBI Sequence Read Archive (SRA)
+    \item Umani, ENCODE
+    \item SPecie dei Maiali deiravta da e Gene Expression Omnibus (GEO)
+    \item Bovini e polli sono stati prelevati dal sito del UC-DAVi university, californi, Farm Clusters
+\end{itemize} 
 
-Per sequenze di DNA, DeepSATA estendo il concetto di one hot encoding in uno spazio tridimensionale che incorpara i TF bining sites che sono importanti nei contesti biologici specifci. Questi TF sono sono selezionati in modo da arricchire i motivi di DNA binding nelle OCR.\@ Ogni layer bidimensionale codifica la binding affinity di uno specifico TF.\@ L'encoding trategi utilizzata è quella della position weight probability matrix (PWPM) del TF site.
+Per le sequenze di DNA, deepsata estende la matrice bidimensionale che rappresenta la sequenza genomica dopo il onehot encoding (matrice M X 4) in una matrice tridimensionale che incorpora anche le binding configuration dei TFs che sono importanti per capire il contesto di studio. Questi TFs sono selezionati per arricchire il dna bionding motif con le OCR, regioni aperte di cromatina. In seguito, lungo la terza dimensione della matrice, ciascun layer convoluzionale successivo codifica l'affinità di legame (biding) dimension un fattore di trascrizione specifico. La strategia di codifica consiste nell'utilizzare la matrice di probabilità dei pesi di posizione del fattore di trascrizione (TF) per popolare la matrice nel suo sito di legame previsto.
 
-\subsection*{Model design}
+Il genoma è stato diviso in bin da 200bp. Ad ogni bin è stata assegnata l'etichetta 0 o 1 se almeno meta dei 200 bp confomavano alla ATAC peak region. Ogni OCB (Open chromatin bins), associato ai sui 400bp di flanking sequence è stato poin buttato dentro deppsata. Ogni OCB è composto dalla strattura $1000 \times 4 \times (N + 1)$, dove N sono i TFs che sono stati predictati legare la sequenza. Per determinare N nel training set sono statti collezionait TF binding sites da Jaspar 2022 database e poi è stato usato FIMO 5.4.1 per identificare la presenza dei motivbi. Dopo di che i TF sono stati rankati i primi N TFS per l'allenamento del modello. Nell'articolo viene indicato che si è deciso di inserire N = 10 a causa di resource constraints.
 
-
-\subsection*{Training Dataset}
-
-In maniera del tutto analoga a DeepSEA.\@ Specifically, the genome was divided into bins of 200 base pairs (bp). Each bin was assigned a label of 1 if more than half of the 200 bp fell within the ATAC peak regions and a label of 0 if not. Anche qui ci sono 400 flaning sequnces con deepsea.
-
-
-\begin{comment}
-\section{Codifica}
-
-\section{Struttura della rete}
-
-\section{Dataset}
-\end{comment}
-
-
-
-
-\begin{comment}
-In our study, we utilized DeepSATA to evaluate its predictive capabilities for chromatin features in five distinct species: mice, pigs, cattle, humans, and chickens. We collected open chromatin accessibility datasets and corresponding transcription factor binding motifs, which are summarized in Table 1 and Supplementary Tables S1 and S2. The performance of the DeepSATA, DeepSEA, and Basset models was assessed for each species by comparing their average AUC values across different chromatin features. DeepSATA demonstrated superior performance across all species, with average AUC values of 0.854, 0.779, 0.772, 0.759, and 0.744 for mice, pigs, cattle, humans, and chickens, respectively (Figure 2A and Supplementary Table S3). In comparison, DeepSEA had average AUC values of 0.796, 0.775, 0.769, 0.755, and 0.736, respectively (Figure 2B and Supplementary Table S3), while Basset had average AUC values of 0.778, 0.719, 0.768, 0.717, and 0.722, respectively (Figure 2C and Supplementary Table S3). It is worth noting that DeepSATA consistently outperformed DeepSEA and Basset in all chromatin features for pigs and mice (Supplementary Table S3). The relative improvement was particularly significant in the cerebrum tissue of the mice, where DeepSATA achieved an AUC of 0.829 compared to DeepSEA’s 0.659 for female mice and an AUC of 0.828 compared to DeepSEA’s 0.653 for male mice, representing a relative improvement of over 25%. Interestingly, our findings indicate that the DeepSATA, DeepSEA, and Basset models performed better for the Duroc pig breed compared to other pig breeds (Supplementary Table S3). This suggests a superior ability to recognize regulatory functional patterns in the non-coding genomic regions  pecific to Duroc pigs. In the case of cattle, the chromatin feature of the hypothalamus was most effectively captured, with AUC values of 0.887 for DeepSATA, 0.883 for DeepSEA, and 0.895 for Basset (Supplementary Table S3). What particularly encouraged us was the remarkable performance of DeepSATA in accurately recognizing the regulatory patterns of the cerebellum in chickens, achieving AUC values as high as 0.972, while DeepSEA achieved 0.971 and Basset achieved 0.953 (Supplementary Table S3). Additionally, in the following analysis, we selected DeepSEA as the baseline comparison, since it achieved better prediction performance compared with Basset. Overall, these results clearly demonstrate the effectiveness of DeepSATA in accurately identifying the regulatory patterns of chromatin features in different animal species
+Copo ciascun layer convoluzionale, viene effettuata una ReLu legegrmente modificata: per evitare gli overfitting, i pesi sono stati messi a 0.000001 quando minori di zero. In seguito alla ReLu viene fatta una maxpooling di grandezza 4 X N + 1, per combinare le feature che sono state estratte dai vari OCB types. Infine, dopo la max pooling viene effettuato un droput con rate di 0.2 per evitare overfitting e rendere a rete pi robusta. Per i livelkli convoluzionali seguenti sono stati utilizzati 480 e 960 kernel. I parametri della ReLu activatioon erano gfli stessi del primo layer. Per quanto riguarda la max pooling, ha size $4 \times 1$, per cionsentire il downsampling del dataset e graantire un miglior traingin experince trolp letsgoski. In questo caso il droput rate è stato butatto a 0.2 e 0.5, per prevenire l'overfitting.
 \end{comment}

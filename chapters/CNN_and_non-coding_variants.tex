@@ -1,12 +1,10 @@
 %!TEX root = ../main.tex
 \chapter{Reti convoluzionali e varianti non codificanti}\label{chp:CNN-non-coding-variants}
 
-In questo capitolo verranno descritti tre tool basati sulle reti neurali convoluzionali, pubblicati con l'obiettivo di far più chiarezza sulla comprensione funzionale delle mutazioni non condificanti. I modelli in questione sono \textsl{DeepSEA}\,\cite{zhou2015predicting}, \textsl{Basset}\,\cite{kelley2016basset} e \textsl{DeepSATA}\,\cite{ma2023deepsata}.
+In questo capitolo verranno presentati tre tool basati su reti neurali convoluzionali, sviluppati con l'obiettivo di migliorare la comprensione funzionale delle mutazioni non codificanti. I modelli trattati sono \textsl{DeepSEA},\cite{zhou2015predicting}, \textsl{Basset},\cite{kelley2016basset} e \textsl{DeepSATA},\cite{ma2023deepsata}. Ciascuno di questi modelli verrà approfonditamente analizzato, in modo da comprendere le caratterstiche principali di ciascuno strumento. Più precisamente sarà discusso il dataset utilizzato per allenare il modello, la sua struttura — quindi il numero ed il tipo di livelli presenti — e le tecniche di allenamento applicate.
 
-Di questi modelli si esploreranno importanti carattersitiche strutturali della rete, tra cui il numero e il tipo di layer presenti, il dataset iniziale utilizzato e 
 
-\todo{finisci introduzione}
-\todo{I picchi delle sequenze sono le regioni aperte del DNA}
+
 
 
 \section{DeepSEA}\label{sec:DeepSEA}
@@ -32,14 +30,6 @@ Per allenare DeepSEA in maniera efficace si è definita la cost function come la
 \end{gather*}
 % 
 \noindent In questa formula, $s$ è l'indice del campione $s$-esimo ($X_s$) del dataset e $p$ è l'indice del profilo della cromatina. Ne consegue che il valore $y_{s,\,p}$ è il valore corretto del campione $s$ rispetto al profilo di cromatina $p$ mentre $\sigma_p\left(X_s\right)$ è la predizione di DeepSEA sul campione $X_s$ rispetto al profilo $p$. L'effettiva cost function in realtà è definita come la funzione \acs{NLL} sommata ad altri valori con l'obiettivo di evitare situazioni di \textit{overfitting}\footnote{L'overfitting è la situazione in cui il modello è completamente allineato con il dataset di allenamento, diventando quindi meno accurato nella predizioni di dati che non sono presenti nel datase.}. Il gradiente della loss function è stato calcolato attraverso l'algoritmo della backpropagation, per poi essere utilizzato nell'ottimizzazione della rete. L'algoritmo di ottimizzazione utilizzato è stato il \acs{SGD} con momento, che è una variante utilizzata per aumentare ancora di più le possibilità di non cadere nei minimi locali\,\cite{aggarwal2018neural}. Inoltre si è scelto di applicare il \textit{dropout training} il quale implica di annullare l'effetto di alcuni neuroni durante le epoche dell'allenamento al fine di rendere la rete più robusta al rischio di overfitting\,\cite{nielsen2015neural}.
-
-% L'efficacia predittiva del modello è stata valutata tramite l'AUC (\textit{Area Under the Curve}), una metrica che misura la capacità del modello di distinguere tra i vari profili, con valori compresi tra 0 e 1. Il modello ha ottenuto un'AUC di $0.958$ per i siti di binding dei fattori di trascrizione (\acs{TF}), $0.923$ per i siti \acs{DHS} e $0.856$ per le modifiche istoniche (Figura\,\ref{fig:deepSEA-AUC}).
-
-% \begin{figure}[!b]
-%     \centering
-%     \includegraphics[width=1\textwidth]{assets/imgs/DeepSEA-AUC.jpg}   
-%     \caption[DeepSEA evaluation]{DeepSEA evaluation}\label{fig:deepSEA-AUC}
-% \end{figure}
 
 \begin{comment}
 Il modello è stato elaborato per predire l'effetto delle varianti non codificanti sulla cromatina. Sono presenti tre features importanti in questo modello:
@@ -152,7 +142,6 @@ Il dataset che contiene sequenze di più specie è stato raccolto rispettivament
 
 Essendo DeepSATA un modello basato su DeepSEA, il modelli è stato allenato attraverso il \acs{GD} stocastico con momento per ottimizzare la funzione di binary cross entropy. In maniera del tutto analoga, il gradiente di questa funzione è stato calcolato mediante l'algoritmo della backpropagation
 
-% 
 \begin{comment}
 
 DeepSATA è uno framework user-friendly, progettato per identificare le regioni aprte di cromatina (OCR) lungo l'intero genoma e le functional annotation delle varianti non codificanti (con annotazione funzionale si intende il processo di descrivere la struttura e la funzione di un componente del genoma).

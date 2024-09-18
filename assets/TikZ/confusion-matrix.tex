@@ -1,0 +1,17 @@
+\newcommand\MyBox[2]{
+  \fbox{\lower0.75cm
+    \vbox to 1.7cm{\vfil
+      \hbox to 1.7cm{\hfil\parbox{1.4cm}{#1\\#2}\hfil}
+      \vfil}%
+  }%
+}
+
+\noindent
+\renewcommand\arraystretch{1.5}
+\setlength\tabcolsep{0pt}
+\begin{tabular}{c >{\bfseries}r @{\hspace{0.7em}}c @{\hspace{0.4em}}c @{\hspace{0.7em}}}
+  \multirow{10}{*}{\rotatebox{90}{\parbox{1.1cm}{\bfseries\centering Valore reale\vspace{15px}}}} & & \multicolumn{2}{c}{\bfseries Valore predetto}\\
+  & & \bfseries p & \bfseries n \\
+  & p & \MyBox{True}{Positive} & \MyBox{False}{Negative}\\[2.4em]
+  & n & \MyBox{False}{Positive} & \MyBox{True}{Negative} 
+\end{tabular}

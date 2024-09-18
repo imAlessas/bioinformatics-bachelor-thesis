@@ -294,8 +294,50 @@ Dopo aver definito le 4 equazioni fondamentali dell'algoritmo, è possibile comp
 
 \noindent Questo fondamentale algoritmo, calcolando il gradiente della funzione costo per ogni iterazione — o, in gergo, \textsl{epoca} — dell'allenamento della rete cerca di raggingere il minimo della loss function $C$ ottimizzando i valori dei pesi. In questo modo la rete neurale artificiale è in grado di apprendere dai dati forniti in ingresso in modo tale da fornire predizioni valide a dati non presenti nel dataset. Eseguire un algoritmo così potente richiede uno sforzo computazionale notevole: le reti neurali moderne sono composte da migliaia di neuroni per livello che richiedono milioni di pesi da ottimizzare precisamente. Proprio per questo motivo, con lo sviluppo di hardware avanzato, solo nell'ultimo decennio si è riusciti ad affrontare queste sfide computazionali\,\cite{flasinski2016introduction, rojas1996backpropagation, nielsen2015neural}.
 
+\subsection{Indici di performance}
+% 
+Generalmente le reti neurali si occupano di processare un particolare input e fornire in output un valore, compreso tra 0 ed 1, che indica la probabilità che l'input appartenga ad una certa categoria, chiamata \textsl{classe}. Dopo l'allenamento della rete, è essenziale valutare quanto l'allenamento sia stato efficacie, analizzando il comportamento del modello con un dataset che contiene dati mai utilizzati durante la fase di allenamento, chiamato \textit{testing dataset}. Una volta che la rete processa il dataset di test, le predizioni rispetto ai dati possono essere divise in quattro tipologie. Se la predizione del modello è \textsl{positiva}, ovvero identifica correttamente un elemento come appartenente ad una certa categoria quando lo è realmente si ha un vero positivo, o \textit{true positive} (TP). Analogamente se viene riconosciuto un input come non appartenente ad una classe e non lo è effettivamanete, si ha un vero negativo, o \textit{true negative} (TN). Negli altri due casi, il modello categorizza l'elemento come appartenente ad una classe quando in realtà non lo è — si ha quindi un \textit{false positive} (FP) — oppure categorizza un elemento appartenete ad una classe quando in realtà lo è — \textit{false negative} (FN). La \textit{confusion matrix} (Figura\,\ref{fig:confusion-matrix}) riassume esattamente questo concetto.
+% 
+\begin{figure}[!t]
+    \centering
+    \input{assets/TikZ/confusion-matrix.tex}
+    \caption[Rappresentazione della confusion matrix.]{Rappresentazione della confusion matrix.}\label{fig:confusion-matrix}
+\end{figure}
+% 
 
+Essendo che l'output layer fornisce la probabilità che il dato fornito appartenga o meno ad una classe, è necessario impostare una soglia: se tale valore viene superato, allora il dato verrà considerato come appartenente alla categoria; al contrario, verrà escluso. Per scegliere al soglia migliore viene utilizzata la curva \acs{ROC} (\textit{Receiver Operating Characteristics}), che mette in relazione due valori: il \textit{True Positive Rate} (\acs{TPR}) con il \textit{False Positive Rate} (\acs{FPR}). Il \acs{TPR} è il rapporto tra i veri positivi (ovvero i valori che sono stati classificati come positivi e lo sono realmente) e tutti i valori che in realtà sono positivi (quindi i true positive e i false negative):
+% 
+\begin{gather*}
+    \text{\acs{TPR}} = \frac{TP}{TP + FN}
+\end{gather*}
+% 
+\noindent Un elevato \acs{TPR} indica che il modello è in grado di riconoscere correttamente gli elementi positivi, ovvero quelli che appartengono alla categoria in esame. Contrariamente, un basso \acs{TPR} suggerisce che il modello non è in grado di riconoscere le istanze positive, facendo quindi aumentare il numero di falsi negativi. In contrapposizione al \acs{TPR} è presente il \acs{FPR}, definito come il rapporto tra i falsi positivi (ovvero gli elementi che sono negativi ma classificati come positivi) e tutti i valori negativi (ovvero i falsi positivi e i veri negativi):
+% 
+\begin{gather*}
+    \text{\acs{FPR}} = \frac{FP}{FP + TN}
+\end{gather*}
+% 
+\noindent Questo valore indica quanto il modello è capace di riconoscere le classi negative. Più piccolo è il suo valore e più il modello è accurato nel riconoscimento. Conseguentemente, un \acs{FPR} elevato indica che il modello non è capace di distingure adeguatamente le classi negative da quelle positive\,\cite{narkhede2018understanding}.
 
+La curva \acs{ROC} rappresenta, per soglie diverse (comprese tra 0 ed 1), il valore del \acs{TPR} e del \acs{FPR} del modello
+%
+\begin{figure}[!t]
+    \centering
+    \input{assets/TikZ/ROC-curve.tex} 
+    \caption[Illustrazione di una generica curva ROC.]{Illustrazione di una generica curva ROC.}\label{fig:ROC-curve} 
+\end{figure}
+% 
+Come si può ossevrare nella Figura\,\ref{fig:ROC-curve}, vengono rappresentate tre casistiche. La linea retta, tratteggiata, rappresenta un modello casuale, ovvero che classifica i dati senza criterio. La linea blu rappresenta un modello generico. All'inizio della curva si può osservare che il \acs{FPR} cresce lentamente rispetto al \acs{TPR}, indicando che il modello riesce ad identificare molti veri positivi senza classificare molti falsi positivi. In questo caso, la soglia è molto elevata, poiché è necessario che un elemento abbia un'alta probabilità di apparteneza alla classe affinché venga classificato nella categoria positiva. Man mano che la soglia diminuisce si osserva che sia il \acs{TPR} che il \acs{FPR} del modello salgono in quanto molti più elementi vengono classificati nella categoria positiva, anche se la classe reale è quella negativa. Il punto rosso rappresenta il modello ideale, che ha il massimo valore di \acs{TPR} (ovvero 1) e il minimo valore di \acs{FPR} (cioè 0).
+
+Per semplificare la lettura della curva \acs{ROC}, spesso viene utilizzato il valore dell'area sotto la curva, chiamato \acs{AUC}, \textit{Area Under the Curve} — o anche \acs{AUROC}, \textit{Area Under the \acs{ROC} Curve}.
+% 
+\begin{figure}[!b]
+    \centering
+    \input{assets/TikZ/AUC-value.tex} 
+    \caption[Area sottesa alla curva \acs{ROC}.]{Area sottesa alla curva \acs{ROC}.}\label{fig:AUC-value} 
+\end{figure}
+% 
+Questo valore aiuta notevolmente a riassumere le capactà predittive dell'algoritmo in un solo numero (Figura\,\ref{fig:AUC-value}). È stato dimostrato che questo valore fornisce valori più significativi rispetto ad altre metriche, tra cui l'accuratezza\footnote{}\,\cite{huang2005using}. Inoltre questo valore è anche più comodo per paragonare le performance di due modelli, piuttsto che comparare le curve \acs{ROC}: proprio per questo motivo è ad oggi una tra le metriche utilizzate per la valutazione di modelli di \acs{DL}.
 
 
 
@@ -333,7 +375,7 @@ Osservando la Figura\,\ref{fig:convolution-operation} si nota che la matrice $M$
 
 Come notato in precedenza, dopo ogni livello di convoluzione, la dimensione dell'immagine è ridotta in proporzione alla grandezza del filtro. In genere, la riduzione dimensionale comporta perdita di informazioni e va evitata. Per questo motivo, prima di fare l'operazione di convoluzione, si effettua il padding. Attraverso questa operazione, si aggiungono una serie di ``0''\footnote{Si è scelto il valore zero proprio perché non ha effetto e non distorce il risultato numerico della convoluzione.} lungo i bordi dell'immagine in modo tale che, una volta processata, rimanga della stessa dimensione. In ogni bordo dell'immagine vengono aggiungi esattamente $(n - 1) / 2$ pixel, dove $n$ è la dimensione del filtro. 
 % 
-\begin{figure}[!t]
+\begin{figure}[!b]
     \centering
     \input{assets/TikZ/padding.tex}
     \caption[Padding di una matrice che precede la convoluzione.]{Padding di una matrice che precede la convoluzione. In questo modo, la dimensione della matrice rimane invariata dopo la convoluzione (adattata da\,\cite{janosh_convolution}).}\label{fig:padding}
@@ -399,8 +441,3 @@ Anche se fino ad ora le \acs{CNN} sono state descritte come tool che processa so
 % https://www.researchgate.net/profile/Shashi-Sathyanarayana/publication/266396438_A_Gentle_Introduction_to_Backpropagation/links/577d124808aeaa6988aba0bc/A-Gentle-Introduction-to-Backpropagation.pdf
 
 % https://d1wqtxts1xzle7.cloudfront.net/51924347/NeuralNetworks-libre.pdf?1487958246=&response-content-disposition=inline%3B+filename%3DBack_Propagation_Algorithm.pdf&Expires=1725992239&Signature=J-LZ7rIZD5T6Nb9jar55PvgTCF3pDd0H8dGNJVU3ijf1bFEoiAX2yF9fkroyCTvPGm0oAhX8SUhRLSZ26bEVOC08ZV9wUPb8HekE0~cj836hKUsc60DVhhXQ3TjlPE91VTwe0kMkDuimtxQuf8LVgJhSF5zc~sAFzSOmHwPfbiqBTxNoSFRY8xkMRRNoTMWS1GZmoOr83rB3VkzKA6QncuQ85ogs4IHeInFT2nnqBNUbvUGOEyhDUbECy39bE57G1CkhMRIXiT-CZLPJxY1gu2dYjr7~gerF49Lay6w1yNJ5kdgqrMpy5TI8suaIwC0NQZ1obOrERVpDKrJ3Y~Lrhg__&Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA
-
-
-
-\todo{Le CNN durante l'allenamento modificano i pesi dei kernel}
-\todo{parla anche delle metodologie di evaluation}

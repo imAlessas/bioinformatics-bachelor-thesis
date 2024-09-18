@@ -2,6 +2,26 @@
 
 \chapter{Discussione}\label{chp:discussion}
 
+Questo capitolo ha l'obiettivo di riassumere le caratterstiche principali dei tre tool discussi nel Capitolo\,\ref{chp:CNN-non-coding-variants} e compararne le prestazioni predittive 
+
+I tre tool presentano alcune caratterstiche in comune. Si è scelto in tutti e tre i casi di utilizzare il \textsl{One Hot} encoding per codificare le sequenze in una matrice bidimensionale rendendo quindi immediata l'operazione di convoluzione in cui il kernel, per i tre tool è rappresentato da una \acs{PWM}. 
+
+La struttura dei tre strumenti bioinformatici, anche se simile, presenta diverse differenze. 
+
+
+
+
+cose identiche tra i tre tool:
+- encode (one hot)
+- loss function + training (lecito)
+
+I tre tool bioinformatici hanno diverse caratterstiche in comune. La codifica scelta è la \textsl{One Hot encoding}, che divide . In secondo luogo 
+
+\begin{itemize}
+    \item 3 leayer convoluzionali, ciascuno dei quali seguito da una relu e da un max pooling
+\end{itemize}
+
+
 \begin{comment}
     \section{Codifica}
     
@@ -16,21 +36,23 @@
     \renewcommand{\arraystretch}{2}
     \begin{tabular}{|c|c|c|c|c|c|} % chktex-file 44
         \hline % chktex-file 44
-        \textbf{Modello} & \textbf{Struttura} & \textbf{Codifica} & \textbf{Kernel} & \textbf{Dataset} & \textbf{Funzione costo}\\ 
+        \textbf{Modello} & \textbf{Struttura} & \textbf{Codifica} & \textbf{Numero kernel} & \textbf{Dataset} \\ 
         \hline\hline % chktex-file 44
-        \hyperref[sec:DeepSEA]{\textsl{DeepSEA}} & & One-hot Encoding & \acs{PWM} & & \textsl{Binary Cross Entropy} \\ 
+        \hyperref[sec:DeepSEA]{\textsl{DeepSEA}} & & One-hot Encoding & \acs{PWM} & Lesgoschi \\ 
         % 
-        \hyperref[sec:Basset]{\textsl{Basset}} & & One-hot Encoding & \acs{PWM} & & \textsl{Binary Cross Entropy} \\ 
+        \hyperref[sec:Basset]{\textsl{Basset}} & & One-hot Encoding & \acs{PWM} & Lesgoschi \\ 
         % 
-        \hyperref[sec:DeepSATA]{\textsl{DeepSATA}} & & One-hot Encoding & \acs{PWM} & & \textsl{Binary Cross Entropy} \\ 
+        \hyperref[sec:DeepSATA]{\textsl{DeepSATA}} & & One-hot Encoding & \acs{PWM} & Lesgoschi \\ 
         \hline
     \end{tabular}
     \renewcommand{\arraystretch}{1}
 \end{table}
 
 
-\todo{Inserisci dimensione input richiesto: deepsea 1000 X 4, basset 600 X 4 e deepsata 1000 X 4 X N + 1}
+\todo{Fai un paragrafo struttura}
+\todo{Tabella che contiene: input richiesto ($1000 \times 4$,  $600 \times 4$ e  $1000 \times 4 \times 10 + 1$), dataset scelto}
 
+Questi qua sono i risultati, guarda DeepSATA
 
 \begin{table}[!h]
     \centering
@@ -48,6 +70,7 @@
     \end{tabular}
     \renewcommand{\arraystretch}{1}
 \end{table}
+
 
 \begin{figure}[!b]
     \centering

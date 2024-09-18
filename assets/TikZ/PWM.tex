@@ -1,0 +1,23 @@
+\begin{tikzpicture}
+    \node at (-0.5,3.3) {\textbf{A}};
+    \node at (-0.5,2.5) {\textbf{C}};
+    \node at (-0.5,1.5) {\textbf{G}};
+    \node at (-0.5,0.5) {\textbf{T}};
+    
+    \draw[step=1cm,gray,thin] (0,0) grid (10,4); % Grid 10x4
+
+    \node at (0.5,3.5) {0.9}; \node at (0.5,2.5) {0.05}; \node at (0.5,1.5) {0.03}; \node at (0.5,0.5) {0.02};
+    \node at (1.5,3.5) {0.1}; \node at (1.5,2.5) {0.7};  \node at (1.5,1.5) {0.1};  \node at (1.5,0.5) {0.1};
+    \node at (2.5,3.5) {0.4}; \node at (2.5,2.5) {0.3};  \node at (2.5,1.5) {0.2};  \node at (2.5,0.5) {0.1};
+    \node at (3.5,3.5) {0.25}; \node at (3.5,2.5) {0.25}; \node at (3.5,1.5) {0.25}; \node at (3.5,0.5) {0.25};
+    \node at (4.5,3.5) {0.6}; \node at (4.5,2.5) {0.1};  \node at (4.5,1.5) {0.2};  \node at (4.5,0.5) {0.1};
+    \node at (5.5,3.5) {0.7}; \node at (5.5,2.5) {0.1};  \node at (5.5,1.5) {0.1};  \node at (5.5,0.5) {0.1};
+    \node at (6.5,3.5) {0.2}; \node at (6.5,2.5) {0.4};  \node at (6.5,1.5) {0.2};  \node at (6.5,0.5) {0.2};
+    \node at (7.5,3.5) {0.5}; \node at (7.5,2.5) {0.2};  \node at (7.5,1.5) {0.2};  \node at (7.5,0.5) {0.1};
+    \node at (8.5,3.5) {0.8}; \node at (8.5,2.5) {0.05}; \node at (8.5,1.5) {0.05}; \node at (8.5,0.5) {0.1};
+    \node at (9.5,3.5) {0.3}; \node at (9.5,2.5) {0.2};  \node at (9.5,1.5) {0.4};  \node at (9.5,0.5) {0.1};
+
+    \foreach \x in {1,...,10} {
+        \node at (\x-0.5, 4.2) {\textbf{\x}};
+    }
+\end{tikzpicture}

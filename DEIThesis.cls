@@ -83,6 +83,9 @@
 % comment
 \RequirePackage{comment}
 
+% tables
+\RequirePackage{multirow}
+
 % algoritms
 \RequirePackage[Algoritmo]{algorithm}
 \RequirePackage{algorithmic}
@@ -92,6 +95,7 @@
 
 % arrays
 \RequirePackage{listofitems}
+\RequirePackage{array}
 
 % plots, drawings etc...
 \RequirePackage{tikz}

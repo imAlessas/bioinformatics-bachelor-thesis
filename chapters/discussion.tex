@@ -52,30 +52,34 @@ I tre tool bioinformatici hanno diverse caratterstiche in comune. La codifica sc
 \todo{Fai un paragrafo struttura}
 \todo{Tabella che contiene: input richiesto ($1000 \times 4$,  $600 \times 4$ e  $1000 \times 4 \times 10 + 1$), dataset scelto}
 
-Questi qua sono i risultati, guarda DeepSATA
 
+
+
+Gli autori dell'articolo che introduce DeepSATA, dopo aver illustrato il modello e le principali differenza con il suo predecessore DeepSEA, conducono un esperimento dove paragonano le capacità predittive di DeepSEA, Basset e DeepSATA.\@ In particolare, dopo aver allenato i tre modelli sul dataset contenente sequenze di specie animali diverse, tra cui l'uomo, valutano le prestazione dei modelli. Dai risultati del test (Tabella\,\ref{tab:comparison}) si nota che le prestazioni predittive di DeepSATA, anche se non di molto, superano le prestazioni di DeepSEA e di Basset. In particolare si nota una maggiore differenza nelle sequenze genetiche dei maiali, dove il valore \acs{AUC}/\acs{AUROC} è superiore di più di cinque punti percentuale. Nelle altre specie invece, anche se non di tanto, DeepSATA ottiene comunque risultati migliori.
 \begin{table}[!h]
     \centering
+    \caption{Riassunto del confronto tra DeepSEA, Basset e DeepSATA}\label{tab:comparison}
     \renewcommand{\arraystretch}{2}
     \begin{tabular}{|c|c|c|c|c|c|} % chktex-file 44
         \hline % chktex-file 44
         \textbf{Modello} & \textbf{Topi} & \textbf{Maiali} & \textbf{Bovini} & \textbf{Umani} & \textbf{Polli}\\ 
         \hline\hline % chktex-file 44
+        \hyperref[sec:DeepSATA]{\textsl{DeepSATA}} & 0.854 & 0.779 & 0.772 & 0.759 & 0.744 \\ 
+        % 
         \hyperref[sec:DeepSEA]{\textsl{DeepSEA}} & 0.796 & 0.775 & 0.769 & 0.755 & 0.736 \\ 
         % 
         \hyperref[sec:Basset]{\textsl{Basset}} & 0.778 & 0.719 & 0.768 & 0.717 & 0.722 \\ 
-        % 
-        \hyperref[sec:DeepSATA]{\textsl{DeepSATA}} & 0.854 & 0.779 & 0.772 & 0.759 & 0.744 \\ 
         \hline
     \end{tabular}
     \renewcommand{\arraystretch}{1}
 \end{table}
+Dalla Tabella\,\ref{tab:comparison} si nota che i valori \acs{AUROC} di DeepSATA e DeepSEA differiscono di pochi  millesimi tra loro, a differenza dei valori di Basset, che talvolta sono nettamente più bassi rispetto ai valori degli altri due modelli. In particolare sulle sequenze che riguardano il genoma umano si nota una differenza di circa quattro punti percentuale tra Basset e DeepSEA/DeepSATA.\@ Di conseguenza, la tabella, oltre che ad indicare che DeepSATA abbia capacità predittive migliori rispetto agli altri due strumenti, suggerisce che il modello di DeepSEA riesce a riconoscere in maniera migliore le categorie rispetto a Basset. Le informazioni riportate sulla Tabella\,\ref{tab:comparison} sono anche rappresentate sotto forma di curve \acs{ROC} nella Figura\,\ref{fig:comparison}, dove sono indicate le performance predittive di ciascun modello a seconda delle specie animali in esame.
 
 
 \begin{figure}[!b]
     \centering
     \includegraphics[width=1\textwidth]{assets/imgs/comparison.jpg}
-    \caption[Confronto delle prestazioni predittive dei tre tool su diverse specie animali.]{Confronto delle prestazioni predittive dei tre tool su diverse specie animali.}\label{fig:comparison}
+    \caption[Confronto delle prestazioni predittive dei tre tool su diverse specie animali.]{Confronto delle prestazioni predittive dei tre tool su diverse specie animali\,\cite{ma2023deepsata}.}\label{fig:comparison}
 \end{figure}
 
 \todo{Tabella che specifica e riassume per ogni tool encoding, dataset etc}

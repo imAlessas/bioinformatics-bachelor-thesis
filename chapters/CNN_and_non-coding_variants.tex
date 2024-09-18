@@ -19,7 +19,15 @@ Inoltre, DeepSEA è in grado di imparare contemporaneamente diverse funzionalit�
 \end{itemize}
 % 
 
-Il modello — implementato con la libreria \href{https://github.com/torch/torch7}{\textsl{Torch7}} — è composto da esattmente tre livelli convoluzionali: il primo livello contiene 320 filtri, il secondo 480 e l'ultimo contiene 960 kernel. I filtri sono delle \textit{Position Weight Matrix} (\acs{PWM}) che analizzano la sequenza in input e, attraverso la convoluzione, estraggono pattern significativi, man mano spostando la finestra di una base della sequenza. Nel primo livello il kernel ha dimesnione $M\times 4$, dove $M$ è la lunghezza della finestra mentre $4$ sono il numero delle basi azotate. I livelli convoluzionali successivi hanno invece dimensione $M\times k$, dove in questo caso $k$ è il numero di kernel che sono stati utilizzati nel livello convoluzionale precedente. Dopo ogni livello convoluzionale viene applicata una \acs{ReLU} (Figura\,\ref{fig:relu-function}) e poi viene inserito un max-pooling layer, volto ad estrarre la feature predominante dal risultato della convoluzione. In questo caso la finestra di pooling non ha uno step di uno, bensì lo step coincide con la lunghezza della finestra stessa. Infine, dopo i tre livelli convoluzionali, è presente un fully connected layer — che riceve il risultato del max-pooling layer della terza convoluzione e ci applica una \acs{ReLU} — e l'output layer, che processa le informazioni con una funzione sigmoide (Figura\,\ref{fig:sigmoid-function}) la quale calcola la probabilità che la sequenza in input corrisponda o meno a una tra i 919 profili.
+Il modello — implementato con la libreria \href{https://github.com/torch/torch7}{\textsl{Torch7}} — è composto da esattmente tre livelli convoluzionali: il primo livello contiene 320 filtri, il secondo 480 e l'ultimo contiene 960 kernel. I filtri sono delle \textit{Position Weight Matrix} (\acs{PWM}), ovvero delle matrici composte da $4$ righe ed $M$ colonne che, per ciascuna base azotata, indicano la probabilità che appaia in quella determinata posizione, come mostrato nella Figura\,\ref{fig:PWM}.
+% 
+\begin{figure}[!b]
+    \centering
+    \input{assets/TikZ/PWM.tex}
+    \caption[Rappresentazione di una \acs{PWM}.]{Rappresentazione di una \acs{PWM}.}\label{fig:PWM}
+\end{figure}
+% 
+I filtri analizzano la sequenza in input e, attraverso la convoluzione, estraggono pattern significativi, man mano spostando la finestra di una base della sequenza. Nel primo livello il kernel ha dimesnione $M\times 4$, dove $M$ è la lunghezza della finestra mentre $4$ sono il numero delle basi azotate. I livelli convoluzionali successivi hanno invece dimensione $M\times k$, dove in questo caso $k$ è il numero di kernel che sono stati utilizzati nel livello convoluzionale precedente. Dopo ogni livello convoluzionale viene applicata una \acs{ReLU} (Figura\,\ref{fig:relu-function}) e poi viene inserito un max-pooling layer, volto ad estrarre la feature predominante dal risultato della convoluzione. In questo caso la finestra di pooling non ha uno step di uno, bensì lo step coincide con la lunghezza della finestra stessa. Infine, dopo i tre livelli convoluzionali, è presente un fully connected layer — che riceve il risultato del max-pooling layer della terza convoluzione e ci applica una \acs{ReLU} — e l'output layer, che processa le informazioni con una funzione sigmoide (Figura\,\ref{fig:sigmoid-function}) la quale calcola la probabilità che la sequenza in input corrisponda o meno a una tra i 919 profili.
 
 I 919 profili di cromatina sono stati ottenuti dai progetti ``\textit{Encyclopedia of \acs{DNA} Elements}'' (\acs{ENCODE}) e ``\textit{Roadmap Epigenomics}''. Le sequenze estratte sono state divise in frammenti (\textit{bin}) da 200bp\footnote{Con ``bp'', si intende \textit{base pair}, ovvero la lunghezza della sequenza espressa nel numero di coppie di basi.}, per un totale di $521\,636\,200$bp. Ciascuno di questi bin è stato poi etichettato ad uno tra i 919 profili di cromatina se almeno più della metà della sequenza corrispondeva al profilo teorico. Ogni bin estratto è stato centrato su una sequenza di 1000bp di genoma umano, al fine di fornire a DeepSEA maggiore contesto per ricavare informazioni più significative. Infine,ciascuna sequenza di input è stata trasformata in una matrice $1000\times 4$ attraverso il \textit{One-Hot encoding} e associata al rispettivo vettore di \textit{label} che contiene la risposta attesa dalla rete. 
 
@@ -46,7 +54,7 @@ L'articolo sottolinea l'importanza di utilizzare un contesto di sequenza più am
 
 \subsection*{Model Design}
 Il modello presenta sequenze di conv layer e max pooling layer per estrarre man mano le features in scale spaziali diverse (capisci meglio). Alla fine cè un fully connected che permette di eleborare le informazioni e, attraverso una sgmoide, calcola la probabilità di ciascuno dei chromatine facur feature. I kerne sono le wieght matrixes. L'output di cascun conv layer è processato prima da un RElu. L'operazione di convoulzuone nel primo livello equivale a calcolare le PWM scores in un finestra, con step di 1. Nei livelli convoluzionali successivi, il kernel è una PWM sull'output del layer precedente. 
-\todo{Illustra brevemente una PWM}
+
 Nei livelli successivi al primo, il kernel è di dimension MxN, dove N è il numero di kernel utilizzati nel layer precedente. Se nel primo livello sono state utilizzate 10 PWM $12\times4$, nel lvl successivo sarà usata un kernel di dimension 12X10. Dopo il convlayer viene pushato un relu e poi u pooling: step = dimensione della pooling window.
 
 In DeepSEA sono presenti 3 livelli convluzionali, il primo con 320 kernel, il secondo con 480 ed il terzo con 960. DOpo la convoluzione è presente un fully connected layer, dove i neuroni ricevono il risultato delle convoluzioni e fanno una relu con la matrice dei pesi che colelga 3conv-FCL (fylly conn layer)
@@ -60,7 +68,8 @@ Si è definita la funzione obiettivo (cost function) come la somma del logaritmo
 % 
 % Dove $s$ indica l'indece del sample e $f$ indica la sua feature (ovvero i vari tipo di output, che sono 919). Inoltre $y_f_s$ indica il label 0,1 rispetto alla al tipo di cromatine featre $f$ e al sample $s$. Infine $\sigma_f\left(X_s\right)$ indica il valore predetto dalla rete dato il sample $s$ sulla feture $f$.
 
-A questa funzione vengono sommati altri attributi alla NLL al fine di evitare l'verfitting.\todo{Vedi se inserirla oppure skippare sta parte perchè è poco importante ma difficile da spiegare in quanto relies on knowledge we do not have LMAO1}
+A questa funzione vengono sommati altri attributi alla NLL al fine di evitare l'verfitting.
+
 % 
 \begin{gather*}
 C = \mathbf{NLL} + \lambda_1\vert\vert W \vert\vert_2^2 + \lambda_2 \vert\vert H^{-1} \vert\vert_1

@@ -1,11 +1,12 @@
 %!TEX root = ../main.tex
 
 \chapter{Discussione}\label{chp:discussion}
-
-
+% 
 Dopo aver dettagliatamente descritto le caratterstiche dei tre strumenti bioinformatici nel Capitolo\,\ref{chp:CNN-non-coding-variants}, in questo capitolo si paragoneranno i tre tool, sottolineando le proprietà comuni e gli aspetti per cui differiscono in modo da fornire un confornto oggettivo che permette di comprendere in maniera più approfondita le loro performance predittive.
 
-DeepSEA, Basset e DeepSATA, hanno alcune caratterstiche in comune. I tre tool utilizzano lo stesso metodo di codifica della sequenza, il One-Hot encoding, che rende la sequenza luna $M$ in una matrice $M\times 4$, mappando le basi azotate della sequenza in vettori. Più precisamente, la codifica scelta è stata quella di codificare le basi azotate come segue: $A \to \left[1, 0, 0, 0\right]$, $T \to \left[0, 1, 0, 0\right]$, $C \to \left[0, 0, 1, 0\right]$ e $G \to \left[0, 0, 0, 1\right]$. In questo modo la sequenza può essere processata correttamente dai kernel, che sono delle \acs{PWM} che associano a ciascuna base delle sequenza un peso (o probabilità di occorrenza) in una particolare posizione (Figura\,\ref{fig:PWM}). Infine i tre modelli sono stati allenati attraverso il \acs{SGD} cercando di ottimizzare la stessa funzione obiettivo (cost function): la binary cross entropy (\acs{BCE}).
+DeepSEA, Basset e DeepSATA, hanno alcune caratterstiche in comune. I tre tool utilizzano lo stesso metodo di codifica della sequenza, il One-Hot encoding, che rende la sequenza luna $M$ in una matrice $M\times 4$, mappando le basi azotate della sequenza in vettori. In questo modo la sequenza può essere processata correttamente dai kernel, che sono delle \acs{PWM} che associano a ciascuna base delle sequenza un peso (o probabilità di occorrenza) in una particolare posizione (Figura\,\ref{fig:PWM}). Infine i tre modelli sono stati allenati attraverso il \acs{SGD} cercando di ottimizzare la stessa funzione obiettivo (cost function): la binary cross entropy (\acs{BCE}).
+
+\vspace{5px}
 
 Nonstante le similarità descritte, i tre strumenti prensentano diverse differenze, soprattutto nella struttura della rete e nel training dataset scelto: la Tabella\,\ref{tab:summary} riassume le caratteristiche principali. \,\hyperref[sec:DeepSEA]{\textsl{DeepSEA}} è composto da tre livelli convoluzionali, ciascuno dei quali viene seguito sempre da un livello \acs{ReLU} e da un livello max-pooling, utilizzato per estrarre le feature dominanti processate dalla convoluzione. I tre livelli convoluzionali contengono rispettivamente 320, 480 e 960 filtri. In seguito è presente un fully-conncted layer che prepara la informazioni per essere valutate nell'output layer, formato da una sigmoide.
 

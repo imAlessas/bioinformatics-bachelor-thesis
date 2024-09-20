@@ -2,19 +2,19 @@
 
 \chapter{Discussione}\label{chp:discussion}
 % 
-Dopo aver dettagliatamente descritto le caratterstiche dei tre strumenti bioinformatici nel Capitolo\,\ref{chp:CNN-non-coding-variants}, in questo capitolo si paragoneranno i tre tool, sottolineando le proprietà comuni e gli aspetti per cui differiscono in modo da fornire un confronto oggettivo che permette di comprendere in maniera più approfondita le loro performance predittive.
+Dopo aver dettagliatamente descritto le caratteristiche dei tre strumenti bioinformatici nel Capitolo\,\ref{chp:CNN-non-coding-variants}, in questo capitolo si paragoneranno i tre tool, sottolineando le proprietà comuni e gli aspetti per cui differiscono in modo da fornire un confronto oggettivo che permette di comprendere in maniera più approfondita le loro performance predittive.
 
-DeepSEA, Basset e DeepSATA, hanno alcune caratterstiche in comune. I tre tool utilizzano lo stesso metodo di codifica della sequenza, il One-Hot encoding, che rende la sequenza luna $M$ in una matrice $M\times 4$, mappando le basi azotate della sequenza in vettori. In questo modo la sequenza può essere processata correttamente dai kernel, che sono delle \acs{PWM} che associano a ciascuna base delle sequenza un peso (o probabilità di occorrenza) in una particolare posizione (Figura\,\ref{fig:PWM}). Infine i tre modelli sono stati allenati attraverso il \acs{SGD} cercando di ottimizzare la stessa funzione obiettivo (cost function): la binary cross entropy (\acs{BCE}).
+DeepSEA, Basset e DeepSATA, hanno alcune caratteristiche in comune. I tre tool utilizzano lo stesso metodo di codifica della sequenza, il One-Hot encoding, che rende la sequenza luna $M$ in una matrice $M\times 4$, mappando le basi azotate della sequenza in vettori. In questo modo la sequenza può essere processata correttamente dai kernel, che sono delle \acs{PWM} che associano a ciascuna base delle sequenza un peso (o probabilità di occorrenza) in una particolare posizione (Figura\,\ref{fig:PWM}). Infine i tre modelli sono stati allenati attraverso il \acs{SGD} cercando di ottimizzare la stessa funzione obiettivo (cost function): la binary cross entropy (\acs{BCE}).
 
 \vspace{5px}
 
-Nonstante le similarità descritte, i tre strumenti prensentano diverse differenze, soprattutto nella struttura della rete e nel training dataset scelto: la Tabella\,\ref{tab:summary} riassume le caratteristiche principali. \,\hyperref[sec:DeepSEA]{\textsl{DeepSEA}} è composto da tre livelli convoluzionali, ciascuno dei quali viene seguito sempre da un livello \acs{ReLU} e da un livello max-pooling, utilizzato per estrarre le feature dominanti processate dalla convoluzione. I tre livelli convoluzionali contengono rispettivamente 320, 480 e 960 filtri. In seguito è presente un fully-conncted layer che prepara la informazioni per essere valutate nell'output layer, formato da una sigmoide.
+Nonostante le similarità descritte, i tre strumenti presentano diverse differenze, soprattutto nella struttura della rete e nel training dataset scelto: la Tabella\,\ref{tab:summary} riassume le caratteristiche principali. \,\hyperref[sec:DeepSEA]{\textsl{DeepSEA}} è composto da tre livelli convoluzionali, ciascuno dei quali viene seguito sempre da un livello \acs{ReLU} e da un livello max-pooling, utilizzato per estrarre le feature dominanti processate dalla convoluzione. I tre livelli convoluzionali contengono rispettivamente 320, 480 e 960 filtri. In seguito è presente un fully-conncted layer che prepara la informazioni per essere valutate nell'output layer, formato da una sigmoide.
 
 Anche \hyperref[sec:Basset]{\textsl{Basset}} è composto da tre livelli convoluzionali ma in aggiunga al \acs{ReLU} layer e al max-pooling layer viene inserito anche un livello di normalizzazione. Sono poi presenti tre livelli fully-connected che sono alternati da altri \acs{ReLU} layer e dei dropout layer, per evitare l'overfitting. Anche in questo caso l'output è calcolato tramite una sigmoide.
 % 
 \begin{table}[!t]
     \centering
-    \caption{Riassunto delle differenza tra i tre tool.}\label{tab:summary}
+    \caption{Riassunto delle differenze tra i tre tool.}\label{tab:summary}
     \renewcommand{\arraystretch}{2}
     \begin{tabular}{|>{\centering\arraybackslash}m{2cm}|>{\centering\arraybackslash}m{4.5cm}|>{\centering\arraybackslash}m{1.5cm}|>{\centering\arraybackslash}m{1.5cm}|>{\centering\arraybackslash}m{3cm}|} % chktex-file 44
         \hline % chktex-file 44
@@ -55,7 +55,7 @@ Dalla Tabella\,\ref{tab:comparison} si nota che i valori \acs{AUROC} di DeepSATA
 \begin{figure}[!b]
     \centering
     \includegraphics[width=1\textwidth]{assets/imgs/comparison.jpg}
-    \caption[Confronto delle prestazioni predittive dei tre tool su diverse specie animali.]{Confronto delle prestazioni predittive dei tre tool su diverse specie animali attraverso le cruve \acs{ROC}, mostrate per ogni \acs{OCR}, e dai valori medi di \acs{AUROC}\,\cite{ma2023deepsata}.}\label{fig:comparison}
+    \caption[Confronto delle prestazioni predittive dei tre tool su diverse specie animali.]{Confronto delle prestazioni predittive dei tre tool su diverse specie animali attraverso le curve \acs{ROC}, mostrate per ogni \acs{OCR}, e dai valori medi di \acs{AUROC}\,\cite{ma2023deepsata}.}\label{fig:comparison}
 \end{figure}
 % 
 Di conseguenza, la tabella, oltre che ad indicare che DeepSATA abbia capacità predittive migliori rispetto agli altri due strumenti, suggerisce che il modello di DeepSEA riesce a riconoscere in maniera migliore le categorie rispetto a Basset. Le informazioni riportate sulla Tabella\,\ref{tab:comparison} sono anche rappresentate sotto forma di curve \acs{ROC} nella Figura\,\ref{fig:comparison}, dove sono indicate le performance predittive di ciascun modello a seconda delle specie animali in esame. Per ciascuna specie animale e per ciascuno dei tre tool, sono stati rappresentati i grafici delle loro prestazioni. In particolare in ciascun grafico sono presenti diverse curve \acs{ROC}, ciascuna delle quali indica la capacità predittiva rispetto ad una precisa \acs{OCR}. Per ciascuna delle curve è stato calcolato il valore \acs{AUC} e poi calcolata la media per ciascuna specie, ottenendo i valori indicati nella Tabella\,\ref{tab:comparison}.

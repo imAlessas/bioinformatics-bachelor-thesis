@@ -24,7 +24,7 @@ Come un neurone biologico, il neurone artificiale (Figura\,\ref{fig:artificial-n
 \begin{figure}[!b]
     \centering
     \input{assets/TikZ/artificial-neuron.tex}
-    \caption[Rappresentazione schematica del funzionamento di un neurone artificiale.]{Rappresentazione schematica del funzionamento di un neurone artificiale. I segnali in input $x_i$ vengono moltiplicati con i rispettivi pesi $w_i$ e sommati tra loro; il risultato $v$ viene processato dalla funzione di attivazione $f(v)$ che restituisce l'output $z$.}\label{fig:artificial-neuron}
+    \caption[Rappresentazione schematica del funzionamento di un neurone artificiale.]{Rappresentazione schematica del funzionamento di un neurone artificiale. I segnali in input $x_i$ vengono moltiplicati con i rispettivi pesi $w_i$ e sommati tra loro; il risultato $v$ viene processato dalla funzione di attivazione $f(v)$ che restituisce l'output $a$.}\label{fig:artificial-neuron}
 \end{figure}
 % 
 \noindent Per attivare un neurone, è necessario che il segnale $v$ prodotto in \textsl{output} sia superiore ad una soglia prescelta, indicata con $b$. Questo si traduce nel sottrarre tale valore al segnale $v$ e verificare che il risultato sia maggiore o minore di zero.
@@ -43,10 +43,10 @@ Come un neurone biologico, il neurone artificiale (Figura\,\ref{fig:artificial-n
     v = g\left(\mathbf{w}, \mathbf{x}\right) = \sum_{i = 0}^n w_i\,x_i = \mathbf{w}\,\cdot\,\mathbf{x}
 \end{gather*}
 % 
-Il criterio che descrive l'attivazione del neurone artificiale è riassunto nella \textsl{funzione di attivazione}, chiamata $z = f(v)$. La funzione di attivazione più semplice che descrive tale criterio la funzione \textsl{gradino} \textbf{1}$(v)$, descritta graficamente nella Figura\,\ref{fig:step-function}:
+Il criterio che descrive l'attivazione del neurone artificiale è riassunto nella \textsl{funzione di attivazione}, chiamata $a = f(v)$. La funzione di attivazione più semplice che descrive tale criterio la funzione \textsl{gradino} \textbf{1}$(v)$, descritta graficamente nella Figura\,\ref{fig:step-function}:
 % 
 \begin{gather*}
-    z(v) = \text{\textbf{1}}(v) =
+    a(v) = \text{\textbf{1}}(v) =
     \begin{cases}
         1 \hspace{20px} \text{se } v\geq0\\
         0 \hspace{20px} \text{se } v<0
@@ -107,7 +107,7 @@ Analogamente alle reazioni agli stimoli esterni di un neurone biologico, anche n
     \mathcal{D} = \left\{ \mathbf{X},\, \mathbf{y} \right\}  
 \end{gather*}
 % 
-Con un dataset di partenza si può definire un algoritmo generico che sia in grado di descrivere il processo di apprendimento di neurone artificiale. Come descritto nell'Algoritmo\,\ref{alg:neuron-training}, dopo aver inizializzato il vettore di pesi $\mathbf{w}$, per ogni vettore $X_j$ del dataset $\mathcal{D}$, vengono calcolati il segnale $v$ e il valore della funzione di attivazione $z = f(v)$. L'idea alla base dell'algoritmo è quella di modificare il vettore di pesi $\mathbf{w}$ in funzione del risultato della funzione di attivazione rispetto al segnale processato.
+Con un dataset di partenza si può definire un algoritmo generico che sia in grado di descrivere il processo di apprendimento di neurone artificiale. Come descritto nell'Algoritmo\,\ref{alg:neuron-training}, dopo aver inizializzato il vettore di pesi $\mathbf{w}$, per ogni vettore $X_j$ del dataset $\mathcal{D}$, vengono calcolati il segnale $v$ e il valore della funzione di attivazione $a = f(v)$. L'idea alla base dell'algoritmo è quella di modificare il vettore di pesi $\mathbf{w}$ in funzione del risultato della funzione di attivazione rispetto al segnale processato.
 % 
 \begin{algorithm}[ht]
     \caption{Allenamento del neurone artificiale}\label{alg:neuron-training}
@@ -120,8 +120,8 @@ Con un dataset di partenza si può definire un algoritmo generico che sia in gra
         
         \WHILE{$j \leq M$}
             \STATE\text{Calcola $v$ in funzione di $X_j$ e $\mathbf{w}$}
-            \STATE\text{Determina $z$ in rapporto a $v$ e $y_j$}
-            \STATE\text{Modifica $\mathbf{w}$ a seconda del risultato $z$}
+            \STATE\text{Determina $a$ in rapporto a $v$ e $y_j$}
+            \STATE\text{Modifica $\mathbf{w}$ a seconda del risultato $a$}
             \STATE$j \gets j + 1$
         \ENDWHILE\,
     \end{algorithmic}
@@ -146,14 +146,14 @@ Uno tra i modelli di neuroni artificiali utilizzati nelle reti neurali è il per
 \end{figure}
 % 
 \begin{gather*}
-    z(v) = \text{\textbf{sign}}(v) = \text{\textbf{sign}}(\mathbf{w} \cdot X_j) =
+    a(v) = \text{\textbf{sign}}(v) = \text{\textbf{sign}}(\mathbf{w} \cdot X_j) =
     \begin{cases}
         1 \hspace{29px} \text{se } v\geq0\\
         -1 \hspace{20px} \text{se } v<0
     \end{cases}
 \end{gather*}
 % 
-\noindent Il particolare più importante del percettrone è la \textit{learning rule}, ovvero il criterio secondo il quel il vettore di pesi è aggiornato a seconda della predizione del modello. Se la predizione $z_j$ rispetto al vettore $X_j$ è diversa dalla risposta attesa $y_j$, allora il vettore di pesi è modificato come segue\,\cite{nielsen2015neural, flasinski2016introduction}.
+\noindent Il particolare più importante del percettrone è la \textit{learning rule}, ovvero il criterio secondo il quel il vettore di pesi è aggiornato a seconda della predizione del modello. Se la predizione $a_j$ rispetto al vettore $X_j$ è diversa dalla risposta attesa $y_j$, allora il vettore di pesi è modificato come segue\,\cite{nielsen2015neural, flasinski2016introduction}.
 % 
 \begin{gather*}
     w_i \, = \, w_i \, + \, y_j\,X_j^i
@@ -187,10 +187,10 @@ La learning rule introdotta nel percettrone, per quanto semplice, spesso viene s
     \caption[Il gradient descent in una funzione bidimensionale.]{Il gradient descent in una funzione bidimensionale. Si osserva che l'algoritmo, attraverso il gradiente della funzione, riesce a spostarsi verso il minimo (locale o assoluto) della funzione, come una biglia di vetro.}\label{fig:gradient-descent}
 \end{figure}
 % 
-\noindent Dove $\eta$ è un parametro positivo, chiamato \textit{learning rate} e serve per bilanciare la rapidità con cui il vettore dei pesi sia aggiornato durante l'esecuzione dell'algoritmo. Il termine $\nabla C\left(\mathbf{w}\right)$ è invece il gradiente della loss function. Il gradiente di una funzione a più dimensioni è un vettore che indica la direzione di massima crescita del valore della funzione; conseguentemente la direzione opposta è quella da seguire per raggiungere il minimo (locale o assoluto) della funzione. La Figura\,\ref{fig:gradient-descent} mostra graficamente come l'approccio \acs{GD} cerchi di raggiungere tale valore ad ogni iterazione. Si osserva che in questo caso la funzione è rappresentata in due dimensioni ma in generale la loss function è $n$-dimensionale. Questa funzione può essere una qualsiasi funzione errore: una tra le più comuni è la funzione che calcola la media del quadrato degli errori (in gergo chiamata \acs{MSE}, \textit{Mean Squared Errors}). Per fare un esempio pratico, avendo il vettore di pesi $\mathbf{w}$, un dataset $\mathcal{D}$ — definito come in precedenza — ed una funzione di attivazione $z$, la \acs{MSE} è definita come:
+\noindent Dove $\eta$ è un parametro positivo, chiamato \textit{learning rate} e serve per bilanciare la rapidità con cui il vettore dei pesi sia aggiornato durante l'esecuzione dell'algoritmo. Il termine $\nabla C\left(\mathbf{w}\right)$ è invece il gradiente della loss function. Il gradiente di una funzione a più dimensioni è un vettore che indica la direzione di massima crescita del valore della funzione; conseguentemente la direzione opposta è quella da seguire per raggiungere il minimo (locale o assoluto) della funzione. La Figura\,\ref{fig:gradient-descent} mostra graficamente come l'approccio \acs{GD} cerchi di raggiungere tale valore ad ogni iterazione. Si osserva che in questo caso la funzione è rappresentata in due dimensioni ma in generale la loss function è $n$-dimensionale. Questa funzione può essere una qualsiasi funzione errore: una tra le più comuni è la funzione che calcola la media del quadrato degli errori (in gergo chiamata \acs{MSE}, \textit{Mean Squared Errors}). Per fare un esempio pratico, avendo il vettore di pesi $\mathbf{w}$, un dataset $\mathcal{D}$ — definito come in precedenza — ed una funzione di attivazione $a$, la \acs{MSE} è definita come:
 % 
 \begin{gather*}
-    C(\mathbf{w}) = \frac{1}{M}\,\sum_{j = 1}^M\,{\left[ y_j - z(\mathbf{w},\,X_j) \right]}^2
+    C(\mathbf{w}) = \frac{1}{M}\,\sum_{j = 1}^M\,{\left[ y_j - a(\mathbf{w},\,X_j) \right]}^2
 \end{gather*}
 % 
 \noindent L'approccio adottato da questo algoritmo, per quanto efficacie non è completamente efficiente. La complessità computazionale richiesta è notevole: ad ogni iterazione dell'allentamento del neurone, è necessario trovare il valore della derivata della loss function, che si traduce nel computare la predizione di tutti i vettori di input $X_j$ del dataset $\mathcal{D}$ e compararli con la risposta attesa $y_j$. Questo approccio, per dataset di dimensioni medio-grandi è molto poco efficiente, per quanto preciso. Inoltre è possibile che la discesa del gradiente conduca l'aggiornamento del vettore di pesi in un minimo locale della funzione errore, giungendo quindi ad una soluzione sub-ottima. Questi problemi possono entrambi essere gestiti da una variante di questo algoritmo, chiamata \textit{Stochastic Gradient Descent} (\acs{SGD}). Per ogni iterazione dell'algoritmo di allenamento, vengono presi un numero $m < M$ di vettori di input con le rispettive risposte attese e aggiornato il vettore $\mathbf{w}$ in base a questo sotto insieme del dataset, chiamato anche $mini-batch$. In questo modo la complessità computazionale viene drasticamente diminuita in quanto calcolare la derivata della loss function per una frazione ridotta del dataset richiede meno risorse. In aggiunta la casualità della scelta del mini-batch può evitare la convergenza in un minimo locale poiché rende la discesa lungo la funzione di errore leggermente più imprevedibile, diminuendo la possibilità di risultati sub-ottimi\,\cite{lu2022gradient, andrychowicz2016learning, nielsen2015neural}.
@@ -343,7 +343,7 @@ Questo valore aiuta notevolmente a riassumere le capactà predittive dell'algori
 
 \section{Reti neurali convoluzionali}
 % 
-Le reti neurali convoluzionali (\acs{CNN} o \acs{ConvNet}) sono state introdotte per la prima volta nel 1998, con la pubblicazione dell'articolo ``Gradient-based learning applied to document recognition''\,\cite{lecun1998gradient} il quale descrive una rete artificiale, chiamata \textit{LeNet-5}, il obiettivo era quello di identificare documenti scritti a mano. Questo articolo getta le basi per la progettazione di una rete convoluzionale\,\cite{aggarwal2018neural}.
+Le reti neurali convoluzionali (\acs{CNN}) sono state introdotte per la prima volta nel 1998, con la pubblicazione dell'articolo ``Gradient-based learning applied to document recognition''\,\cite{lecun1998gradient} il quale descrive una rete artificiale, chiamata \textit{LeNet-5}, il obiettivo era quello di identificare documenti scritti a mano. Questo articolo getta le basi per la progettazione di una rete convoluzionale\,\cite{aggarwal2018neural}.
 
 Una rete convoluzionale è una rete neurale feedforward che contiene dei particolari livelli, volti a ridurre il numero di pesi della rete. Tre sono i layer fondamentali che caratterizzano una \acs{CNN}: \textit{convolution layer}, \textit{padding layer} e \textit{\acs{ReLU} layer}. Queste reti, sono organizzate in modo tale da riconoscere le caratteristiche spaziali di un immagine. Per questo motivo, generalmente, si rappresenta l'input layer come una matrice bidimensionale\footnote{Ipotizzando, per semplicità, che l'immagine sia in scala di grigi.} di pixel: in questo modo viene anche facilitata la comprensione delle operazioni che processano l'input.
 
@@ -415,7 +415,7 @@ Dopo aver processato le infomazioni mediante la convoluzione, al fine di allegge
 % 
 L'idea dietro al max-pooling è quella di tenere le caratteristiche prevalenti dalla matrice fornita, in modo da ridurre l'informazione per rendere la fase di allenamento meno onerosa. Al max-pooling si aggiunge anche il \textit{avg-pooling} che si occupa di calcolare la media dei pixel presenti nella porzione selezionata, estraendo quindi la ``proprietà media'' anzichè quella prevalente\,\cite{aggarwal2018neural, o2015introduction}.
 
-Infine, come in tutte le reti neurali, in una \acs{ConvNet} sono presenti i \textit{fully-connected layers}. Questi livelli, che sono presenti solo dopo i livelli convoluzionali (come mostrato nella Figura\,\ref{fig:convolutional-neural-network}), hanno la stessa funzione di una classica feedforward \acs{NN}: effettuare una serie di calcoli che permette di predire correttamente la risposta, in funzione dell'input fornito\,\cite{aggarwal2018neural, o2015introduction}.
+Infine, come in tutte le reti neurali, in una \acs{CNN} sono presenti i \textit{fully-connected layers}. Questi livelli, che sono presenti solo dopo i livelli convoluzionali (come mostrato nella Figura\,\ref{fig:convolutional-neural-network}), hanno la stessa funzione di una classica feedforward \acs{NN}: effettuare una serie di calcoli che permette di predire correttamente la risposta, in funzione dell'input fornito\,\cite{aggarwal2018neural, o2015introduction}.
 
 \subsection{Applicazioni}
 

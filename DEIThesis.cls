@@ -531,7 +531,7 @@
 \newcommand{\acknowledgments} {
   \phantomsection
   \chapter*{\acknowledgmentsname}
-  \input{frontmatter/formal-thanks.tex}
+  \input{frontmatter/thanks.tex}
   % \input{frontmatter/personal-thanks.tex}
 }
 

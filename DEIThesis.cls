@@ -93,6 +93,9 @@
 % code snippets
 \RequirePackage{listings}
 
+% quotes
+\RequirePackage{quoting}
+
 % arrays
 \RequirePackage{listofitems}
 \RequirePackage{array}
@@ -271,7 +274,7 @@
   % \refstepcounter{page}
   
   % insert quote page
-  % \quotepage
+  \quotepage
   % \refstepcounter{page}
   
   % insert abstract
@@ -282,12 +285,12 @@
   \tableofcontents
   \cleardoublepage
   
-  % insert list of figures
+  % insert list of figures (uncomment if needed)
   \phantomsection
   \listoffigures
   \cleardoublepage
 
-  % insert list of tables
+  % insert list of tables (uncomment if needed)
   % \phantomsection
   % \listoftables
   % \cleardoublepage
@@ -459,10 +462,10 @@
   % set empty style for this page (no headers and footers)
   \thispagestyle{empty}
 
-  % english version
+  % italian version
   \input{frontmatter/sommario}
   
-  % italian version
+  % english version
   \cleardoublepage
   \thispagestyle{empty}
   \input{frontmatter/abstract}

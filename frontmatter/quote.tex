@@ -2,14 +2,25 @@
 
 \begin{center}
 
-    % increase line spacing
-    \linespread{1.5}\selectfont
-    
-    % increase font size
-    \fontsize{14pt}{16pt}\selectfont
+    % Adjust line spacing
+    \setstretch{1.5}
 
-    ``\,Se fai solo quello che sai fare,\\
-    non sarai mai più di quello che sei ora\,''\\
-    
+    % Custom opening and closing quotes with enhanced margins
+    \begin{quoting}[leftmargin=2.5cm, rightmargin=1.5cm]
+    \textit{
+    % Custom quote marks
+    \Huge \textcolor{gray}{“} \normalsize
+    Se fai solo quello che sai fare,\\
+    non sarai mai più di quello che sei ora.
+    \normalsize \Huge \textcolor{gray}{”}
+    }
+    \end{quoting}
+
 \end{center}
 
+\vspace{0.75em}
+
+\begin{flushright}
+    \small % Make author's name smaller and italic
+    \textit{\textcolor{gray}{Maestro Shifu}}
+\end{flushright}

@@ -76,6 +76,7 @@
 
 % graphics
 \RequirePackage{graphicx}
+\RequirePackage{wrapfig}
 
 % todo
 \RequirePackage{todonotes}

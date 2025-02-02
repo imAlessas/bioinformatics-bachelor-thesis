@@ -202,7 +202,7 @@ Una rete neurale è una struttura composta da neuroni artificiali i quali sono o
 \begin{figure}[!b]
     \centering
     \input{assets/TikZ/neural-network.tex}
-    \caption[Rete neurale multilivello.]{Rete neurale multilivello. (immagine adattata da\,\cite{izaak2022neural}).}\label{fig:neural-network}
+    \caption[Rete neurale multilivello.]{Rete neurale multilivello (immagine adattata da\,\cite{izaak2022neural}).}\label{fig:neural-network}
 \end{figure}
 % 
 Più precisamente, data una rete neurale, i neuroni del livello $\ell$ ricevono il segnale dai neuroni del livello $\ell-1$ e, dopo aver elaborato le informazioni, inviano il segnale processato ai neuroni del livello $\ell+1$: si dice che la rete è di tipo \textit{feedforward} in quanto non sono presenti cicli nella struttura. Osservando la Figura\,\ref{fig:neural-network} si introduce una nuova notazione per i neuroni all'interno di una rete. Si definisce con $N^{(\ell)}_j$ il neurone $j$-esimo che si trova nel livello $\ell$ e si identifica con la notazione $a^{(\ell)}_j$ l'output della funzione di attivazione del neurone $N^{(\ell)}_j$. Il peso $w^{(\ell)}_{j\,,i}$ è il peso che collega il neurone $N^{(\ell - 1)}_i$ al neurone $N^{(\ell)}_j$, ovvero il collegamento tra il neurone alla posizione $i$ del livello precedente $\ell-1$ e il neurone $N^{(\ell)}_j$. Inoltre, per ogni neurone vengono esplicitati i bias: $b^{(\ell)}_j$ indica il bias associato al $j$-esimo neurone nel livello $\ell$. Presupponendo l'utilizzo di neuroni sigmoidei all'interno della \acs{NN} l'output $a^{(\ell)}_j$ del neurone $N^{(\ell)}_j$, ovvero l'output della funzione di attivazione del neurone può essere calcolato come segue: 
@@ -422,24 +422,3 @@ Infine, come in tutte le reti neurali, in una \acs{CNN} sono presenti i \textit{
 Anche se fino ad ora le \acs{CNN} sono state descritte come tool che processa solo immagine, il loro utilizzo è in realtà molto più vasto. Tra le loro numerose applicazioni, vengono citate il \textit{Natural Language Processing} (\acs{NLP}) — disciplina che si occupa di processare il linguaggio naturale, attraverso il riconoscimento vocale e la classificazione del testo — e \textit{Computer Vision} — che comprende il riconoscimento visivo, la \textit{scene labelling} e il riconoscimento di oggetti e azioni umane\,\cite{shamsaldin2019study, li2021survey, bhatt2021cnn}.
 
 Oltre a quanto menzionato, le reti neurali convoluzionali, sono largamente utilizzate nel campo della bioinformatica. Più precisamente, le \acs{CNN} $1$-dimensionali\footnote{Ovvero che l'input si estende in una dimensione, proprio come una sequenza.} analizzando sequenze di \acs{DNA} ed \acs{RNA}, apprendendo pattern — che in bioinformatica vengono anche chiamati \textit{motif} — sequenziali man mano più complessi attraverso i diversi layer convoluzionali. In questo modo è possibile approfondire i problemi che riguardano gli elementi regolatori dell'espressione genica, tra cui le varianti non codificanti\,\cite{min2017deep}.
-
-
-
-
-
-
-% Invarianti, notazioni
-\begin{comment}
-    Per non diventare matti la notazione è l'opposta di quella sul file di Machine Learnign.
-    - ci sono esattamente N feature in un vettore di input, di conseguenza il vettore di pesi è di lunghezza N
-    - ci sono esattamente M vettori di input nel dataset, di conseguenza la lunghezza della label è M
-    - Il dataset D è composta da j colonne ed i righe
-    - Ciascuna riga j rappresenta un elemento del dataset
-    - Ciascuna colonna i rappresente un feature del dataset
-    
-    Di conseguneza D_j indica il vettore j-esimo composto esattamente da N componenti. La label y_j indica il vero valore dell'input processato
-\end{comment}
-
-% https://www.researchgate.net/profile/Shashi-Sathyanarayana/publication/266396438_A_Gentle_Introduction_to_Backpropagation/links/577d124808aeaa6988aba0bc/A-Gentle-Introduction-to-Backpropagation.pdf
-
-% https://d1wqtxts1xzle7.cloudfront.net/51924347/NeuralNetworks-libre.pdf?1487958246=&response-content-disposition=inline%3B+filename%3DBack_Propagation_Algorithm.pdf&Expires=1725992239&Signature=J-LZ7rIZD5T6Nb9jar55PvgTCF3pDd0H8dGNJVU3ijf1bFEoiAX2yF9fkroyCTvPGm0oAhX8SUhRLSZ26bEVOC08ZV9wUPb8HekE0~cj836hKUsc60DVhhXQ3TjlPE91VTwe0kMkDuimtxQuf8LVgJhSF5zc~sAFzSOmHwPfbiqBTxNoSFRY8xkMRRNoTMWS1GZmoOr83rB3VkzKA6QncuQ85ogs4IHeInFT2nnqBNUbvUGOEyhDUbECy39bE57G1CkhMRIXiT-CZLPJxY1gu2dYjr7~gerF49Lay6w1yNJ5kdgqrMpy5TI8suaIwC0NQZ1obOrERVpDKrJ3Y~Lrhg__&Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA
